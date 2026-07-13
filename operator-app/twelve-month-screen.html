@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12M Expiring — Operator Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 400px;
+            min-height: 100vh;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ==================== HEADER ==================== */
+        .screen-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #ffffff;
+        }
+
+        .screen-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ea4335;
+            flex: 1;
+        }
+
+        .screen-subtitle {
+            font-size: 13px;
+            color: #5f6368;
+            padding: 0 16px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        /* ==================== LEGEND ==================== */
+        .legend-bar {
+            display: flex;
+            gap: 16px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-critical {
+            background: #ea4335;
+        }
+
+        .legend-warning {
+            background: #f9ab00;
+        }
+
+        .legend-notice {
+            background: #fef7e0;
+            border: 1px solid #f9ab00;
+        }
+
+        /* ==================== CONTENT ==================== */
+        .screen-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        /* ==================== TABLE ==================== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .data-table tbody td {
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #202124;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* Row urgency colors */
+        .row-critical {
+            background: #fce8e6;
+        }
+
+        .row-critical td {
+            color: #c5221f;
+            font-weight: 600;
+        }
+
+        .row-warning {
+            background: #fff3e0;
+        }
+
+        .row-warning td {
+            color: #e65100;
+            font-weight: 500;
+        }
+
+        .row-notice {
+            background: #fef7e0;
+        }
+
+        .row-notice td {
+            color: #f57f17;
+        }
+
+        /* Shelf life badge */
+        .shelf-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .badge-critical {
+            background: #ea4335;
+            color: #ffffff;
+        }
+
+        .badge-warning {
+            background: #f9ab00;
+            color: #ffffff;
+        }
+
+        .badge-notice {
+            background: #fef7e0;
+            color: #f57f17;
+            border: 1px solid #f9ab00;
+        }
+
+        /* ==================== BOTTOM NAVIGATION ==================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #5f6368;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .nav-btn.active {
+            color: #1a73e8;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- Header -->
+        <div class="screen-header">
+            <div class="screen-title">12M Expiring</div>
+        </div>
+        <div class="screen-subtitle">Products expiring within 12 months</div>
+
+        <!-- Legend -->
+        <div class="legend-bar">
+            <span class="legend-item">
+                <span class="legend-dot legend-critical"></span>
+                ≤3 months
+            </span>
+            <span class="legend-item">
+                <span class="legend-dot legend-warning"></span>
+                4–6 months
+            </span>
+            <span class="legend-item">
+                <span class="legend-dot legend-notice"></span>
+                7–12 months
+            </span>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="screen-content">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Pack</th>
+                        <th>Expiry</th>
+                        <th>Qty</th>
+                        <th>Left</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- CRITICAL: ≤3 months -->
+                    <tr class="row-critical">
+                        <td>Jazz</td>
+                        <td>100g</td>
+                        <td>Jan 2026</td>
+                        <td>50</td>
+                        <td><span class="shelf-badge badge-critical">3M</span></td>
+                    </tr>
+                    <tr class="row-critical">
+                        <td>Jazz</td>
+                        <td>500g</td>
+                        <td>Feb 2026</td>
+                        <td>75</td>
+                        <td><span class="shelf-badge badge-critical">4M</span></td>
+                    </tr>
+
+                    <!-- WARNING: 4-6 months -->
+                    <tr class="row-warning">
+                        <td>Score</td>
+                        <td>50ml</td>
+                        <td>Mar 2026</td>
+                        <td>100</td>
+                        <td><span class="shelf-badge badge-warning">5M</span></td>
+                    </tr>
+                    <tr class="row-warning">
+                        <td>Score</td>
+                        <td>100ml</td>
+                        <td>Apr 2026</td>
+                        <td>120</td>
+                        <td><span class="shelf-badge badge-warning">6M</span></td>
+                    </tr>
+                    <tr class="row-warning">
+                        <td>Ridomil</td>
+                        <td>100g</td>
+                        <td>May 2026</td>
+                        <td>80</td>
+                        <td><span class="shelf-badge badge-warning">7M</span></td>
+                    </tr>
+
+                    <!-- NOTICE: 7-12 months -->
+                    <tr class="row-notice">
+                        <td>Karate</td>
+                        <td>50ml</td>
+                        <td>Jun 2027</td>
+                        <td>125</td>
+                        <td><span class="shelf-badge badge-notice">11M</span></td>
+                    </tr>
+                    <tr class="row-notice">
+                        <td>Amistar</td>
+                        <td>100ml</td>
+                        <td>Jul 2027</td>
+                        <td>200</td>
+                        <td><span class="shelf-badge badge-notice">12M</span></td>
+                    </tr>
+                    <tr class="row-notice">
+                        <td>Revus</td>
+                        <td>50ml</td>
+                        <td>Aug 2027</td>
+                        <td>90</td>
+                        <td><span class="shelf-badge badge-notice">13M</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="count-screen.html" class="nav-btn">
+                <span class="nav-icon">📦</span>
+                <span class="nav-label">Count</span>
+            </a>
+            <a href="twelve-month-screen.html" class="nav-btn active">
+                <span class="nav-icon">⚠️</span>
+                <span class="nav-label">12M</span>
+            </a>
+            <a href="inventory-screen.html" class="nav-btn">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Inventory</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

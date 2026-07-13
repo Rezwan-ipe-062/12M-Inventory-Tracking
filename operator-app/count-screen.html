@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Count — Operator Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 400px;
+            min-height: 100vh;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ==================== HEADER ==================== */
+        .screen-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #ffffff;
+        }
+
+        .btn-back {
+            font-size: 18px;
+            color: #1a73e8;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+
+        .screen-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #202124;
+            flex: 1;
+        }
+
+        /* ==================== PRODUCT INFO ==================== */
+        .product-info {
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .product-name {
+            font-size: 22px;
+            font-weight: 600;
+            color: #202124;
+        }
+
+        .product-pack {
+            font-size: 14px;
+            color: #5f6368;
+            margin-top: 2px;
+        }
+
+        /* ==================== CONTENT ==================== */
+        .screen-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+
+        /* ==================== MONTH SECTIONS ==================== */
+        .month-section {
+            margin-bottom: 24px;
+        }
+
+        .section-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .year-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .year-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #dadce0;
+            border-radius: 10px;
+            background: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .year-btn:active {
+            transform: scale(0.97);
+        }
+
+        .year-btn.selected {
+            border-color: #1a73e8;
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .month-btn {
+            padding: 12px 4px;
+            border: 2px solid #dadce0;
+            border-radius: 8px;
+            background: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .month-btn:active {
+            transform: scale(0.95);
+        }
+
+        .month-btn.selected {
+            border-color: #1a73e8;
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+
+        /* Expiry section dashed border */
+        .expiry-section {
+            border-top: 2px dashed #dadce0;
+            padding-top: 20px;
+        }
+
+        .expiry-section .section-label {
+            color: #ea4335;
+        }
+
+        /* ==================== QUANTITY DISPLAY ==================== */
+        .qty-total-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px;
+            background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+            border-radius: 16px;
+            margin-bottom: 16px;
+        }
+
+        .qty-total-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.85);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .qty-total-value {
+            font-size: 52px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .qty-total-unit {
+            font-size: 14px;
+            color: rgba(255,255,255,0.75);
+            margin-top: 4px;
+        }
+
+        /* ==================== +/- CONTROLS ==================== */
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .qty-adj-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            border: none;
+            font-size: 28px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .qty-adj-btn:active {
+            transform: scale(0.95);
+        }
+
+        .qty-minus {
+            background: #fce8e6;
+            color: #ea4335;
+            border: 2px solid #ea4335;
+        }
+
+        .qty-plus {
+            background: #e6f4ea;
+            color: #34a853;
+            border: 2px solid #34a853;
+        }
+
+        .qty-input-field {
+            flex: 1;
+            height: 56px;
+            border: 2px solid #dadce0;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            background: #ffffff;
+            color: #202124;
+        }
+
+        .quantity-tip {
+            text-align: center;
+            font-size: 13px;
+            color: #5f6368;
+            margin-bottom: 16px;
+        }
+
+        /* ==================== STACK CALCULATOR ==================== */
+        .stack-calc {
+            border: 1px solid #dadce0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .stack-calc-toggle {
+            width: 100%;
+            padding: 14px 16px;
+            border: none;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 500;
+            color: #202124;
+            cursor: pointer;
+        }
+
+        .toggle-arrow {
+            font-size: 12px;
+            transition: transform 0.2s;
+        }
+
+        .toggle-arrow.open {
+            transform: rotate(90deg);
+        }
+
+        .stack-calc-body {
+            padding: 16px;
+            background: #ffffff;
+        }
+
+        .stack-formula {
+            font-size: 13px;
+            color: #5f6368;
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .stack-formula strong {
+            color: #202124;
+        }
+
+        .stack-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .stack-field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stack-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #5f6368;
+            text-transform: uppercase;
+        }
+
+        .stack-field input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            background: #f8f9fa;
+        }
+
+        .stack-field input:focus {
+            border-color: #1a73e8;
+            background: #ffffff;
+            outline: none;
+        }
+
+        .stack-op {
+            font-size: 18px;
+            font-weight: 600;
+            color: #5f6368;
+            padding-top: 18px;
+        }
+
+        .stack-result {
+            text-align: center;
+            padding: 12px;
+            background: #e8f0fe;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a73e8;
+            margin-bottom: 12px;
+        }
+
+        .stack-result-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .stack-apply-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #1a73e8;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .stack-apply-btn:active {
+            background: #1557b0;
+        }
+
+        /* ==================== SAVE BUTTON ==================== */
+        .save-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: #34a853;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-btn:active {
+            background: #2d9249;
+        }
+
+        /* ==================== BOTTOM NAVIGATION ==================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #5f6368;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .nav-btn.active {
+            color: #1a73e8;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- Header -->
+        <div class="screen-header">
+            <button class="btn-back">←</button>
+            <div class="screen-title">Karate 50ml</div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="screen-content">
+            <!-- Production Month -->
+            <div class="month-section">
+                <span class="section-label">Production Month</span>
+                <div class="year-buttons">
+                    <button class="year-btn">2025</button>
+                    <button class="year-btn selected">2026</button>
+                </div>
+                <div class="month-grid">
+                    <button class="month-btn">Jan</button>
+                    <button class="month-btn">Feb</button>
+                    <button class="month-btn">Mar</button>
+                    <button class="month-btn">Apr</button>
+                    <button class="month-btn">May</button>
+                    <button class="month-btn selected">Jun</button>
+                    <button class="month-btn">Jul</button>
+                    <button class="month-btn">Aug</button>
+                    <button class="month-btn">Sep</button>
+                    <button class="month-btn">Oct</button>
+                    <button class="month-btn">Nov</button>
+                    <button class="month-btn">Dec</button>
+                </div>
+            </div>
+
+            <!-- Expiry Month -->
+            <div class="month-section expiry-section">
+                <span class="section-label">Expiry Month</span>
+                <div class="year-buttons">
+                    <button class="year-btn">2025</button>
+                    <button class="year-btn">2026</button>
+                    <button class="year-btn selected">2027</button>
+                </div>
+                <div class="month-grid">
+                    <button class="month-btn">Jan</button>
+                    <button class="month-btn">Feb</button>
+                    <button class="month-btn">Mar</button>
+                    <button class="month-btn">Apr</button>
+                    <button class="month-btn">May</button>
+                    <button class="month-btn selected">Jun</button>
+                    <button class="month-btn">Jul</button>
+                    <button class="month-btn">Aug</button>
+                    <button class="month-btn">Sep</button>
+                    <button class="month-btn">Oct</button>
+                    <button class="month-btn">Nov</button>
+                    <button class="month-btn">Dec</button>
+                </div>
+            </div>
+
+            <!-- Quantity Display -->
+            <div class="qty-total-display">
+                <span class="qty-total-label">Total Quantity</span>
+                <span class="qty-total-value">125</span>
+                <span class="qty-total-unit">packs</span>
+            </div>
+
+            <!-- +/- Controls -->
+            <div class="qty-controls">
+                <button class="qty-adj-btn qty-minus">−</button>
+                <input type="number" class="qty-input-field" value="200" min="0">
+                <button class="qty-adj-btn qty-plus">+</button>
+            </div>
+            <p class="quantity-tip">Type amount, then press + or −</p>
+
+            <!-- Stack Calculator -->
+            <div class="stack-calc">
+                <button class="stack-calc-toggle">
+                    <span>📐 Stack Calculator</span>
+                    <span class="toggle-arrow open">▸</span>
+                </button>
+                <div class="stack-calc-body">
+                    <div class="stack-formula">
+                        <strong>((L × W × H) × n) + loose = total</strong>
+                    </div>
+
+                    <div class="stack-row">
+                        <div class="stack-field">
+                            <label>Length</label>
+                            <input type="number" value="5" min="0">
+                        </div>
+                        <span class="stack-op">×</span>
+                        <div class="stack-field">
+                            <label>Width</label>
+                            <input type="number" value="4" min="0">
+                        </div>
+                        <span class="stack-op">×</span>
+                        <div class="stack-field">
+                            <label>Height</label>
+                            <input type="number" value="3" min="0">
+                        </div>
+                    </div>
+
+                    <div class="stack-row">
+                        <div class="stack-field">
+                            <label>Stacks (n)</label>
+                            <input type="number" value="2" min="1">
+                        </div>
+                        <span class="stack-op">+</span>
+                        <div class="stack-field">
+                            <label>Loose</label>
+                            <input type="number" value="5" min="0">
+                        </div>
+                    </div>
+
+                    <div class="stack-result">
+                        = <span class="stack-result-value">125</span> packs
+                    </div>
+
+                    <button class="stack-apply-btn">Use This Value</button>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <button class="save-btn">Save</button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="count-screen.html" class="nav-btn active">
+                <span class="nav-icon">📦</span>
+                <span class="nav-label">Count</span>
+            </a>
+            <a href="twelve-month-screen.html" class="nav-btn">
+                <span class="nav-icon">⚠️</span>
+                <span class="nav-label">12M</span>
+            </a>
+            <a href="inventory-screen.html" class="nav-btn">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Inventory</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // Stack calculator logic
+        const stackFields = document.querySelectorAll('.stack-field input');
+        const stackResult = document.querySelector('.stack-result-value');
+        const qtyTotal = document.querySelector('.qty-total-value');
+        const qtyInput = document.querySelector('.qty-input-field');
+
+        function calculateStack() {
+            const values = Array.from(stackFields).map(f => parseInt(f.value) || 0);
+            const l = values[0], w = values[1], h = values[2], n = values[3], loose = values[4];
+            const perStack = l * w * h;
+            const total = (perStack * n) + loose;
+            stackResult.textContent = total;
+            return total;
+        }
+
+        stackFields.forEach(field => {
+            field.addEventListener('input', calculateStack);
+        });
+
+        // Apply stack result to quantity
+        document.querySelector('.stack-apply-btn').addEventListener('click', () => {
+            const value = calculateStack();
+            qtyTotal.textContent = value;
+            qtyInput.value = value;
+        });
+
+        // +/- buttons
+        document.querySelector('.qty-plus').addEventListener('click', () => {
+            const increment = parseInt(qtyInput.value) || 0;
+            const current = parseInt(qtyTotal.textContent) || 0;
+            qtyTotal.textContent = current + increment;
+        });
+
+        document.querySelector('.qty-minus').addEventListener('click', () => {
+            const decrement = parseInt(qtyInput.value) || 0;
+            const current = parseInt(qtyTotal.textContent) || 0;
+            qtyTotal.textContent = Math.max(0, current - decrement);
+        });
+
+        // Year/Month button selection
+        document.querySelectorAll('.month-section').forEach(section => {
+            section.querySelectorAll('.year-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    section.querySelectorAll('.year-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                });
+            });
+
+            section.querySelectorAll('.month-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    section.querySelectorAll('.month-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                });
+            });
+        });
+
+        // Stack calculator toggle
+        document.querySelector('.stack-calc-toggle').addEventListener('click', () => {
+            const body = document.querySelector('.stack-calc-body');
+            const arrow = document.querySelector('.toggle-arrow');
+            const isOpen = body.style.display !== 'none';
+            body.style.display = isOpen ? 'none' : 'block';
+            arrow.classList.toggle('open', !isOpen);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory List — Operator Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 400px;
+            min-height: 100vh;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ==================== HEADER ==================== */
+        .screen-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #ffffff;
+        }
+
+        .btn-back {
+            font-size: 18px;
+            color: #1a73e8;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+
+        .screen-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #202124;
+            flex: 1;
+        }
+
+        /* ==================== LEGEND ==================== */
+        .legend-bar {
+            display: flex;
+            gap: 16px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-normal {
+            background: #ffffff;
+            border: 1px solid #dadce0;
+        }
+
+        .legend-warning {
+            background: #fce8e6;
+            border: 1px solid #ea4335;
+        }
+
+        /* ==================== CONTENT ==================== */
+        .screen-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        /* ==================== TABLE ==================== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .data-table tbody td {
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #202124;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* Product group header */
+        .product-group {
+            background: #f8f9fa;
+        }
+
+        .product-group td {
+            font-size: 15px;
+            font-weight: 600;
+            color: #202124;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        /* FEFO warning row */
+        .row-warning {
+            background: #fce8e6;
+        }
+
+        .row-warning td {
+            color: #c5221f;
+            font-weight: 600;
+        }
+
+        /* Normal row hover */
+        .data-table tbody tr:not(.product-group):not(.row-warning):hover {
+            background: #f8f9fa;
+        }
+
+        /* ==================== EMPTY STATE ==================== */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+            color: #5f6368;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+        }
+
+        /* ==================== BOTTOM NAVIGATION ==================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #5f6368;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .nav-btn.active {
+            color: #1a73e8;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- Header -->
+        <div class="screen-header">
+            <button class="btn-back">←</button>
+            <div class="screen-title">Inventory List</div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend-bar">
+            <span class="legend-item">
+                <span class="legend-dot legend-normal"></span>
+                Normal
+            </span>
+            <span class="legend-item">
+                <span class="legend-dot legend-warning"></span>
+                Qty dropped
+            </span>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="screen-content">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Pack</th>
+                        <th>Month</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Amistar group -->
+                    <tr class="product-group">
+                        <td colspan="4">Amistar</td>
+                    </tr>
+                    <tr>
+                        <td>Amistar</td>
+                        <td>50ml</td>
+                        <td>6A</td>
+                        <td>200</td>
+                    </tr>
+                    <tr class="row-warning">
+                        <td>Amistar</td>
+                        <td>50ml</td>
+                        <td>6B</td>
+                        <td>150</td>
+                    </tr>
+                    <tr>
+                        <td>Amistar</td>
+                        <td>100ml</td>
+                        <td>6A</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>Amistar</td>
+                        <td>100ml</td>
+                        <td>6C</td>
+                        <td>180</td>
+                    </tr>
+
+                    <!-- Bingo group -->
+                    <tr class="product-group">
+                        <td colspan="4">Bingo</td>
+                    </tr>
+                    <tr>
+                        <td>Bingo</td>
+                        <td>100g</td>
+                        <td>5L</td>
+                        <td>300</td>
+                    </tr>
+                    <tr>
+                        <td>Bingo</td>
+                        <td>500g</td>
+                        <td>6A</td>
+                        <td>120</td>
+                    </tr>
+
+                    <!-- Karate group -->
+                    <tr class="product-group">
+                        <td colspan="4">Karate</td>
+                    </tr>
+                    <tr>
+                        <td>Karate</td>
+                        <td>50ml</td>
+                        <td>6F</td>
+                        <td>125</td>
+                    </tr>
+                    <tr>
+                        <td>Karate</td>
+                        <td>50ml</td>
+                        <td>6G</td>
+                        <td>80</td>
+                    </tr>
+                    <tr class="row-warning">
+                        <td>Karate</td>
+                        <td>50ml</td>
+                        <td>6H</td>
+                        <td>60</td>
+                    </tr>
+                    <tr>
+                        <td>Karate</td>
+                        <td>100ml</td>
+                        <td>6E</td>
+                        <td>200</td>
+                    </tr>
+
+                    <!-- Pegasus group -->
+                    <tr class="product-group">
+                        <td colspan="4">Pegasus</td>
+                    </tr>
+                    <tr>
+                        <td>Pegasus</td>
+                        <td>50ml</td>
+                        <td>6B</td>
+                        <td>150</td>
+                    </tr>
+                    <tr>
+                        <td>Pegasus</td>
+                        <td>100ml</td>
+                        <td>6A</td>
+                        <td>90</td>
+                    </tr>
+
+                    <!-- Score group -->
+                    <tr class="product-group">
+                        <td colspan="4">Score</td>
+                    </tr>
+                    <tr>
+                        <td>Score</td>
+                        <td>50ml</td>
+                        <td>6A</td>
+                        <td>250</td>
+                    </tr>
+                    <tr>
+                        <td>Score</td>
+                        <td>100ml</td>
+                        <td>6A</td>
+                        <td>180</td>
+                    </tr>
+                    <tr>
+                        <td>Score</td>
+                        <td>500ml</td>
+                        <td>5K</td>
+                        <td>40</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="count-screen.html" class="nav-btn">
+                <span class="nav-icon">📦</span>
+                <span class="nav-label">Count</span>
+            </a>
+            <a href="twelve-month-screen.html" class="nav-btn">
+                <span class="nav-icon">⚠️</span>
+                <span class="nav-label">12M</span>
+            </a>
+            <a href="inventory-screen.html" class="nav-btn active">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Inventory</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>
