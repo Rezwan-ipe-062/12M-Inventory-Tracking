@@ -187,5 +187,20 @@
         });
     };
 
+    syncManager.pullConfig = function () {
+        if (!supabase) return Promise.resolve();
+        return supabase.from('config').select('*').eq('key', 'shelf-life-config').single().then(function (res) {
+            if (res.error && res.error.code !== 'PGRST116') {
+                console.warn('syncManager: pullConfig failed', res.error);
+                return;
+            }
+            if (res.data && res.data.value) {
+                localStorage.setItem('shelf-life-config', JSON.stringify(res.data.value));
+            }
+        }).catch(function (e) {
+            console.warn('syncManager: pullConfig error', e.message || e);
+        });
+    };
+
     window.syncManager = syncManager;
 })();

@@ -23,7 +23,7 @@
 - ❌ No React, Vue, Angular, Svelte, or any frontend framework
 - ❌ No npm, node_modules, build steps, bundlers (webpack, vite, etc.)
 - ❌ No TypeScript — keep pure `.js` files
-- ❌ No service workers or PWA manifests (for now)
+- ❌ No service workers (for now)
 - ❌ No authentication backend — PIN and password are client-side only
 - ❌ No real-time subscriptions or WebSockets
 - ❌ No Supabase service_role key on the client — anon key only
@@ -83,7 +83,14 @@ For each group **independently** (i.e., Amistar 50ml is a separate group from Am
 5. Operator app uses CSS class `row-fefo-highlight` (defined in `style.css`)
 6. Admin app uses inline `background:#FEF3C7` — if moving to CSS later, use same class for consistency
 
-## 7. AI Boundaries
+## 7. Config Persistence & Sync
+
+- Config (`shelf-life-config`) is stored in `localStorage` and synced to Supabase `config` table on every admin save
+- `syncManager.pullConfig()` pulls config from Supabase on both admin and operator init
+- If Supabase is offline, the local `localStorage` config is used as fallback
+- `loadConfig()` (admin) and `loadOperatorConfig()` (operator) both merge missing fields from defaults
+
+## 8. AI Boundaries
 
 - Do not refactor the app architecture (e.g., don't suggest converting to React)
 - Do not add build tools or package managers

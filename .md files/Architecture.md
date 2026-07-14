@@ -30,6 +30,10 @@ User Action → app.js (state) → syncToStorage()
 Admin reads: localStorage.getItem('operator-data') ← same key written by operator app
                      ↓
              renderDashboard(), render12M(), renderInventory(), renderActivity()
+
+Config flow:
+  Admin saves settings → saveConfig() → localStorage + upsert to Supabase `config` table
+  Operator loads app → init → pullConfig() from Supabase → merge into localStorage
 ```
 
 ## 3. Data Storage Architecture

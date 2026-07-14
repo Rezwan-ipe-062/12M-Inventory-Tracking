@@ -39,11 +39,11 @@ An offline-first inventory tracking system for Syngenta Bangladesh warehouse ope
 - **Supabase Cloud Sync** — Background sync via `syncManager.js` when online
 - **SQL Tables** — `transactions`, `inventory`, `products`, `config`, `operators`
 - **RLS Public Policies** — Simple open access for anon key (single-tenant tool)
+- **Config Sync** — Admin settings (warehouses, expiry/prod years, operator PINs) synced to Supabase `config` table, pulled on operator app init for cross-device consistency
 
 ## 4. Non-Goals (Future)
 
 - Barcode/QR scanning (planned Phase 6)
 - Multi-tenant user authentication
-- Real-time multi-device sync (manual refresh for now)
 - Service worker / PWA install
 - Native mobile app

@@ -1,6 +1,6 @@
 # Phases — 12M Shelf Life Inventory Tracking
 
-> Current phase: **4 (Deployment)** — Project is live on GitHub Pages
+> Current phase: **8 (Config Sync & Polish)** — Cross-device config sync, bug fixes
 
 ---
 
@@ -71,16 +71,20 @@
 | GitHub Pages enabled (branch: main, root) | ✅ |
 | Public URL: `https://Rezwan-ipe-062.github.io/12M-Inventory-Tracking/` | ✅ |
 
-## Phase 5: Multi-Warehouse 🔲 Future
+## Phase 5: Multi-Warehouse ✅ Done
 
 **Goal:** Warehouse-level filtering and inventory views
 
 | Task | Status |
 |------|--------|
-| Warehouse column in transactions | 🔲 |
-| Warehouse selector on operator app count screen | 🔲 |
-| Warehouse-filtered dashboard stats | 🔲 |
-| Per-warehouse inventory report | 🔲 |
+| Warehouse column in transactions | ✅ |
+| Warehouse selector on operator app (via PIN assignment) | ✅ |
+| Warehouse-filtered dashboard stats | ✅ |
+| Per-warehouse inventory report | ✅ |
+| Operator inventory/12M views scoped to assigned warehouse | ✅ |
+| Warehouse column in admin tables (12M, Inventory, Activity) | ✅ |
+| Warehouse chips in admin dashboard | ✅ |
+| Warehouse in CSV exports | ✅ |
 
 ## Phase 6: Barcode Scanning 🔲 Future
 
@@ -92,13 +96,29 @@
 | Barcode→product mapping | 🔲 |
 | Scan → auto-select product → go to count screen | 🔲 |
 
-## Phase 7: User Roles & Audit 🔲 Future
+## Phase 7: User Roles & Audit ✅ Done
 
 **Goal:** Named operator sessions and full audit trail
 
 | Task | Status |
 |------|--------|
-| Operator login shows name, not just PIN validation | 🔲 |
-| Every transaction records operator name | 🔲 |
-| Admin audit log with operator filter | 🔲 |
+| Operator login shows name + warehouse in header | ✅ |
+| Every transaction records operator_name + warehouse | ✅ |
+| Admin audit log with operator column | ✅ |
 | Session timeout / auto-logout | 🔲 |
+
+## Phase 8: Config Sync & Polish ✅ Done
+
+**Goal:** Cross-device config sync and bug fixes
+
+| Task | Status |
+|------|--------|
+| Remove hardcoded Default 1234 PIN fallbacks (3 locations) | ✅ |
+| loadConfig() merges missing fields from defaults (warehouses) | ✅ |
+| Admin pushes config to Supabase `config` table on save | ✅ |
+| Operator pulls config from Supabase on init | ✅ |
+| Admin pulls config from Supabase on init | ✅ |
+| Operator name shown in header | ✅ |
+| Cross-device inventory sync (pullFromSupabase on operator init) | ✅ |
+| Remove last operator guard | ✅ |
+| Favicon, PWA manifest | ✅ |

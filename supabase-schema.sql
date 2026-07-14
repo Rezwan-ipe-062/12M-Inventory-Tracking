@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS config (
   value JSONB DEFAULT '{}'
 );
 
-INSERT INTO config (key, value) VALUES ('shelf-life-config', '{"operatorPins":[{"name":"Default","pin":"1234"}],"expiryYears":{"start":2025,"end":2030},"prodYears":{"start":5,"end":6},"warehouses":["Chittagong","Gazipur","Jessore","Bogura"]}') ON CONFLICT (key) DO NOTHING;
+INSERT INTO config (key, value) VALUES ('shelf-life-config', '{"operatorPins":[],"expiryYears":{"start":2025,"end":2030},"prodYears":{"start":5,"end":6},"warehouses":["Chittagong","Gazipur","Jessore","Bogura"]}') ON CONFLICT (key) DO NOTHING;
 
 -- Enable Row Level Security (open access with anon key — locked to your Supabase project)
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;

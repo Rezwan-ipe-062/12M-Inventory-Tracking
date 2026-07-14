@@ -58,3 +58,27 @@
 - Phase 5: Multi-warehouse filtering
 - Phase 6: Barcode scanning
 - Phase 7: User roles & audit trail
+
+### Session: Bug fix round — Default 1234, config merge, cross-device sync (Jul 14, 2026)
+
+#### Completed
+- **Bug 1 — Default 1234 PIN still works**: Removed all 3 hardcoded fallbacks that re-created Default 1234 operator. `loadOperatorConfig()` no longer returns 1234 when config is empty. `validatePin()` no longer has `|| [{name:"Default", pin:"1234"}]`. `renderOperatorPinList()` no longer re-creates Default when list is empty.
+- **Bug 2 — Warehouse dropdown empty**: `loadConfig()` in admin-app and `loadOperatorConfig()` in app.js now merge missing fields from DEFAULT_CONFIG — ensures `warehouses` always populated even for old saved configs.
+- **Bug 3 — Config not syncing cross-device**: Added `saveConfig()` pushes config to Supabase `config` table on every save. Added `syncManager.pullConfig()` to pull config from Supabase on init. Both admin and operator apps call `pullConfig()` before `pullFromSupabase()` in their init sequence.
+- **Bug 4 — Operator name not shown**: Header now shows `"Sojib · Chittagong"` format in the `.wh-indicator` badge.
+- **Bug 5 — Cross-device sync missing**: Operator init now calls `pullFromSupabase()` then `loadFromStorage()` so remote transactions appear on login.
+- **Bug 6 — Can't remove last operator PIN**: Removed the `length <= 1` guard in `removeOperatorPin()`.
+- **Bug 7 — FEFO highlight logic**: Changed from adjacent `<` comparison to running-min bottom-up traversal (`>` against minimum of all later batches).
+
+#### Files Modified
+- `operator-app/app.js` — Removed 1234 fallbacks, added getConfig(), warehouse scoping, config merge, operator name in header, pullConfig + pullFromSupabase in init
+- `operator-app/syncManager.js` — Added `pullConfig()` method
+- `admin-app/admin-app.js` — Default 1234 removal, config merge, saveConfig pushes to Supabase, init pulls config
+- `admin-app/admin-panel.html` — Warehouse dropdown in add-operator form
+- `favicon.svg` — New 12M brand icon
+- `manifest.json` — New PWA manifest
+- `supabase-schema.sql` — Updated default config insert (empty operatorPins, warehouses field)
+
+#### Known Issues
+- Config sync depends on Supabase connectivity — if offline, operator uses local config only
+- Old inventory records (created before warehouse field) are orphaned — won't match warehouse-scoped queries

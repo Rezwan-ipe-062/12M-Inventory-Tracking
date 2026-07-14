@@ -16,24 +16,26 @@ const state = {
 };
 
 // Load config from admin panel (localStorage)
+var DEFAULT_OP_CONFIG = {
+    operatorPins: [],
+    expiryYears: { start: 2025, end: 2030 },
+    prodYears: { start: 5, end: 6 },
+    warehouses: ['Chittagong', 'Gazipur', 'Jessore', 'Bogura']
+};
 function loadOperatorConfig() {
     try {
-        const saved = localStorage.getItem('shelf-life-config');
+        var saved = localStorage.getItem('shelf-life-config');
         if (saved) {
-            const cfg = JSON.parse(saved);
-            // Support old single-PIN format
-            if (!cfg.operatorPins) {
-                cfg.operatorPins = cfg.operatorPin ? [{ name: 'Default', pin: cfg.operatorPin }] : [];
-            }
-            return cfg;
+            var base = JSON.parse(saved);
+            return {
+                operatorPins: base.operatorPins || JSON.parse(JSON.stringify(DEFAULT_OP_CONFIG.operatorPins)),
+                expiryYears: base.expiryYears || DEFAULT_OP_CONFIG.expiryYears,
+                prodYears: base.prodYears || DEFAULT_OP_CONFIG.prodYears,
+                warehouses: base.warehouses || DEFAULT_OP_CONFIG.warehouses
+            };
         }
-    } catch {}
-    return {
-        operatorPins: [],
-        expiryYears: { start: 2025, end: 2030 },
-        prodYears: { start: 5, end: 6 },
-        warehouses: ['Chittagong', 'Gazipur', 'Jessore', 'Bogura']
-    };
+    } catch (e) {}
+    return JSON.parse(JSON.stringify(DEFAULT_OP_CONFIG));
 }
 function getConfig() { return loadOperatorConfig(); }
 
@@ -840,8 +842,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFromStorage();
     if (window.syncManager) {
         window.syncManager.init();
-        window.syncManager.pullFromSupabase().then(function() {
-            loadFromStorage();
+        window.syncManager.pullConfig().then(function() {
+            return window.syncManager.pullFromSupabase().then(function() {
+                loadFromStorage();
+            });
         });
         window.syncManager.onSync(() => {
             if (state.currentScreen === 'inventory') renderInventoryList();

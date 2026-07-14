@@ -117,12 +117,31 @@ const DEFAULT_CONFIG = {
 function loadConfig() {
     try {
         const saved = localStorage.getItem('shelf-life-config');
-        return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        const base = saved ? JSON.parse(saved) : {};
+        return {
+            operatorPins: base.operatorPins || JSON.parse(JSON.stringify(DEFAULT_CONFIG.operatorPins)),
+            expiryYears: base.expiryYears || DEFAULT_CONFIG.expiryYears,
+            prodYears: base.prodYears || DEFAULT_CONFIG.prodYears,
+            warehouses: base.warehouses || DEFAULT_CONFIG.warehouses,
+            // Allow any extra fields stored (forward-compat)
+            ...base
+        };
     } catch { return JSON.parse(JSON.stringify(DEFAULT_CONFIG)); }
 }
 
 function saveConfig(cfg) {
     localStorage.setItem('shelf-life-config', JSON.stringify(cfg));
+    // Push config to Supabase for cross-device sync
+    if (window.supabase) {
+        supabase.from('config').upsert({
+            key: 'shelf-life-config',
+            value: cfg
+        }, { onConflict: 'key' }).then(function(res) {
+            if (res.error) console.warn('config sync failed', res.error);
+        }).catch(function(e) {
+            console.warn('config sync error', e.message || e);
+        });
+    }
 }
 
 let CONFIG = loadConfig();
@@ -943,8 +962,13 @@ function renderAll() {
 }
 
 function initApp() {
-    if (window.syncManager && window.syncManager.pullFromSupabase) {
-        window.syncManager.pullFromSupabase().then(renderAll);
+    if (window.syncManager && window.syncManager.pullConfig) {
+        window.syncManager.pullConfig().then(function() {
+            if (window.syncManager.pullFromSupabase) {
+                return window.syncManager.pullFromSupabase().then(renderAll);
+            }
+            renderAll();
+        });
     } else {
         renderAll();
     }
