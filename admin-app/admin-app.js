@@ -132,8 +132,9 @@ function loadConfig() {
 function saveConfig(cfg) {
     localStorage.setItem('shelf-life-config', JSON.stringify(cfg));
     // Push config to Supabase for cross-device sync
-    if (window.supabase) {
-        supabase.from('config').upsert({
+    var client = window.syncManager && window.syncManager.supabase;
+    if (client) {
+        client.from('config').upsert({
             key: 'shelf-life-config',
             value: cfg
         }, { onConflict: 'key' }).then(function(res) {
@@ -962,8 +963,9 @@ function renderAll() {
 }
 
 function initApp() {
-    if (window.syncManager && window.syncManager.pullConfig) {
-        window.syncManager.pullConfig().then(function() {
+    if (window.syncManager) {
+        window.syncManager.init();
+        (window.syncManager.pullConfig ? window.syncManager.pullConfig() : Promise.resolve()).then(function() {
             if (window.syncManager.pullFromSupabase) {
                 return window.syncManager.pullFromSupabase().then(renderAll);
             }

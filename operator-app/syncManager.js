@@ -22,6 +22,7 @@
                 supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
                     auth: { persistSession: false }
                 });
+                syncManager.supabase = supabase;
             } catch (e) {
                 console.warn('syncManager: failed to init supabase client', e);
                 return;
