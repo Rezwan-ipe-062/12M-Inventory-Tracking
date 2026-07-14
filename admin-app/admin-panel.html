@@ -324,8 +324,14 @@
                             </div>
                         </div>
 
-                        <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border);display:flex;gap:8px;">
-                            <button class="add-product-btn" onclick="resetConfig()" style="background:#DC2626;">Reset to Defaults</button>
+                        <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border);">
+                            <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;">Danger Zone</div>
+                            <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">These actions cannot be undone.</p>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                <button class="add-product-btn" onclick="resetConfig()" style="background:#DC2626;">Reset to Defaults</button>
+                                <button class="add-product-btn" onclick="clearLocalData()" style="background:#DC2626;">Delete Local Data</button>
+                                <button class="add-product-btn" onclick="clearSupabaseData()" style="background:#DC2626;">Clear Supabase Data</button>
+                            </div>
                         </div>
                     </div>
                 </div>

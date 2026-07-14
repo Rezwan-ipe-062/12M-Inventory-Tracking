@@ -866,6 +866,53 @@ function resetConfig() {
 }
 
 // ==============================
+// DANGER ZONE: Clear data actions
+// ==============================
+function clearLocalData() {
+    if (!confirm('Delete ALL local data (inventory, transactions) from this browser? This cannot be undone.')) return;
+    if (!confirm('Are you sure? All counting data will be permanently removed from this device.')) return;
+    localStorage.removeItem('operator-data');
+    document.querySelectorAll('.admin-screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-dashboard').classList.add('active');
+    renderDashboard();
+    render12M('all');
+    renderInventory();
+    renderActivity('all');
+    renderProducts();
+    alert('Local data cleared.');
+}
+
+function clearSupabaseData() {
+    if (!confirm('Delete ALL data from Supabase cloud? This will clear tables: transactions, inventory, products, config, operators.')) return;
+    if (!confirm('FINAL WARNING: This removes ALL data from the cloud database. Continue?')) return;
+
+    if (!window.supabase) {
+        alert('Supabase not connected. Data may already be cleared, or the app needs a reload.');
+        return;
+    }
+
+    var tables = ['transactions', 'inventory', 'products', 'config', 'operators'];
+    var btn = document.querySelector('button[onclick*="clearSupabaseData"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Clearing...'; }
+
+    Promise.all(tables.map(function(t) {
+        return supabase.from(t).delete().neq('id', '0');
+    })).then(function(results) {
+        var errors = results.filter(function(r) { return r.error; });
+        if (errors.length > 0) {
+            alert('Cleared with some errors. Check console for details.');
+            console.warn('Clear errors:', errors);
+        } else {
+            alert('All Supabase tables cleared successfully!');
+        }
+    }).catch(function(e) {
+        alert('Failed to clear: ' + (e.message || e));
+    }).finally(function() {
+        if (btn) { btn.disabled = false; btn.textContent = 'Clear Supabase Data'; }
+    });
+}
+
+// ==============================
 // INIT
 // ==============================
 function initApp() {

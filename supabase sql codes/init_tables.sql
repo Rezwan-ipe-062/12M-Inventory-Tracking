@@ -60,26 +60,47 @@ ALTER TABLE config ENABLE ROW LEVEL SECURITY;
 ALTER TABLE operators ENABLE ROW LEVEL SECURITY;
 
 -- Allow public access for anon key (since this is a simple tool, not multi-tenant)
+-- Drop existing policies first to allow re-running this script safely
+DROP POLICY IF EXISTS "Allow public read products" ON products;
+DROP POLICY IF EXISTS "Allow public insert products" ON products;
+DROP POLICY IF EXISTS "Allow public update products" ON products;
+DROP POLICY IF EXISTS "Allow public delete products" ON products;
 CREATE POLICY "Allow public read products" ON products FOR SELECT USING (true);
 CREATE POLICY "Allow public insert products" ON products FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public update products" ON products FOR UPDATE USING (true);
 CREATE POLICY "Allow public delete products" ON products FOR DELETE USING (true);
 
+DROP POLICY IF EXISTS "Allow public read transactions" ON transactions;
+DROP POLICY IF EXISTS "Allow public insert transactions" ON transactions;
+DROP POLICY IF EXISTS "Allow public update transactions" ON transactions;
+DROP POLICY IF EXISTS "Allow public delete transactions" ON transactions;
 CREATE POLICY "Allow public read transactions" ON transactions FOR SELECT USING (true);
 CREATE POLICY "Allow public insert transactions" ON transactions FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public update transactions" ON transactions FOR UPDATE USING (true);
 CREATE POLICY "Allow public delete transactions" ON transactions FOR DELETE USING (true);
 
+DROP POLICY IF EXISTS "Allow public read inventory" ON inventory;
+DROP POLICY IF EXISTS "Allow public insert inventory" ON inventory;
+DROP POLICY IF EXISTS "Allow public update inventory" ON inventory;
+DROP POLICY IF EXISTS "Allow public delete inventory" ON inventory;
 CREATE POLICY "Allow public read inventory" ON inventory FOR SELECT USING (true);
 CREATE POLICY "Allow public insert inventory" ON inventory FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public update inventory" ON inventory FOR UPDATE USING (true);
 CREATE POLICY "Allow public delete inventory" ON inventory FOR DELETE USING (true);
 
+DROP POLICY IF EXISTS "Allow public read config" ON config;
+DROP POLICY IF EXISTS "Allow public insert config" ON config;
+DROP POLICY IF EXISTS "Allow public update config" ON config;
+DROP POLICY IF EXISTS "Allow public delete config" ON config;
 CREATE POLICY "Allow public read config" ON config FOR SELECT USING (true);
 CREATE POLICY "Allow public insert config" ON config FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public update config" ON config FOR UPDATE USING (true);
 CREATE POLICY "Allow public delete config" ON config FOR DELETE USING (true);
 
+DROP POLICY IF EXISTS "Allow public read operators" ON operators;
+DROP POLICY IF EXISTS "Allow public insert operators" ON operators;
+DROP POLICY IF EXISTS "Allow public update operators" ON operators;
+DROP POLICY IF EXISTS "Allow public delete operators" ON operators;
 CREATE POLICY "Allow public read operators" ON operators FOR SELECT USING (true);
 CREATE POLICY "Allow public insert operators" ON operators FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public update operators" ON operators FOR UPDATE USING (true);
