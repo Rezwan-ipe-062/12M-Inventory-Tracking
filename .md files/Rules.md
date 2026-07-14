@@ -76,10 +76,10 @@ All rows are sorted by three keys in this exact order:
 ### FEFO Highlight (per group)
 For each group **independently** (i.e., Amistar 50ml is a separate group from Amistar 100ml, which is separate from Karate 50ml):
 
-1. Batches within the group are already sorted by production month ascending
-2. Compare each adjacent batch pair (index `i-1` vs `i`)
-3. If an **older** batch (`i-1`) has **less** quantity than the **newer** batch (`i`), the older batch gets the FEFO highlight
-4. This catches potential counting errors: older-stock quantity should never be less than newer-stock quantity
+1. Batches within the group are sorted by production month ascending (oldest first)
+2. Starting from the second-to-last row up to the first, check each row against all later rows: if a row's quantity exceeds the minimum quantity of any row after it, highlight it
+3. Implementation: run a pointer `r` from `group.length-2` to `0`; keep a `runningMin` starting from the last row's quantity. If `group[r].qty > runningMin`, highlight `group[r]`. Then update `runningMin = Math.min(runningMin, group[r].qty)`.
+4. This catches FEFO violations: older stock has not been consumed, while newer stock was consumed instead
 5. Operator app uses CSS class `row-fefo-highlight` (defined in `style.css`)
 6. Admin app uses inline `background:#FEF3C7` — if moving to CSS later, use same class for consistency
 

@@ -41,6 +41,19 @@
 ### Files Modified
 - `.md files/Rules.md` — Added section 6: Inventory Display Rules (filter, sort, group, FEFO highlight)
 
+### Session: Bug fixes (Jul 14, 2026)
+
+### Completed
+- Bug 1 — Added `window.addEventListener('storage', ...)` in admin-app.js to auto-refresh admin dashboards when operator saves data in another tab
+- Bug 2 — Fixed FEFO highlight logic: changed from adjacent `<` comparison to running-min bottom-up traversal (`>` against minimum of all later batches) in both operator-app/app.js and admin-app/admin-app.js
+- Bug 3 — Changed `const OPERATOR_CONFIG` to `getConfig()` getter function in operator-app/app.js so count screen always reads fresh config from localStorage
+- Updated Rules.md FEFO section to document the corrected highlight logic
+
+### Files Modified
+- `.md files/Rules.md` — Updated FEFO highlight rules
+- `operator-app/app.js` — Fixed FEFO loop (lines 612-620), changed `const OPERATOR_CONFIG` to `getConfig()` getter
+- `admin-app/admin-app.js` — Fixed FEFO loop, added storage event listener for cross-tab sync
+
 ### Next Planned
 - Phase 5: Multi-warehouse filtering
 - Phase 6: Barcode scanning

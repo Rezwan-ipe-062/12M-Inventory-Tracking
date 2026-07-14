@@ -527,10 +527,12 @@ function renderInventory() {
 
     const highlighted = new Set();
     Object.values(groups).forEach(group => {
-        for (let i = 1; i < group.length; i++) {
-            if (group[i - 1].qty < group[i].qty) {
-                highlighted.add(group[i - 1].product + '|' + group[i - 1].pack + '|' + group[i - 1].prodMonth);
+        let runningMin = group[group.length - 1].qty
+        for (let i = group.length - 2; i >= 0; i--) {
+            if (group[i].qty > runningMin) {
+                highlighted.add(group[i].product + '|' + group[i].pack + '|' + group[i].prodMonth);
             }
+            runningMin = Math.min(runningMin, group[i].qty)
         }
     });
 
@@ -947,6 +949,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (document.getElementById('screen-inventory').classList.contains('active')) renderInventory();
             if (document.getElementById('screen-activity').classList.contains('active')) renderActivity(currentActivityFilter);
         });
+    }
+});
+
+// Auto-refresh when operator saves data in another tab
+window.addEventListener('storage', function(e) {
+    if (e.key === 'operator-data') {
+        if (document.getElementById('screen-dashboard').classList.contains('active')) renderDashboard();
+        if (document.getElementById('screen-12m').classList.contains('active')) render12M(currentFilter);
+        if (document.getElementById('screen-inventory').classList.contains('active')) renderInventory();
+        if (document.getElementById('screen-activity').classList.contains('active')) renderActivity(currentActivityFilter);
     }
 });
 
