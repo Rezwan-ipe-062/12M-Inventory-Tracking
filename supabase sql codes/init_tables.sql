@@ -1,37 +1,40 @@
 -- Supabase SQL: Initialize tables for 12M Shelf Life Inventory Tracking
 -- Run this in Supabase SQL Editor (https://supabase.com/dashboard/project/ytirmuuchcxzlwethvsg/sql/new)
 
--- 1. Products table
+-- 1. Transactions table (individual receive/dispatch records)
+CREATE TABLE IF NOT EXISTS transactions (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  product TEXT NOT NULL,
+  pack_size TEXT DEFAULT '',
+  production_month TEXT DEFAULT '',
+  expiry_month TEXT DEFAULT '',
+  quantity NUMERIC NOT NULL DEFAULT 0,
+  type TEXT NOT NULL CHECK (type IN ('receive', 'dispatch')),
+  operator_name TEXT DEFAULT '',
+  client_timestamp TEXT DEFAULT '',
+  client_date TEXT DEFAULT '',
+  sync_status TEXT DEFAULT 'synced',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 2. Inventory table (aggregated stock snapshot)
+CREATE TABLE IF NOT EXISTS inventory (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  product TEXT NOT NULL,
+  pack_size TEXT DEFAULT '',
+  production_month TEXT DEFAULT '',
+  expiry_month TEXT DEFAULT '',
+  quantity NUMERIC NOT NULL DEFAULT 0,
+  sync_status TEXT DEFAULT 'synced',
+  UNIQUE(product, pack_size, production_month)
+);
+
+-- 3. Products table (shared product catalog)
 CREATE TABLE IF NOT EXISTS products (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name TEXT NOT NULL,
-  sku TEXT UNIQUE NOT NULL,
-  category TEXT,
-  unit TEXT DEFAULT 'pcs',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 2. Transactions table
-CREATE TABLE IF NOT EXISTS transactions (
-  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  product_sku TEXT NOT NULL REFERENCES products(sku),
-  type TEXT NOT NULL CHECK (type IN ('in', 'out')),
-  quantity NUMERIC NOT NULL,
-  batch_code TEXT,
-  location TEXT,
-  operator TEXT,
-  notes TEXT,
-  timestamp TIMESTAMPTZ DEFAULT NOW(),
-  synced_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 3. Inventory table (current stock snapshot)
-CREATE TABLE IF NOT EXISTS inventory (
-  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  product_sku TEXT NOT NULL REFERENCES products(sku) UNIQUE,
-  quantity NUMERIC NOT NULL DEFAULT 0,
-  updated_at TIMESTAMPTZ DEFAULT NOW()
+  pack TEXT DEFAULT '',
+  prefix TEXT DEFAULT ''
 );
 
 -- 4. Config table (app settings)
@@ -45,7 +48,7 @@ CREATE TABLE IF NOT EXISTS config (
 CREATE TABLE IF NOT EXISTS operators (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name TEXT NOT NULL,
-  code TEXT UNIQUE NOT NULL,
+  pin TEXT UNIQUE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
