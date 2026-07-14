@@ -967,13 +967,27 @@ function initApp() {
         window.syncManager.init();
         (window.syncManager.pullConfig ? window.syncManager.pullConfig() : Promise.resolve()).then(function() {
             if (window.syncManager.pullFromSupabase) {
-                return window.syncManager.pullFromSupabase().then(renderAll);
+                return window.syncManager.pullFromSupabase().then(function() {
+                    renderAll();
+                    startAutoRefresh();
+                });
             }
             renderAll();
+            startAutoRefresh();
         });
     } else {
         renderAll();
     }
+}
+
+var _refreshInterval = null;
+function startAutoRefresh() {
+    if (_refreshInterval) clearInterval(_refreshInterval);
+    _refreshInterval = setInterval(function() {
+        if (window.syncManager && window.syncManager.pullFromSupabase) {
+            window.syncManager.pullFromSupabase();
+        }
+    }, 15000);
 }
 
 // Close modal on overlay click

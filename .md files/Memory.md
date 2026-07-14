@@ -95,3 +95,28 @@
 - `operator-app/syncManager.js` — Fixed `pullConfig()` to check `typeof val === 'string'` before storing; exposed `syncManager.supabase`
 - `admin-app/admin-app.js` — `saveConfig()` uses `window.syncManager.supabase`; `initApp()` calls `syncManager.init()` first
 - `supabase-schema.sql` — Switched config.value from JSONB to TEXT to match deployed schema
+
+### Session: Admin dashboard not updating — missing auto-refresh (Jul 14, 2026)
+
+#### Root cause
+Admin dashboard reads from `localStorage` populated by `pullFromSupabase()` only once during `initApp()`. After that, no mechanism pulls fresh data from Supabase as operators make changes. The dashboard shows stale data until manual page refresh.
+
+#### What worked
+- `syncManager` and `pullFromSupabase()` correctly fetch data from Supabase
+- `onSync` callbacks correctly refresh the current screen when `pullFromSupabase()` completes
+- The `storage` event listener handles cross-tab updates correctly
+
+#### What didn't work
+- No periodic refresh in the same tab — operator could push data to Supabase but admin dashboard never re-pulled it
+- `onSync` only fires when `syncAll()` on the same machine pushes pending items — but admin never pushes, so onSync never triggered except on initial `pullFromSupabase()` call
+
+#### What we changed
+- Added `startAutoRefresh()` with a 15-second `setInterval` that calls `syncManager.pullFromSupabase()` repeatedly after `initApp()` completes
+- `pullFromSupabase()` calls `syncCallbacks` after writing to localStorage, which triggers the `onSync` handler to refresh whichever screen is active
+
+#### Files Modified
+- `admin-app/admin-app.js` — Added `startAutoRefresh()` function, called after initial `pullFromSupabase()` + `renderAll()` in `initApp()`
+
+#### Known Issues
+- Config sync depends on Supabase connectivity — if offline, operator uses local config only
+- Old inventory records (created before warehouse field) are orphaned — won't match warehouse-scoped queries
