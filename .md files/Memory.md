@@ -96,26 +96,32 @@
 - `admin-app/admin-app.js` — `saveConfig()` uses `window.syncManager.supabase`; `initApp()` calls `syncManager.init()` first
 - `supabase-schema.sql` — Switched config.value from JSONB to TEXT to match deployed schema
 
-### Session: Admin dashboard not updating — missing auto-refresh (Jul 14, 2026)
+### Session: Admin dashboard not updating — missing auto-refresh + 3 more bugs (Jul 14, 2026)
 
-#### Root cause
-Admin dashboard reads from `localStorage` populated by `pullFromSupabase()` only once during `initApp()`. After that, no mechanism pulls fresh data from Supabase as operators make changes. The dashboard shows stale data until manual page refresh.
+#### Bug 1: F5 browser refresh shows login overlay (fixed)
+**What didn't work:** `checkAdminAuth()` returned `true` when `sessionStorage` had the auth flag, but the login overlay (with inline `style="display:flex"`) was never hidden. `initApp()` ran in the background but the user saw the login screen on top.
+**What we changed:** Added `overlay.style.display = 'none'` when `authed === 'true'` before returning from `checkAdminAuth()`.
+
+#### Bug 2: Operator data never reaches Supabase — warehouse column missing (fixed)
+**What didn't work:** The `inventory` table schema had `UNIQUE(product, pack_size, production_month)` without a `warehouse` column. The operator's `syncAll()` pushed a `warehouse` field and upsert with `onConflict: 'product,pack_size,production_month,warehouse'`. PostgREST couldn't match the constraint → upsert failed silently → data never landed in Supabase. Same for `transactions` — pushed `warehouse` field but table had no `warehouse` column.
+**What we changed:** Created `migration_add_warehouse.sql` — `ALTER TABLE transactions ADD COLUMN warehouse TEXT DEFAULT ''`, `ALTER TABLE inventory ADD COLUMN warehouse TEXT DEFAULT ''`, updated UNIQUE constraint. Updated `init_tables.sql` to include warehouse in fresh installs. User must run this migration SQL in Supabase dashboard.
+
+#### Bug 3: No manual refresh button (fixed)
+**What didn't work:** User had to browser-refresh to see operator data, which triggers Bug 1.
+**What we changed:** Added refresh SVG icon button in the admin top bar next to the clock. Calls `manualRefresh()` which triggers `syncManager.pullFromSupabase()` then refreshes the current screen via `onSync` callbacks. Added CSS for `.refresh-btn` with rotation animation on click.
 
 #### What worked
-- `syncManager` and `pullFromSupabase()` correctly fetch data from Supabase
+- `syncManager` and `pullFromSupabase()` correctly fetch data from Supabase when called
 - `onSync` callbacks correctly refresh the current screen when `pullFromSupabase()` completes
 - The `storage` event listener handles cross-tab updates correctly
-
-#### What didn't work
-- No periodic refresh in the same tab — operator could push data to Supabase but admin dashboard never re-pulled it
-- `onSync` only fires when `syncAll()` on the same machine pushes pending items — but admin never pushes, so onSync never triggered except on initial `pullFromSupabase()` call
-
-#### What we changed
-- Added `startAutoRefresh()` with a 15-second `setInterval` that calls `syncManager.pullFromSupabase()` repeatedly after `initApp()` completes
-- `pullFromSupabase()` calls `syncCallbacks` after writing to localStorage, which triggers the `onSync` handler to refresh whichever screen is active
+- 15s auto-refresh interval works — but only after Bug 2 is fixed (data must reach Supabase first)
 
 #### Files Modified
-- `admin-app/admin-app.js` — Added `startAutoRefresh()` function, called after initial `pullFromSupabase()` + `renderAll()` in `initApp()`
+- `admin-app/admin-app.js` — Fixed `checkAdminAuth()` to hide overlay; added `manualRefresh()` and `startAutoRefresh()`
+- `admin-app/admin-panel.html` — Added refresh button in top bar
+- `admin-app/admin-style.css` — Added `.refresh-btn` styles
+- `supabase sql codes/migration_add_warehouse.sql` — New: migration to add warehouse column to existing tables
+- `supabase sql codes/init_tables.sql` — Added warehouse column + updated UNIQUE constraint for fresh installs
 
 #### Known Issues
 - Config sync depends on Supabase connectivity — if offline, operator uses local config only

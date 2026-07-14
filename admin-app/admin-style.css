@@ -147,6 +147,27 @@
             color: var(--text-secondary);
         }
 
+        .refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .refresh-btn:hover {
+            background: var(--hover);
+            color: var(--text);
+        }
+        .refresh-btn:active {
+            transform: rotate(45deg);
+        }
+
         .warehouse-filter-bar {
             display: flex;
             gap: 6px;

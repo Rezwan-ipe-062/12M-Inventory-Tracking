@@ -5,7 +5,11 @@ const ADMIN_PASSWORD = '9876';
 
 function checkAdminAuth() {
     const authed = sessionStorage.getItem('admin-authenticated');
-    if (authed === 'true') return true;
+    if (authed === 'true') {
+        const overlay = document.getElementById('admin-login-overlay');
+        if (overlay) overlay.style.display = 'none';
+        return true;
+    }
     const overlay = document.getElementById('admin-login-overlay');
     if (overlay) overlay.style.display = 'flex';
     return false;
@@ -988,6 +992,12 @@ function startAutoRefresh() {
             window.syncManager.pullFromSupabase();
         }
     }, 15000);
+}
+
+function manualRefresh() {
+    if (window.syncManager && window.syncManager.pullFromSupabase) {
+        window.syncManager.pullFromSupabase();
+    }
 }
 
 // Close modal on overlay click

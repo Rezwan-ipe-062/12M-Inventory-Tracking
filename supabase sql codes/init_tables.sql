@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   quantity NUMERIC NOT NULL DEFAULT 0,
   type TEXT NOT NULL CHECK (type IN ('receive', 'dispatch')),
   operator_name TEXT DEFAULT '',
+  warehouse TEXT DEFAULT '',
   client_timestamp TEXT DEFAULT '',
   client_date TEXT DEFAULT '',
   sync_status TEXT DEFAULT 'synced',
@@ -25,8 +26,9 @@ CREATE TABLE IF NOT EXISTS inventory (
   production_month TEXT DEFAULT '',
   expiry_month TEXT DEFAULT '',
   quantity NUMERIC NOT NULL DEFAULT 0,
+  warehouse TEXT DEFAULT '',
   sync_status TEXT DEFAULT 'synced',
-  UNIQUE(product, pack_size, production_month)
+  UNIQUE(product, pack_size, production_month, warehouse)
 );
 
 -- 3. Products table (shared product catalog)
