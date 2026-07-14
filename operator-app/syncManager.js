@@ -196,7 +196,9 @@
                 return;
             }
             if (res.data && res.data.value) {
-                localStorage.setItem('shelf-life-config', JSON.stringify(res.data.value));
+                var val = res.data.value;
+                var toStore = typeof val === 'string' ? val : JSON.stringify(val);
+                localStorage.setItem('shelf-life-config', toStore);
             }
         }).catch(function (e) {
             console.warn('syncManager: pullConfig error', e.message || e);

@@ -49,9 +49,9 @@ CREATE TABLE IF NOT EXISTS inventory (
 );
 
 CREATE TABLE IF NOT EXISTS config (
-  id BIGSERIAL PRIMARY KEY,
-  key TEXT UNIQUE NOT NULL,
-  value JSONB DEFAULT '{}'
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 INSERT INTO config (key, value) VALUES ('shelf-life-config', '{"operatorPins":[],"expiryYears":{"start":2025,"end":2030},"prodYears":{"start":5,"end":6},"warehouses":["Chittagong","Gazipur","Jessore","Bogura"]}') ON CONFLICT (key) DO NOTHING;

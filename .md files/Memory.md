@@ -82,3 +82,16 @@
 #### Known Issues
 - Config sync depends on Supabase connectivity — if offline, operator uses local config only
 - Old inventory records (created before warehouse field) are orphaned — won't match warehouse-scoped queries
+
+### Session: Config sync debug — TEXT column double-stringify fix (Jul 14, 2026)
+
+#### Completed
+- **Bug — Config never reached operator phone**: Root cause found. The deployed `config` table has `value TEXT` (not JSONB). `pullConfig()` called `JSON.stringify(res.data.value)` treating it as a JavaScript object, but the TEXT column returns a string — producing a double-serialized value like `'"{\\"operatorPins\\":...}"'`. When `loadOperatorConfig()` parsed it, `base.operatorPins` was `undefined` because `base` was a string, not an object.
+- **Bug — `supabase` client not accessible from admin-app.js**: `var supabase` inside syncManager's IIFE was not exposed to the global scope. Fixed by adding `syncManager.supabase = supabase` after client creation. `saveConfig()` now uses `window.syncManager.supabase`.
+- **Bug — Admin init timing**: `initApp()` ran at script load (before DOMContentLoaded), but `syncManager.init()` was inside DOMContentLoaded. So `pullConfig()` ran before the client existed. Fixed by calling `syncManager.init()` inside `initApp()` first.
+- Updated `supabase-schema.sql` to match deployed schema: `value TEXT` (not JSONB).
+
+#### Files Modified
+- `operator-app/syncManager.js` — Fixed `pullConfig()` to check `typeof val === 'string'` before storing; exposed `syncManager.supabase`
+- `admin-app/admin-app.js` — `saveConfig()` uses `window.syncManager.supabase`; `initApp()` calls `syncManager.init()` first
+- `supabase-schema.sql` — Switched config.value from JSONB to TEXT to match deployed schema
