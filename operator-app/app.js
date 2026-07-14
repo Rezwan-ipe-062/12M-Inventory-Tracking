@@ -1,6 +1,8 @@
 // App State
 const state = {
     pin: '',
+    operatorName: '',
+    warehouse: '',
     currentScreen: 'login',
     selectedProduct: null,
     selectedPackSize: null,
@@ -19,21 +21,21 @@ function loadOperatorConfig() {
         const saved = localStorage.getItem('shelf-life-config');
         if (saved) {
             const cfg = JSON.parse(saved);
-            // Support both old single-PIN and new multi-PIN format
+            // Support old single-PIN format
             if (!cfg.operatorPins) {
-                cfg.operatorPins = [{ name: 'Default', pin: cfg.operatorPin || '1234' }];
+                cfg.operatorPins = cfg.operatorPin ? [{ name: 'Default', pin: cfg.operatorPin }] : [];
             }
             return cfg;
         }
     } catch {}
     return {
-        operatorPins: [{ name: 'Default', pin: '1234' }],
+        operatorPins: [],
         expiryYears: { start: 2025, end: 2030 },
         prodYears: { start: 5, end: 6 },
         warehouses: ['Chittagong', 'Gazipur', 'Jessore', 'Bogura']
     };
 }
-const OPERATOR_CONFIG = loadOperatorConfig();
+function getConfig() { return loadOperatorConfig(); }
 
 // DOM Elements
 const screens = {
@@ -103,9 +105,13 @@ function initPinLogin() {
     }
 
     function validatePin() {
-        const validPins = OPERATOR_CONFIG.operatorPins || [{ name: 'Default', pin: '1234' }];
+        const cfg = getConfig();
+        const validPins = cfg.operatorPins || [];
         const match = validPins.find(op => op.pin === state.pin);
         if (match) {
+            state.operatorName = match.name;
+            state.warehouse = match.warehouse || (cfg.warehouses ? cfg.warehouses[0] : 'Chittagong');
+            document.querySelectorAll('.wh-indicator').forEach(function(el) { el.textContent = state.operatorName + ' · ' + state.warehouse; });
             showScreen('products');
             initProductList();
         } else {
@@ -387,10 +393,11 @@ function initCountScreen() {
         });
     }
 
+    const cfg = getConfig();
     const prodYears = [];
-    for (let y = OPERATOR_CONFIG.prodYears.start; y <= OPERATOR_CONFIG.prodYears.end; y++) prodYears.push(y);
+    for (let y = cfg.prodYears.start; y <= cfg.prodYears.end; y++) prodYears.push(y);
     const expiryYears = [];
-    for (let y = OPERATOR_CONFIG.expiryYears.start; y <= OPERATOR_CONFIG.expiryYears.end; y++) expiryYears.push(y);
+    for (let y = cfg.expiryYears.start; y <= cfg.expiryYears.end; y++) expiryYears.push(y);
     buildYearButtons(yearButtons, prodYears, false);
     buildYearButtons(expiryYearButtons, expiryYears, true);
 
@@ -571,7 +578,7 @@ function renderInventoryList() {
     const searchInput = document.getElementById('inv-search');
     const search = searchInput ? searchInput.value.toLowerCase() : '';
 
-    let data = [...state.inventory];
+    let data = state.inventory.filter(d => d.warehouse === state.warehouse);
 
     // Search filter (matches admin panel)
     if (search) {
@@ -609,13 +616,15 @@ function renderInventoryList() {
         groups[key].push(d);
     });
 
-    // Determine FEFO highlight: older batch highlighted when qty < newer batch
+    // Determine FEFO highlight: older batch highlighted when qty > any later batch
     const highlighted = new Set();
     Object.values(groups).forEach(group => {
-        for (let i = 1; i < group.length; i++) {
-            if (group[i - 1].quantity < group[i].quantity) {
-                highlighted.add(group[i - 1].product + '|' + group[i - 1].packSize + '|' + group[i - 1].productionMonth);
+        let runningMin = group[group.length - 1].quantity
+        for (let i = group.length - 2; i >= 0; i--) {
+            if (group[i].quantity > runningMin) {
+                highlighted.add(group[i].product + '|' + group[i].packSize + '|' + group[i].productionMonth);
             }
+            runningMin = Math.min(runningMin, group[i].quantity)
         }
     });
 
@@ -664,28 +673,33 @@ function doTransaction(type, qty) {
         expiryMonth: expiryDate,
         quantity: qty,
         type: type,
+        operator_name: state.operatorName,
+        warehouse: state.warehouse,
         timestamp: new Date().toISOString(),
         date: new Date().toLocaleString('en-BD', { hour: '2-digit', minute: '2-digit', hour12: false, day: '2-digit', month: 'short', year: 'numeric' })
     };
     state.transactions.push(tx);
 
-    // Update aggregated inventory
+    // Update aggregated inventory (scoped to warehouse)
     const existingIndex = state.inventory.findIndex(item => 
         item.product === state.selectedProduct &&
         item.packSize === state.selectedPackSize &&
-        item.productionMonth === prodMonthCode
+        item.productionMonth === prodMonthCode &&
+        item.warehouse === state.warehouse
     );
 
     if (type === 'receive') {
         if (existingIndex >= 0) {
             state.inventory[existingIndex].quantity += qty;
+            state.inventory[existingIndex].warehouse = state.warehouse;
         } else {
             state.inventory.push({
                 product: state.selectedProduct,
                 packSize: state.selectedPackSize,
                 productionMonth: prodMonthCode,
                 expiryMonth: expiryDate,
-                quantity: qty
+                quantity: qty,
+                warehouse: state.warehouse
             });
         }
     } else {
@@ -772,8 +786,9 @@ function render12MonthList() {
     const tbody = document.getElementById('twelve-month-tbody');
     const emptyMsg = document.getElementById('twelve-month-empty');
     
-    // Filter inventory to only items expiring within12 months
+    // Filter inventory to only items expiring within 12 months for this warehouse
     const expiringItems = state.inventory.filter(item => {
+        if (item.warehouse !== state.warehouse) return false;
         if (!item.expiryMonth) return false;
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
         return monthsLeft >= 0 && monthsLeft <= 12;
@@ -825,6 +840,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFromStorage();
     if (window.syncManager) {
         window.syncManager.init();
+        window.syncManager.pullFromSupabase().then(function() {
+            loadFromStorage();
+        });
         window.syncManager.onSync(() => {
             if (state.currentScreen === 'inventory') renderInventoryList();
             if (state.currentScreen === 'twelve-month') render12MonthList();

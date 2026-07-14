@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS inventory (
   operator_name TEXT DEFAULT '',
   sync_status TEXT DEFAULT 'synced',
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(product, pack_size, production_month)
+  UNIQUE(product, pack_size, production_month, warehouse)
 );
 
 CREATE TABLE IF NOT EXISTS config (

@@ -107,7 +107,7 @@ const PRODUCTS = [
 // ==============================
 const DEFAULT_CONFIG = {
     operatorPins: [
-        { name: 'Default', pin: '1234' }
+        { name: 'Default', pin: '1234', warehouse: 'Chittagong' }
     ],
     expiryYears: { start: 2025, end: 2030 },
     prodYears: { start: 5, end: 6 },
@@ -238,7 +238,7 @@ let dashboardCharts = {};
 function renderDashboard() {
     const opData = loadOperatorData();
 
-    const expiryItems = (opData.inventory || []).filter(item => item.expiryMonth).map(item => {
+    const expiryItems = filterByWarehouse((opData.inventory || []).filter(item => item.expiryMonth).map(item => {
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
         return {
             product: item.product,
@@ -247,9 +247,9 @@ function renderDashboard() {
             qty: item.quantity,
             monthsLeft,
             level: getExpiryLevel(monthsLeft),
-            warehouse: ''
+            warehouse: item.warehouse || ''
         };
-    });
+    }));
 
     const critical = expiryItems.filter(d => d.level === 'critical').length;
     const warning = expiryItems.filter(d => d.level === 'warning').length;
@@ -329,7 +329,10 @@ function renderCharts(opData) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Top 10 Products by Quantity', font: { size: 13, weight: '600' }, padding: { bottom: 12 } }
+            },
             scales: {
                 y: { beginAtZero: true, ticks: { precision: 0 } },
                 x: { ticks: { maxRotation: 45 } }
@@ -360,7 +363,10 @@ function renderCharts(opData) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Stock by Production Month', font: { size: 13, weight: '600' }, padding: { bottom: 12 } }
+            },
             scales: {
                 y: { beginAtZero: true, ticks: { precision: 0 } },
                 x: { ticks: { maxRotation: 0 } }
@@ -391,6 +397,7 @@ function renderCharts(opData) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
+                title: { display: true, text: 'Expiry Distribution', font: { size: 13, weight: '600' }, padding: { bottom: 12 } },
                 legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12, font: { size: 11 } } }
             }
         }
@@ -406,20 +413,20 @@ function render12M(filter) {
     const tbody = document.getElementById('tbody-12m');
     const opData = loadOperatorData();
 
-    let expiryItems = (opData.inventory || []).filter(item => item.expiryMonth).map(item => {
+    let expiryItems = filterByWarehouse((opData.inventory || []).filter(item => item.expiryMonth).map(item => {
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
         const level = getExpiryLevel(monthsLeft);
         return {
             product: item.product,
             pack: item.packSize,
-            code: '',
+            code: item.productionMonth || '',
             expiry: item.expiryMonth,
             qty: item.quantity,
             monthsLeft,
             level,
-            warehouse: ''
+            warehouse: item.warehouse || ''
         };
-    });
+    }));
 
     if (filter !== 'all') {
         expiryItems = expiryItems.filter(d => d.level === filter);
@@ -429,7 +436,7 @@ function render12M(filter) {
     document.getElementById('filter-count').textContent = 'Showing ' + expiryItems.length + ' items';
 
     if (expiryItems.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">' +
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">' +
             (filter === 'all' ? 'No inventory data yet. Start counting from the operator app.' : 'No items match this filter.') +
             '</td></tr>';
         return;
@@ -439,7 +446,7 @@ function render12M(filter) {
         const cls = d.level === 'distant' ? '' : 'row-' + d.level;
         const badgeLabel = d.monthsLeft + 'M';
         const badgeCls = d.level === 'distant' ? 'badge-distant' : 'badge-' + d.level;
-        return '<tr class="' + cls + '"><td>' + d.product + '</td><td>' + d.pack + '</td><td>' + (d.code || '\u2014') + '</td><td>' + d.expiry + '</td><td>' + d.qty + '</td><td><span class="badge ' + badgeCls + '">' + badgeLabel + '</span></td></tr>';
+        return '<tr class="' + cls + '"><td>' + d.product + '</td><td>' + d.pack + '</td><td>' + (d.code || '\u2014') + '</td><td>' + d.expiry + '</td><td>' + d.qty + '</td><td><span class="badge ' + badgeCls + '">' + badgeLabel + '</span></td><td>' + (d.warehouse || '\u2014') + '</td></tr>';
     }).join('');
 }
 
@@ -458,7 +465,7 @@ let currentActivityFilter = 'all';
 function renderActivity(filter) {
     const tbody = document.getElementById('tbody-activity');
     const opData = loadOperatorData();
-    let txs = opData.transactions || [];
+    let txs = filterByWarehouse(opData.transactions || []);
 
     if (filter !== 'all') {
         const typeMap = { 'add': 'receive', 'sub': 'dispatch' };
@@ -478,7 +485,7 @@ function renderActivity(filter) {
         const isAdd = d.type === 'receive';
         const typeLabel = isAdd ? '<span style="color:#16A34A;font-weight:600;">+</span>' : '<span style="color:#DC2626;font-weight:600;">\u2212</span>';
         const typeText = isAdd ? 'Addition' : 'Subtraction';
-        return '<tr><td>' + (d.date || d.timestamp || '') + '</td><td>' + d.product + '</td><td>' + (d.packSize || '') + '</td><td>' + (d.productionMonth || '') + '</td><td>\u2014</td><td>' + typeLabel + ' ' + typeText + '</td><td>' + d.quantity + '</td><td>\u2014</td></tr>';
+        return '<tr><td>' + (d.date || d.timestamp || '') + '</td><td>' + d.product + '</td><td>' + (d.packSize || '') + '</td><td>' + (d.productionMonth || '') + '</td><td>' + (d.warehouse || '\u2014') + '</td><td>' + typeLabel + ' ' + typeText + '</td><td>' + d.quantity + '</td><td>' + (d.operator_name || '\u2014') + '</td></tr>';
     }).join('');
 }
 
@@ -496,15 +503,15 @@ function renderInventory() {
     const search = document.getElementById('inv-search').value.toLowerCase();
     const tbody = document.getElementById('tbody-inventory');
     const opData = loadOperatorData();
-    let data = (opData.inventory || []).map(item => ({
+    let data = filterByWarehouse((opData.inventory || []).map(item => ({
         product: item.product,
         pack: item.packSize,
         prefix: '',
         code: item.productionMonth || '',
         prodMonth: item.productionMonth || '',
         qty: item.quantity,
-        warehouse: ''
-    }));
+        warehouse: item.warehouse || ''
+    })));
 
     if (search) {
         data = data.filter(d => d.product.toLowerCase().includes(search) || d.code.toLowerCase().includes(search));
@@ -527,15 +534,17 @@ function renderInventory() {
 
     const highlighted = new Set();
     Object.values(groups).forEach(group => {
-        for (let i = 1; i < group.length; i++) {
-            if (group[i - 1].qty < group[i].qty) {
-                highlighted.add(group[i - 1].product + '|' + group[i - 1].pack + '|' + group[i - 1].prodMonth);
+        let runningMin = group[group.length - 1].qty
+        for (let i = group.length - 2; i >= 0; i--) {
+            if (group[i].qty > runningMin) {
+                highlighted.add(group[i].product + '|' + group[i].pack + '|' + group[i].prodMonth);
             }
+            runningMin = Math.min(runningMin, group[i].qty)
         }
     });
 
     if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">' +
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">' +
             (search ? 'No results found' : 'No inventory data yet. Start counting from the operator app.') +
             '</td></tr>';
         return;
@@ -545,10 +554,10 @@ function renderInventory() {
     for (const key in groups) {
         const items = groups[key];
         const first = items[0];
-        html += '<tr style="background:var(--table-header)"><td colspan="6" style="padding:10px 16px;font-weight:600;font-size:14px;">' + first.product + ' ' + first.pack + '</td></tr>';
+        html += '<tr style="background:var(--table-header)"><td colspan="7" style="padding:10px 16px;font-weight:600;font-size:14px;">' + first.product + ' ' + first.pack + '</td></tr>';
         items.forEach(d => {
             const fefoClass = highlighted.has(d.product + '|' + d.pack + '|' + d.prodMonth) ? ' style="background:#FEF3C7;"' : '';
-            html += '<tr' + fefoClass + '><td>' + d.product + '</td><td>' + d.pack + '</td><td>' + (d.prefix || '\u2014') + '</td><td>' + (d.code || '\u2014') + '</td><td>' + d.prodMonth + '</td><td>' + d.qty + '</td></tr>';
+            html += '<tr' + fefoClass + '><td>' + d.product + '</td><td>' + d.pack + '</td><td>' + (d.prefix || '\u2014') + '</td><td>' + (d.code || '\u2014') + '</td><td>' + d.prodMonth + '</td><td>' + d.qty + '</td><td>' + (d.warehouse || '\u2014') + '</td></tr>';
         });
     }
 
@@ -634,44 +643,44 @@ function downloadCSV(csv, filename) {
 
 function exportExcel() {
     const opData = loadOperatorData();
-    let data = (opData.inventory || []).filter(item => item.expiryMonth).map(item => {
+    let data = filterByWarehouse((opData.inventory || []).filter(item => item.expiryMonth)).map(item => {
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
         const level = getExpiryLevel(monthsLeft);
-        return { product: item.product, pack: item.packSize, code: item.productionMonth || '', expiry: item.expiryMonth, qty: item.quantity, monthsLeft, range: monthsLeft <= 12 ? '12m' : '18m', warehouse: '' };
+        return { product: item.product, pack: item.packSize, code: item.productionMonth || '', expiry: item.expiryMonth, qty: item.quantity, monthsLeft, range: monthsLeft <= 12 ? '12m' : '18m', warehouse: item.warehouse || '' };
     });
-    let csv = 'Product,Pack,Code,Expiry,Qty,Months Left,Range\n';
-    data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.code + ',' + d.expiry + ',' + d.qty + ',' + d.monthsLeft + ',' + d.range + '\n'; });
+    let csv = 'Product,Pack,Code,Expiry,Qty,Months Left,Range,Warehouse\n';
+    data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.code + ',' + d.expiry + ',' + d.qty + ',' + d.monthsLeft + ',' + d.range + ',' + d.warehouse + '\n'; });
     downloadCSV(csv, 'Expiry_Report_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
 
 function exportDashboard() {
     const opData = loadOperatorData();
-    const data = (opData.inventory || []).filter(item => item.expiryMonth).map(item => {
+    const data = filterByWarehouse((opData.inventory || []).filter(item => item.expiryMonth)).map(item => {
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
-        return { product: item.product, pack: item.packSize, code: item.productionMonth || '', expiry: item.expiryMonth, qty: item.quantity, monthsLeft, level: getExpiryLevel(monthsLeft), range: monthsLeft <= 12 ? '12m' : '18m', warehouse: '' };
+        return { product: item.product, pack: item.packSize, code: item.productionMonth || '', expiry: item.expiryMonth, qty: item.quantity, monthsLeft, level: getExpiryLevel(monthsLeft), range: monthsLeft <= 12 ? '12m' : '18m', warehouse: item.warehouse || '' };
     });
-    let csv = 'Product,Pack,Code,Expiry,Qty,Months Left,Level,Range\n';
-    data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.code + ',' + d.expiry + ',' + d.qty + ',' + d.monthsLeft + ',' + d.level + ',' + d.range + '\n'; });
+    let csv = 'Product,Pack,Code,Expiry,Qty,Months Left,Level,Range,Warehouse\n';
+    data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.code + ',' + d.expiry + ',' + d.qty + ',' + d.monthsLeft + ',' + d.level + ',' + d.range + ',' + d.warehouse + '\n'; });
     downloadCSV(csv, 'Dashboard_Expiry_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
 
 function exportInventory() {
     const opData = loadOperatorData();
-    const data = (opData.inventory || []).map(item => ({
-        product: item.product, pack: item.packSize, prefix: '', code: item.productionMonth || '', prodMonth: item.productionMonth || '', qty: item.quantity, warehouse: ''
+    const data = filterByWarehouse(opData.inventory || []).map(item => ({
+        product: item.product, pack: item.packSize, prefix: '', code: item.productionMonth || '', prodMonth: item.productionMonth || '', qty: item.quantity, warehouse: item.warehouse || ''
     }));
-    let csv = 'Product,Pack,Prefix,Code,Prod Month,Qty\n';
-    data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.prefix + ',' + d.code + ',' + d.prodMonth + ',' + d.qty + '\n'; });
+    let csv = 'Product,Pack,Prefix,Code,Prod Month,Qty,Warehouse\n';
+    data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.prefix + ',' + d.code + ',' + d.prodMonth + ',' + d.qty + ',' + d.warehouse + '\n'; });
     downloadCSV(csv, 'Inventory_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
 
 function exportActivity() {
     const opData = loadOperatorData();
-    const filtered = opData.transactions || [];
-    let csv = 'Date & Time,Product,Pack,Code,Type,Qty\n';
+    const filtered = filterByWarehouse(opData.transactions || []);
+    let csv = 'Date & Time,Product,Pack,Code,Warehouse,Type,Qty,Operator\n';
     filtered.forEach(d => {
         const typeText = d.type === 'receive' ? 'Addition' : 'Subtraction';
-        csv += (d.date || '') + ',' + d.product + ',' + (d.packSize || '') + ',' + (d.productionMonth || '') + ',' + typeText + ',' + d.quantity + '\n';
+        csv += (d.date || '') + ',' + d.product + ',' + (d.packSize || '') + ',' + (d.productionMonth || '') + ',' + (d.warehouse || '') + ',' + typeText + ',' + d.quantity + ',' + (d.operator_name || '') + '\n';
     });
     downloadCSV(csv, 'Activity_Log_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
@@ -691,10 +700,10 @@ const DRILLDOWN_LABELS = { critical: 'Expiring \u22643mo', warning: 'Expiring 4-
 
 function showDrilldown(level) {
     const opData = loadOperatorData();
-    const data = (opData.inventory || []).filter(item => item.expiryMonth).map(item => {
+    const data = filterByWarehouse((opData.inventory || []).filter(item => item.expiryMonth).map(item => {
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
-        return { product: item.product, pack: item.packSize, code: item.productionMonth || '', expiry: item.expiryMonth, qty: item.quantity, monthsLeft, level: getExpiryLevel(monthsLeft), warehouse: '' };
-    }).filter(d => d.level === level);
+        return { product: item.product, pack: item.packSize, code: item.productionMonth || '', expiry: item.expiryMonth, qty: item.quantity, monthsLeft, level: getExpiryLevel(monthsLeft), warehouse: item.warehouse || '' };
+    })).filter(d => d.level === level);
 
     document.getElementById('drilldown-title').textContent = DRILLDOWN_LABELS[level] + ' (' + data.length + ' items)';
     const tbody = document.getElementById('tbody-drilldown');
@@ -775,27 +784,32 @@ function renderSettings() {
 
 function renderOperatorPinList() {
     const list = document.getElementById('operator-pin-list');
-    if (!CONFIG.operatorPins || CONFIG.operatorPins.length === 0) {
-        CONFIG.operatorPins = [{ name: 'Default', pin: '1234' }];
-        saveConfig(CONFIG);
+    const whSelect = document.getElementById('new-op-warehouse');
+    if (whSelect) {
+        whSelect.innerHTML = CONFIG.warehouses.map(w => '<option value="' + w + '">' + w + '</option>').join('');
     }
-    list.innerHTML = CONFIG.operatorPins.map((op, i) =>
-        '<div class="settings-wh-row">' +
-        '<span class="wh-name">' + op.name + ' \u2014 <code>' + op.pin + '</code></span>' +
-        '<button class="wh-remove" onclick="removeOperatorPin(' + i + ')">Remove</button>' +
-        '</div>'
-    ).join('');
+    if (!CONFIG.operatorPins) CONFIG.operatorPins = [];
+    list.innerHTML = CONFIG.operatorPins.length === 0
+        ? '<div style="font-size:13px;color:var(--text-muted);padding:8px 0;">No operators configured. Add one below to enable login.</div>'
+        : CONFIG.operatorPins.map((op, i) =>
+            '<div class="settings-wh-row">' +
+            '<span class="wh-name">' + op.name + ' \u2014 <code>' + op.pin + '</code> \u2014 ' + (op.warehouse || CONFIG.warehouses[0]) + '</span>' +
+            '<button class="wh-remove" onclick="removeOperatorPin(' + i + ')">Remove</button>' +
+            '</div>'
+        ).join('');
 }
 
 function addOperatorPin() {
     const nameEl = document.getElementById('new-op-name');
     const pinEl = document.getElementById('new-op-pin');
+    const whEl = document.getElementById('new-op-warehouse');
     const name = nameEl.value.trim();
     const pin = pinEl.value.trim();
+    const warehouse = whEl ? whEl.value : CONFIG.warehouses[0];
     if (!name) { alert('Enter operator name'); return; }
     if (!pin || pin.length < 4 || isNaN(pin)) { alert('Enter a valid 4-digit PIN'); return; }
     if (CONFIG.operatorPins.some(op => op.pin === pin)) { alert('PIN already exists'); return; }
-    CONFIG.operatorPins.push({ name, pin });
+    CONFIG.operatorPins.push({ name, pin, warehouse });
     saveConfig(CONFIG);
     nameEl.value = '';
     pinEl.value = '';
@@ -803,7 +817,6 @@ function addOperatorPin() {
 }
 
 function removeOperatorPin(idx) {
-    if (CONFIG.operatorPins.length <= 1) { alert('Must have at least one operator PIN'); return; }
     if (!confirm('Remove operator "' + CONFIG.operatorPins[idx].name + '"?')) return;
     CONFIG.operatorPins.splice(idx, 1);
     saveConfig(CONFIG);
@@ -866,9 +879,56 @@ function resetConfig() {
 }
 
 // ==============================
+// DANGER ZONE: Clear data actions
+// ==============================
+function clearLocalData() {
+    if (!confirm('Delete ALL local data (inventory, transactions) from this browser? This cannot be undone.')) return;
+    if (!confirm('Are you sure? All counting data will be permanently removed from this device.')) return;
+    localStorage.removeItem('operator-data');
+    document.querySelectorAll('.admin-screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-dashboard').classList.add('active');
+    renderDashboard();
+    render12M('all');
+    renderInventory();
+    renderActivity('all');
+    renderProducts();
+    alert('Local data cleared.');
+}
+
+function clearSupabaseData() {
+    if (!confirm('Delete ALL data from Supabase cloud? This will clear tables: transactions, inventory, products, config, operators.')) return;
+    if (!confirm('FINAL WARNING: This removes ALL data from the cloud database. Continue?')) return;
+
+    if (!window.supabase) {
+        alert('Supabase not connected. Data may already be cleared, or the app needs a reload.');
+        return;
+    }
+
+    var tables = ['transactions', 'inventory', 'products', 'config', 'operators'];
+    var btn = document.querySelector('button[onclick*="clearSupabaseData"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Clearing...'; }
+
+    Promise.all(tables.map(function(t) {
+        return supabase.from(t).delete().neq('id', '0');
+    })).then(function(results) {
+        var errors = results.filter(function(r) { return r.error; });
+        if (errors.length > 0) {
+            alert('Cleared with some errors. Check console for details.');
+            console.warn('Clear errors:', errors);
+        } else {
+            alert('All Supabase tables cleared successfully!');
+        }
+    }).catch(function(e) {
+        alert('Failed to clear: ' + (e.message || e));
+    }).finally(function() {
+        if (btn) { btn.disabled = false; btn.textContent = 'Clear Supabase Data'; }
+    });
+}
+
+// ==============================
 // INIT
 // ==============================
-function initApp() {
+function renderAll() {
     CONFIG = loadConfig();
     selectedWarehouses = new Set(CONFIG.warehouses);
     rebuildWarehouseChips();
@@ -880,6 +940,14 @@ function initApp() {
     renderSettings();
     updateClock();
     setInterval(updateClock, 60000);
+}
+
+function initApp() {
+    if (window.syncManager && window.syncManager.pullFromSupabase) {
+        window.syncManager.pullFromSupabase().then(renderAll);
+    } else {
+        renderAll();
+    }
 }
 
 // Close modal on overlay click
@@ -900,6 +968,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (document.getElementById('screen-inventory').classList.contains('active')) renderInventory();
             if (document.getElementById('screen-activity').classList.contains('active')) renderActivity(currentActivityFilter);
         });
+    }
+});
+
+// Auto-refresh when operator saves data in another tab
+window.addEventListener('storage', function(e) {
+    if (e.key === 'operator-data') {
+        if (document.getElementById('screen-dashboard').classList.contains('active')) renderDashboard();
+        if (document.getElementById('screen-12m').classList.contains('active')) render12M(currentFilter);
+        if (document.getElementById('screen-inventory').classList.contains('active')) renderInventory();
+        if (document.getElementById('screen-activity').classList.contains('active')) renderActivity(currentActivityFilter);
     }
 });
 

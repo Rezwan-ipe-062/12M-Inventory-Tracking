@@ -87,6 +87,7 @@
                         quantity: tx.quantity || 0,
                         type: tx.type || 'receive',
                         operator_name: tx.operator_name || '',
+                        warehouse: tx.warehouse || '',
                         client_timestamp: tx.timestamp || '',
                         client_date: tx.date || ''
                     }]).then(function (res) { if (res.error) throw res.error; })
@@ -100,8 +101,9 @@
                         pack_size: inv.packSize || '',
                         production_month: inv.productionMonth || '',
                         expiry_month: inv.expiryMonth || '',
-                        quantity: inv.quantity || 0
-                    }], { onConflict: 'product,pack_size,production_month' }).then(function (res) { if (res.error) throw res.error; })
+                        quantity: inv.quantity || 0,
+                        warehouse: inv.warehouse || ''
+                    }], { onConflict: 'product,pack_size,production_month,warehouse' }).then(function (res) { if (res.error) throw res.error; })
                 );
             });
 
@@ -129,6 +131,60 @@
                     isSyncing = false;
                 });
         }
+    };
+
+    syncManager.pullFromSupabase = function () {
+        if (!supabase) return Promise.resolve();
+        return Promise.all([
+            supabase.from('transactions').select('*'),
+            supabase.from('inventory').select('*')
+        ]).then(function (results) {
+            var txRows = results[0].data || [];
+            var invRows = results[1].data || [];
+
+            var pulled = {
+                transactions: txRows.map(function (t) {
+                    return {
+                        product: t.product,
+                        packSize: t.pack_size || '',
+                        productionMonth: t.production_month || '',
+                        expiryMonth: t.expiry_month || '',
+                        quantity: t.quantity || 0,
+                        type: t.type || 'receive',
+                        operator_name: t.operator_name || '',
+                        warehouse: t.warehouse || '',
+                        timestamp: t.client_timestamp || '',
+                        date: t.client_date || '',
+                        sync_status: 'synced'
+                    };
+                }),
+                inventory: invRows.map(function (i) {
+                    return {
+                        product: i.product,
+                        packSize: i.pack_size || '',
+                        productionMonth: i.production_month || '',
+                        expiryMonth: i.expiry_month || '',
+                        quantity: i.quantity || 0,
+                        warehouse: i.warehouse || '',
+                        sync_status: 'synced'
+                    };
+                })
+            };
+
+            // Merge with local — keep any pending items not yet pushed
+            var localData = loadRaw('operator-data');
+            if (localData) {
+                var localPendingTx = (localData.transactions || []).filter(function (t) { return t.sync_status === 'pending'; });
+                var localPendingInv = (localData.inventory || []).filter(function (i) { return i.sync_status === 'pending'; });
+                pulled.transactions = pulled.transactions.concat(localPendingTx);
+                pulled.inventory = pulled.inventory.concat(localPendingInv);
+            }
+
+            localStorage.setItem('operator-data', JSON.stringify(pulled));
+            syncCallbacks.forEach(function (cb) { try { cb(); } catch (e) {} });
+        }).catch(function (e) {
+            console.warn('syncManager: pullFromSupabase failed', e.message || e);
+        });
     };
 
     window.syncManager = syncManager;

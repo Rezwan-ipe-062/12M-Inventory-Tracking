@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#00843D">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="manifest" href="manifest.json">
     <title>Syngenta — 12 Month Shelf Life</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -29,16 +31,10 @@
         .brand {
             margin-bottom: 24px;
         }
-        .brand h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1F2933;
-            margin-top: 12px;
-        }
         .brand p {
             font-size: 14px;
             color: #52616B;
-            margin-top: 4px;
+            margin-top: 12px;
         }
         .apps {
             display: flex;
@@ -93,11 +89,12 @@
 <body>
     <div class="card">
         <div class="brand">
-            <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
-                <rect width="40" height="40" rx="8" fill="#00843D"/>
-                <path d="M12 28V14l8-6 8 6v14H12zm4-2h8v-4h-8v4zm0-6h8v-4h-8v4z" fill="white"/>
+            <svg width="120" height="120" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="512" cy="512" rx="400" ry="270" fill="#007A3D" transform="rotate(-28 512 512)"/>
+                <ellipse cx="512" cy="512" rx="400" ry="270" fill="#38A169" opacity="0.9" transform="rotate(28 512 512)"/>
+                <ellipse cx="512" cy="512" rx="315" ry="185" fill="#FFFFFF" opacity="0.96"/>
+                <text x="512" y="583" text-anchor="middle" font-family="Inter, Arial, system-ui, sans-serif" font-size="220" font-weight="900" letter-spacing="-8" fill="#D71920">12M</text>
             </svg>
-            <h1>12 Month Shelf Life</h1>
             <p>Inventory Tracking System</p>
         </div>
         <div class="apps">
