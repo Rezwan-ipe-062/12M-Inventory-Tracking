@@ -145,15 +145,20 @@
 
             var localData = loadRaw('operator-data');
 
-            // Guard: if Supabase returned empty but local has data, keep local
+            // Guard: if Supabase returned empty but local has data, check for reset flag
             var hasSupabaseData = txRows.length > 0 || invRows.length > 0;
             var hasLocalData = localData && (
                 (localData.transactions && localData.transactions.length > 0) ||
                 (localData.inventory && localData.inventory.length > 0)
             );
             if (!hasSupabaseData && hasLocalData) {
-                syncCallbacks.forEach(function (cb) { try { cb(); } catch (e) {} });
-                return;
+                var cfg = loadRaw('shelf-life-config');
+                if (cfg && cfg._lastReset) {
+                    localStorage.removeItem('operator-data');
+                } else {
+                    syncCallbacks.forEach(function (cb) { try { cb(); } catch (e) {} });
+                    return;
+                }
             }
 
             var pulled = {

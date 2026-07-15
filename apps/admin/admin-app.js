@@ -353,6 +353,10 @@ function showScreen(id, btn) {
     document.getElementById('page-title').textContent = titles[id] || 'Dashboard';
 
     if (id === 'screen-dashboard') renderDashboard();
+    if (id === 'screen-activity') renderActivity(currentActivityFilter);
+    if (id === 'screen-inventory') renderInventory();
+    if (id === 'screen-12m') render12M(currentFilter || 'all');
+    if (id === 'screen-products') renderProducts();
 }
 
 // ==============================
@@ -1137,6 +1141,7 @@ function clearSupabaseData() {
         } else {
             alert('All Supabase data cleared successfully! Re-saving config and products.');
             localStorage.removeItem('operator-data');
+            CONFIG._lastReset = Date.now();
             saveConfig(CONFIG);
             syncProducts();
         }
