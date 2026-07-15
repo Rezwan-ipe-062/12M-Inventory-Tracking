@@ -13,3 +13,6 @@ __pycache__/
 
 # Logs
 *.log
+
+# Auto-generated
+graphify-out/

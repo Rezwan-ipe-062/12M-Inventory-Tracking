@@ -6,7 +6,7 @@ Digital inventory tracking for Syngenta Bangladesh — two static web apps shari
 
 ```
 Admin App (desktop dashboard)    ←→ Supabase ←→    Operator App (mobile PWA)
-  admin-app/                                          operator-app/
+  apps/admin/                                        apps/operator/
 ```
 
 - **Admin App** — manager dashboard: charts, inventory tables, 12-month reports, product/operator config
@@ -25,7 +25,7 @@ Admin App (desktop dashboard)    ←→ Supabase ←→    Operator App (mobile 
 
 1. Log in to your Supabase dashboard
 2. Open the **SQL Editor**
-3. Paste the contents of `supabase-schema.sql`
+ 3. Paste the contents of `database/supabase-schema.sql`
 4. Click **Run**
 
 This creates three tables (`transactions`, `inventory`, `config`) with Row Level Security and the `clear_all_data_rpc()` function.
@@ -33,8 +33,8 @@ This creates three tables (`transactions`, `inventory`, `config`) with Row Level
 ### 2. Configure Supabase Credentials
 
 Both apps already have the Supabase URL and anon key hardcoded in:
-- `admin-app/admin-app.js` — `SUPABASE_URL` and `SUPABASE_ANON_KEY`
-- `operator-app/client.js` — same constants
+- `apps/admin/admin-app.js` — `SUPABASE_URL` and `SUPABASE_ANON_KEY`
+- `apps/operator/client.js` — same constants
 
 If you fork to a new Supabase project, update these four values.
 
@@ -44,13 +44,13 @@ Both apps are **pure static files** — no build step, no package managers neede
 
 | App | Folder | How to Deploy |
 |-----|--------|--------------|
-| **Admin** | `admin-app/` | Upload to any static host. Open `admin-panel.html` in browser. |
-| **Operator** | `operator-app/` | Upload to any static host. Open `index.html` on mobile. Can also run from local file server. |
+| **Admin** | `apps/admin/` | Upload to any static host. Open `admin-panel.html` in browser. |
+| **Operator** | `apps/operator/` | Upload to any static host. Open `index.html` on mobile. Can also run from local file server. |
 
 **Quick deploy options:**
 - **Netlify:** Drag the project folder to [https://app.netlify.com/drop](https://app.netlify.com/drop)
 - **GitHub Pages:** Push to repo → enable Pages from `main` root
-- **Any web server:** Copy `admin-app/` and `operator-app/` to your web root
+- **Any web server:** Copy `apps/admin/` and `apps/operator/` to your web root
 
 ### 4. Initial Configuration
 
@@ -77,27 +77,40 @@ Both apps are **pure static files** — no build step, no package managers neede
 ## Supabase Project
 
 - **Project URL:** `https://ytirmuuchcxzlwethvsg.supabase.co`
-- **Anon Key:** (hardcoded in `admin-app.js` and `client.js`)
+- **Anon Key:** (hardcoded in `apps/admin/admin-app.js` and `apps/operator/client.js`)
 
 ## Project Structure
 
 ```
-├── admin-app/              # Admin dashboard (desktop)
-│   ├── admin-panel.html    # Main HTML
-│   ├── admin-app.js        # All logic + charts
-│   ├── admin-style.css     # Styling
-│   └── ...
-├── operator-app/           # Operator mobile PWA
-│   ├── index.html          # Main HTML
-│   ├── app.js              # App logic
-│   ├── products.js         # Product catalog (69 SKUs)
-│   ├── syncManager.js      # Supabase sync engine
-│   ├── client.js           # Supabase client init
-│   ├── style.css           # Styling
-│   └── manifest.json       # PWA manifest
-├── supabase-schema.sql     # Run this against your Supabase project
-├── PROJECT_REQUIREMENTS.md # Full system design document
-└── MEMORY.md               # Development history
+├── apps/
+│   ├── admin/                 # Admin dashboard (desktop)
+│   │   ├── admin-panel.html   # Main HTML
+│   │   ├── admin-app.js       # All logic + charts
+│   │   └── admin-style.css    # Styling
+│   └── operator/              # Operator mobile PWA
+│       ├── index.html         # Main HTML
+│       ├── app.js             # App logic
+│       ├── products.js        # Product catalog (69 SKUs)
+│       ├── syncManager.js     # Supabase sync engine
+│       ├── client.js          # Supabase client init
+│       ├── style.css          # Styling
+│       └── manifest.json      # PWA manifest
+├── database/
+│   ├── supabase-schema.sql    # Run this against your Supabase project
+│   └── legacy/                # Superseded SQL scripts
+│       ├── init_tables.sql
+│       ├── migration_add_warehouse.sql
+│       └── clear_all_data.sql
+├── docs/
+│   ├── PROJECT_REQUIREMENTS.md   # Full system design document
+│   ├── MEMORY.md                 # Development history
+│   └── planning/                 # Early design drafts
+│       ├── Architecture.md
+│       ├── PRD.md
+│       └── ...
+├── reference/                 # Reference data, spreadsheets, photos
+├── .github/workflows/         # CI/CD
+└── README.md
 ```
 
 ## License

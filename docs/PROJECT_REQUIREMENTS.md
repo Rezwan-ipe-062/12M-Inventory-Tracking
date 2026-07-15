@@ -283,25 +283,35 @@ Dashboard / Reports / Excel Export
 
 ```
 12M Inventory Tracking Folder/
-├── PROJECT_REQUIREMENTS.md      ← This document
-├── operator-app/                ← Warehouse Assistant PWA
-│   ├── index.html               ← Main HTML (6 screens)
-│   ├── style.css                ← Syngenta-branded mobile CSS
-│   ├── app.js                   ← All application logic
-│   ├── products.js              ← 69 SKU product catalog
-│   └── syncManager.js           ← Offline-first Supabase sync layer
-├── admin-app/                   ← Warehouse Officer Dashboard
-│   ├── admin-panel.html         ← Single-page admin dashboard
-│   ├── admin-app.js             ← Admin application logic
-│   └── admin-style.css          ← Admin dashboard styles
-├── supabase-schema.sql          ← Definitive Supabase SQL schema (run-once)
-├── supabase sql codes/          ← Archived SQL scripts (for reference)
-│   ├── init_tables.sql          ← (superseded by root supabase-schema.sql)
-│   ├── migration_add_warehouse.sql
-│   └── clear_all_data.sql
-└── reference-data/              ← Reference documents
-    ├── 12_Month_Shelf_Life_Data.md
-    └── System_Export_Data.md
+├── apps/
+│   ├── admin/                     ← Warehouse Officer Dashboard
+│   │   ├── admin-panel.html       ← Single-page admin dashboard
+│   │   ├── admin-app.js           ← Admin application logic
+│   │   └── admin-style.css        ← Admin dashboard styles
+│   └── operator/                  ← Warehouse Assistant PWA
+│       ├── index.html             ← Main HTML (6 screens)
+│       ├── style.css              ← Syngenta-branded mobile CSS
+│       ├── app.js                 ← All application logic
+│       ├── products.js            ← 69 SKU product catalog
+│       ├── syncManager.js         ← Offline-first Supabase sync layer
+│       ├── client.js              ← Supabase client init
+│       └── manifest.json          ← PWA manifest
+├── database/
+│   ├── supabase-schema.sql        ← Definitive Supabase SQL schema (run-once)
+│   └── legacy/                    ← Archived SQL scripts (for reference)
+│       ├── init_tables.sql        ← (superseded by supabase-schema.sql)
+│       ├── migration_add_warehouse.sql
+│       └── clear_all_data.sql
+├── docs/
+│   ├── PROJECT_REQUIREMENTS.md    ← This document
+│   ├── MEMORY.md                  ← Development history
+│   └── planning/                  ← Early design drafts
+├── reference/                     ← Reference documents
+│   ├── 12_Month_Shelf_Life_Data.md
+│   └── System_Export_Data.md
+├── .github/workflows/             ← CI/CD (GitHub Pages)
+├── README.md                      ← Project overview & setup guide
+└── .gitignore
 ```
 
 ### 7.2 Data Layer Architecture

@@ -3,7 +3,7 @@
 ## Session Date: 2026-07-15
 
 ## Overview
-This session updated PROJECT_REQUIREMENTS.md to reflect Supabase cloud sync, AGI codes, multi-operator sharing, admin-priority product sync, and answered all open questions. Then implemented the corresponding code changes. Finally, added chart filters (year pills + month dropdown) to the admin dashboard.
+This session updated PROJECT_REQUIREMENTS.md to reflect Supabase cloud sync, AGI codes, multi-operator sharing, admin-priority product sync, and answered all open questions. Then implemented the corresponding code changes. Added chart filters (year pills + month dropdown) to the admin dashboard. Restructured the entire project folder into a clean layout. Fixed SQL bug and prepared for pilot launch.
 
 ## Key Design Decisions (updated in this session)
 
@@ -111,6 +111,21 @@ This session updated PROJECT_REQUIREMENTS.md to reflect Supabase cloud sync, AGI
 ### operator-app/style.css
 - Removed `.agi-code-label` CSS block
 
+### Folder Restructuring
+- **`admin-app/` → `apps/admin/`** — all admin dashboard files
+- **`operator-app/` → `apps/operator/`** — all operator PWA files
+- **`supabase-schema.sql` → `database/supabase-schema.sql`** — SQL schema
+- **`supabase sql codes/` → `database/legacy/`** — archived SQL scripts
+- **`reference-data/` → `reference/`** — spreadsheets, photos, reference docs
+- **`PROJECT_REQUIREMENTS.md`, `MEMORY.md` → `docs/`** — documentation
+- **`.md files/` → `docs/planning/`** — early design drafts (Architecture.md, PRD.md, etc.)
+- **`graphify-out/`** added to `.gitignore` (auto-generated, not source)
+- Updated `README.md` and `docs/PROJECT_REQUIREMENTS.md` with new file paths
+
+### GitHub Pages Setup
+- Added `.github/workflows/pages.yml` — deploys root to Pages on push to `main`
+- User must enable Pages in repo Settings → Pages → Source: GitHub Actions
+
 ## Important Notes for Future Sessions
 
 ### Supabase Info
@@ -127,6 +142,7 @@ This session updated PROJECT_REQUIREMENTS.md to reflect Supabase cloud sync, AGI
 1. Admin: saveProduct/deleteProduct → `syncProducts()` → upserts to `config.key='product-list'`
 2. Operator init: `pullProducts()` → reads from `config.key='product-list'` → stores in localStorage
 3. Products.js: `loadSyncedProducts()` at load time overrides the hardcoded array
+4. Both apps at `apps/admin/` and `apps/operator/` respectively
 
 ### AGI Codes (admin only)
 - DEFAULT_AGI_CODES in both apps (48 entries from reference data)
@@ -143,6 +159,8 @@ This session updated PROJECT_REQUIREMENTS.md to reflect Supabase cloud sync, AGI
 - Charts only show columns for months with data (the existing Chart.js logic was already filtering zero months)
 
 ### Next Likely Work
+- Enable GitHub Pages in repo Settings → Pages → Source: GitHub Actions
+- Run `database/supabase-schema.sql` in Supabase SQL Editor
 - Testing the Supabase RPC function
 - Testing multi-operator sync behavior
 - Testing product sync from admin to operator
