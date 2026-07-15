@@ -248,7 +248,7 @@
                     <div class="table-wrap">
                         <table class="admin-table">
                             <thead>
-                                <tr><th>Date & Time</th><th>Product</th><th>Pack</th><th>Code</th><th>Warehouse</th><th>Type</th><th>Qty</th><th>Operator</th></tr>
+                                <tr><th>Date & Time</th><th>Product</th><th>Pack</th><th>AGI Code</th><th>Code</th><th>Warehouse</th><th>Type</th><th>Qty</th><th>Operator</th></tr>
                             </thead>
                             <tbody id="tbody-activity"></tbody>
                         </table>
@@ -270,7 +270,7 @@
                     <div class="table-wrap">
                         <table class="admin-table">
                             <thead>
-                                <tr><th>Prefix</th><th>Product Name</th><th>Pack Size</th><th style="width:120px;"></th></tr>
+                                <tr><th>Prefix</th><th>Product Name</th><th>Pack Size</th><th>AGI Code</th><th style="width:120px;"></th></tr>
                             </thead>
                             <tbody id="tbody-products"></tbody>
                         </table>
@@ -375,6 +375,10 @@
                     <option value="BWL">BWL</option>
                     <option value="">None</option>
                 </select>
+            </div>
+            <div class="modal-field">
+                <label>AGI Code</label>
+                <input type="text" id="modal-agi" placeholder="e.g. 29568">
             </div>
             <div class="modal-actions">
                 <button class="modal-btn secondary" onclick="closeProductModal()">Cancel</button>

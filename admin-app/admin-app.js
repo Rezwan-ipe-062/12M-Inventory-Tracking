@@ -118,6 +118,31 @@ const DEFAULT_CONFIG = {
     warehouses: ['Chittagong', 'Gazipur', 'Jessore', 'Bogura']
 };
 
+// ==============================
+// AGI CODE HELPERS
+// ==============================
+function getAgiCode(product, pack) {
+    const codes = JSON.parse(localStorage.getItem('product-agi-codes') || '{}');
+    return codes[product + '|' + (pack || '')] || '';
+}
+function setAgiCode(product, pack, code) {
+    const codes = JSON.parse(localStorage.getItem('product-agi-codes') || '{}');
+    codes[product + '|' + (pack || '')] = code;
+    localStorage.setItem('product-agi-codes', JSON.stringify(codes));
+}
+
+// Merge persisted product edits into PRODUCTS array
+(function loadCustomProducts() {
+    try {
+        const saved = localStorage.getItem('custom-products');
+        if (saved) {
+            const custom = JSON.parse(saved);
+            PRODUCTS.length = 0;
+            custom.forEach(p => PRODUCTS.push(p));
+        }
+    } catch(e) {}
+})();
+
 function loadConfig() {
     try {
         const saved = localStorage.getItem('shelf-life-config');
@@ -499,7 +524,7 @@ function renderActivity(filter) {
     document.getElementById('activity-count').textContent = 'Showing ' + txs.length + ' entries';
 
     if (txs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">No activity recorded yet.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">No activity recorded yet.</td></tr>';
         return;
     }
 
@@ -509,7 +534,7 @@ function renderActivity(filter) {
         const isAdd = d.type === 'receive';
         const typeLabel = isAdd ? '<span style="color:#16A34A;font-weight:600;">+</span>' : '<span style="color:#DC2626;font-weight:600;">\u2212</span>';
         const typeText = isAdd ? 'Addition' : 'Subtraction';
-        return '<tr><td>' + (d.date || d.timestamp || '') + '</td><td>' + d.product + '</td><td>' + (d.packSize || '') + '</td><td>' + (d.productionMonth || '') + '</td><td>' + (d.warehouse || '\u2014') + '</td><td>' + typeLabel + ' ' + typeText + '</td><td>' + d.quantity + '</td><td>' + (d.operator_name || '\u2014') + '</td></tr>';
+        return '<tr><td>' + (d.date || d.timestamp || '') + '</td><td>' + d.product + '</td><td>' + (d.packSize || '') + '</td><td>' + (getAgiCode(d.product, d.packSize || '') || '\u2014') + '</td><td>' + (d.productionMonth || '') + '</td><td>' + (d.warehouse || '\u2014') + '</td><td>' + typeLabel + ' ' + typeText + '</td><td>' + d.quantity + '</td><td>' + (d.operator_name || '\u2014') + '</td></tr>';
     }).join('');
 }
 
@@ -604,7 +629,7 @@ function renderProducts() {
 
     tbody.innerHTML = data.map((d, i) => {
         const originalIndex = PRODUCTS.indexOf(d);
-        return '<tr><td><span class="badge badge-green">' + (d.prefix || '\u2014') + '</span></td><td>' + d.name + '</td><td>' + (d.pack || '\u2014') + '</td><td><button class="action-btn" onclick="editProduct(' + originalIndex + ')">Edit</button> <button class="action-btn danger" onclick="deleteProduct(' + originalIndex + ')">Delete</button></td></tr>';
+        return '<tr><td><span class="badge badge-green">' + (d.prefix || '\u2014') + '</span></td><td>' + d.name + '</td><td>' + (d.pack || '\u2014') + '</td><td>' + (getAgiCode(d.name, d.pack) || '\u2014') + '</td><td><button class="action-btn" onclick="editProduct(' + originalIndex + ')">Edit</button> <button class="action-btn danger" onclick="deleteProduct(' + originalIndex + ')">Delete</button></td></tr>';
     }).join('');
 }
 
@@ -616,10 +641,12 @@ function openProductModal(idx) {
         document.getElementById('modal-name').value = p.name;
         document.getElementById('modal-pack').value = p.pack;
         document.getElementById('modal-prefix').value = p.prefix;
+        document.getElementById('modal-agi').value = getAgiCode(p.name, p.pack);
     } else {
         document.getElementById('modal-name').value = '';
         document.getElementById('modal-pack').value = '';
         document.getElementById('modal-prefix').value = 'SCH';
+        document.getElementById('modal-agi').value = '';
     }
     document.getElementById('product-modal').classList.add('open');
 }
@@ -632,13 +659,23 @@ function saveProduct() {
     const name = document.getElementById('modal-name').value.trim();
     const pack = document.getElementById('modal-pack').value.trim();
     const prefix = document.getElementById('modal-prefix').value;
+    const agi = document.getElementById('modal-agi').value.trim();
     if (!name) { alert('Product name is required'); return; }
 
     if (editingIndex >= 0) {
+        const old = PRODUCTS[editingIndex];
+        if (old.name !== name || old.pack !== pack) {
+            const oldKey = old.name + '|' + (old.pack || '');
+            const codes = JSON.parse(localStorage.getItem('product-agi-codes') || '{}');
+            delete codes[oldKey];
+            localStorage.setItem('product-agi-codes', JSON.stringify(codes));
+        }
         PRODUCTS[editingIndex] = { name, pack, prefix };
     } else {
         PRODUCTS.push({ name, pack, prefix });
     }
+    setAgiCode(name, pack, agi);
+    localStorage.setItem('custom-products', JSON.stringify(PRODUCTS));
     closeProductModal();
     renderProducts();
 }
@@ -649,7 +686,13 @@ function editProduct(idx) {
 
 function deleteProduct(idx) {
     if (!confirm('Delete ' + PRODUCTS[idx].name + ' ' + PRODUCTS[idx].pack + '?')) return;
+    const old = PRODUCTS[idx];
+    const oldKey = old.name + '|' + (old.pack || '');
+    const codes = JSON.parse(localStorage.getItem('product-agi-codes') || '{}');
+    delete codes[oldKey];
+    localStorage.setItem('product-agi-codes', JSON.stringify(codes));
     PRODUCTS.splice(idx, 1);
+    localStorage.setItem('custom-products', JSON.stringify(PRODUCTS));
     renderProducts();
 }
 
@@ -701,18 +744,18 @@ function exportInventory() {
 function exportActivity() {
     const opData = loadOperatorData();
     const filtered = filterByWarehouse(opData.transactions || []);
-    let csv = 'Date & Time,Product,Pack,Code,Warehouse,Type,Qty,Operator\n';
+    let csv = 'Date & Time,Product,Pack,AGI Code,Code,Warehouse,Type,Qty,Operator\n';
     filtered.forEach(d => {
         const typeText = d.type === 'receive' ? 'Addition' : 'Subtraction';
-        csv += (d.date || '') + ',' + d.product + ',' + (d.packSize || '') + ',' + (d.productionMonth || '') + ',' + (d.warehouse || '') + ',' + typeText + ',' + d.quantity + ',' + (d.operator_name || '') + '\n';
+        csv += (d.date || '') + ',' + d.product + ',' + (d.packSize || '') + ',' + (getAgiCode(d.product, d.packSize || '') || '') + ',' + (d.productionMonth || '') + ',' + (d.warehouse || '') + ',' + typeText + ',' + d.quantity + ',' + (d.operator_name || '') + '\n';
     });
     downloadCSV(csv, 'Activity_Log_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
 
 function exportProducts() {
-    let csv = 'Prefix,Product Name,Pack Size\n';
+    let csv = 'Prefix,Product Name,Pack Size,AGI Code\n';
     PRODUCTS.forEach(d => {
-        csv += (d.prefix || '\u2014') + ',' + d.name + ',' + (d.pack || '\u2014') + '\n';
+        csv += (d.prefix || '\u2014') + ',' + d.name + ',' + (d.pack || '\u2014') + ',' + (getAgiCode(d.name, d.pack) || '') + '\n';
     });
     downloadCSV(csv, 'Products_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
