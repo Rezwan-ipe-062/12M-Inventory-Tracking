@@ -1,0 +1,2062 @@
+{
+  "admin-app/admin-app.js": {
+    "mtime": 1784086239.816707,
+    "ast_hash": "8a5d7fe724e6135d123197501fc5005f",
+    "semantic_hash": "8a5d7fe724e6135d123197501fc5005f"
+  },
+  "manifest.json": {
+    "mtime": 1784010862.4836504,
+    "ast_hash": "ea65b3c78a713cf4f88622a67771b387",
+    "semantic_hash": "ea65b3c78a713cf4f88622a67771b387"
+  },
+  "operator-app/app.js": {
+    "mtime": 1784025012.4484587,
+    "ast_hash": "56f84ae833c3156884e33b2437a5975e",
+    "semantic_hash": "56f84ae833c3156884e33b2437a5975e"
+  },
+  "operator-app/products.js": {
+    "mtime": 1783889794.3018217,
+    "ast_hash": "fd9dfc6719efff7832c683ad53acf353",
+    "semantic_hash": "fd9dfc6719efff7832c683ad53acf353"
+  },
+  "operator-app/syncManager.js": {
+    "mtime": 1784026450.6474073,
+    "ast_hash": "4b349a93085a76b4e097b5ecaf013c1e",
+    "semantic_hash": "4b349a93085a76b4e097b5ecaf013c1e"
+  },
+  "supabase sql codes/clear_all_data.sql": {
+    "mtime": 1784024122.3344202,
+    "ast_hash": "4e20698d8d37e46564d468ba3bd894a6",
+    "semantic_hash": "4e20698d8d37e46564d468ba3bd894a6"
+  },
+  "supabase sql codes/init_tables.sql": {
+    "mtime": 1784027592.9578035,
+    "ast_hash": "71f563b804a2ee08898200fc3b6365a3",
+    "semantic_hash": "71f563b804a2ee08898200fc3b6365a3"
+  },
+  "supabase sql codes/migration_add_warehouse.sql": {
+    "mtime": 1784033448.0896041,
+    "ast_hash": "662d397e942e5d2e5b9661de54df3639",
+    "semantic_hash": "662d397e942e5d2e5b9661de54df3639"
+  },
+  "supabase-schema.sql": {
+    "mtime": 1784026458.649541,
+    "ast_hash": "74fb2eea9c1256dc6ba1289567bc17bc",
+    "semantic_hash": "74fb2eea9c1256dc6ba1289567bc17bc"
+  },
+  ".md files/Architecture.md": {
+    "mtime": 1784025118.9062603,
+    "ast_hash": "6ae8b137fff1836f1a0459932e5ea75c",
+    "semantic_hash": "6ae8b137fff1836f1a0459932e5ea75c"
+  },
+  ".md files/Design.md": {
+    "mtime": 1784024122.3031564,
+    "ast_hash": "7a0c422fcce6debfae636852378a7a48",
+    "semantic_hash": "7a0c422fcce6debfae636852378a7a48"
+  },
+  ".md files/Memory.md": {
+    "mtime": 1784027654.5974865,
+    "ast_hash": "cacd64a889bd63c3e9e7aa4114100248",
+    "semantic_hash": "cacd64a889bd63c3e9e7aa4114100248"
+  },
+  ".md files/PRD.md": {
+    "mtime": 1784025109.7110171,
+    "ast_hash": "52f62a90a6538daeb76602f685c027ab",
+    "semantic_hash": "52f62a90a6538daeb76602f685c027ab"
+  },
+  ".md files/Phases.md": {
+    "mtime": 1784025091.9948306,
+    "ast_hash": "054a550014c62a41d48e8f4e86d4a8f4",
+    "semantic_hash": "054a550014c62a41d48e8f4e86d4a8f4"
+  },
+  ".md files/Rules.md": {
+    "mtime": 1784025103.4890344,
+    "ast_hash": "b5dd9929fcf6b5bebfd5cb3fd4bf71ed",
+    "semantic_hash": "b5dd9929fcf6b5bebfd5cb3fd4bf71ed"
+  },
+  "How Syngenta Brand UI Looks.txt": {
+    "mtime": 1783919731.1333208,
+    "ast_hash": "25f09a4e171791a6d9a6f916f2e51bc7",
+    "semantic_hash": "25f09a4e171791a6d9a6f916f2e51bc7"
+  },
+  "PROJECT_REQUIREMENTS.md": {
+    "mtime": 1783937334.439712,
+    "ast_hash": "b4691a86833f3c525ed655131946e645",
+    "semantic_hash": "b4691a86833f3c525ed655131946e645"
+  },
+  "admin-app/admin-panel.html": {
+    "mtime": 1784033501.9918954,
+    "ast_hash": "fc613096aab97fd4427b0656c34a57a9",
+    "semantic_hash": "fc613096aab97fd4427b0656c34a57a9"
+  },
+  "graphify-out/converted/12 M file CP & SE Country July-26_c5500969.md": {
+    "mtime": 1784092597.9938605,
+    "ast_hash": "ca1d8af6f020fe026ff8b08c20484f9d",
+    "semantic_hash": "ca1d8af6f020fe026ff8b08c20484f9d"
+  },
+  "graphify-out/converted/12M and MRP changing Status_80bf46ee.md": {
+    "mtime": 1784092598.7007096,
+    "ast_hash": "af8f49ae545b509e0c92793542b1da18",
+    "semantic_hash": "af8f49ae545b509e0c92793542b1da18"
+  },
+  "graphify-out/converted/Age Analysis Report_CTG Outer Sales  DC June-2025(Nurjahan DC)_b4a1bab1.md": {
+    "mtime": 1784092598.910173,
+    "ast_hash": "e1fb6648785fb3bed6cdc4e8b5aa3802",
+    "semantic_hash": "e1fb6648785fb3bed6cdc4e8b5aa3802"
+  },
+  "graphify-out/converted/Bulk in Pallet_1dbfd71b.md": {
+    "mtime": 1784092597.7991552,
+    "ast_hash": "1e8d5a86ebe66178beefc15e66b7c5e9",
+    "semantic_hash": "1e8d5a86ebe66178beefc15e66b7c5e9"
+  },
+  "graphify-out/converted/EXPORT_20260706_120415_701ad6a6.md": {
+    "mtime": 1784092598.285297,
+    "ast_hash": "f09cf94eb46b7e4f7a687633a707c868",
+    "semantic_hash": "f09cf94eb46b7e4f7a687633a707c868"
+  },
+  "graphify-out/converted/Physical FG Inventory Data (June)_3adb004b.md": {
+    "mtime": 1784092648.617793,
+    "ast_hash": "a195bc97ba7a97ed3cd6b4bcf3b585f9",
+    "semantic_hash": "a195bc97ba7a97ed3cd6b4bcf3b585f9"
+  },
+  "index.html": {
+    "mtime": 1784010846.541323,
+    "ast_hash": "088a2925860f84dd8a6d1e79809f5966",
+    "semantic_hash": "088a2925860f84dd8a6d1e79809f5966"
+  },
+  "operator-app/count-screen.html": {
+    "mtime": 1783917445.7482073,
+    "ast_hash": "825ad16bb6d2f1a7618a182c45951ab6",
+    "semantic_hash": "825ad16bb6d2f1a7618a182c45951ab6"
+  },
+  "operator-app/index.html": {
+    "mtime": 1784021433.9023738,
+    "ast_hash": "6b48da61a67ab099f7f489e28883884e",
+    "semantic_hash": "6b48da61a67ab099f7f489e28883884e"
+  },
+  "operator-app/inventory-screen.html": {
+    "mtime": 1783917521.28532,
+    "ast_hash": "7f9c5b55da37bd1a88662436b76a8cf4",
+    "semantic_hash": "7f9c5b55da37bd1a88662436b76a8cf4"
+  },
+  "operator-app/twelve-month-screen.html": {
+    "mtime": 1783917485.8743556,
+    "ast_hash": "026a377bea3e9dfd380d35475c6e52b1",
+    "semantic_hash": "026a377bea3e9dfd380d35475c6e52b1"
+  },
+  "reference-data/12_Month_Shelf_Life_Data.md": {
+    "mtime": 1783743855.9751005,
+    "ast_hash": "6bfbbff9bbe942a29a3807e330a19754",
+    "semantic_hash": "6bfbbff9bbe942a29a3807e330a19754"
+  },
+  "reference-data/System_Export_Data.md": {
+    "mtime": 1783743856.3243573,
+    "ast_hash": "c5a640a9c25ef5836c7319011e60bb0d",
+    "semantic_hash": "c5a640a9c25ef5836c7319011e60bb0d"
+  },
+  "reference-data/Data Files Shared with Me/12M Report Chittagong Warehouse.pdf": {
+    "mtime": 1783794724.5021887,
+    "ast_hash": "f09a8f092bed331d0f087be5eba777ee",
+    "semantic_hash": "f09a8f092bed331d0f087be5eba777ee"
+  },
+  "reference-data/OCR/12M Report Chittagong Warehouse.pdf": {
+    "mtime": 1783794724.5021887,
+    "ast_hash": "f09a8f092bed331d0f087be5eba777ee",
+    "semantic_hash": "f09a8f092bed331d0f087be5eba777ee"
+  },
+  "favicon.svg": {
+    "mtime": 1784010857.4352167,
+    "ast_hash": "dc747ea00fd4773bdd9139802a914c64",
+    "semantic_hash": "dc747ea00fd4773bdd9139802a914c64"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_101607629.jpg": {
+    "mtime": 1783851369.0,
+    "ast_hash": "a05613692b94e53a54b72838d71dd26d",
+    "semantic_hash": "a05613692b94e53a54b72838d71dd26d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_101612809.jpg": {
+    "mtime": 1783851374.0,
+    "ast_hash": "ce724551460621bcc6b1295d51a2fd5b",
+    "semantic_hash": "ce724551460621bcc6b1295d51a2fd5b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_101624135.jpg": {
+    "mtime": 1783851385.0,
+    "ast_hash": "817e7611462d8b3c19cec344546256e1",
+    "semantic_hash": "817e7611462d8b3c19cec344546256e1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103556674.jpg": {
+    "mtime": 1783852559.0,
+    "ast_hash": "afaf5cac12855e0d7a3d36cbe737489f",
+    "semantic_hash": "afaf5cac12855e0d7a3d36cbe737489f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103601976.jpg": {
+    "mtime": 1783852563.0,
+    "ast_hash": "566da830b1a25bcd06cb52930ed8e37d",
+    "semantic_hash": "566da830b1a25bcd06cb52930ed8e37d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103605946.jpg": {
+    "mtime": 1783852567.0,
+    "ast_hash": "6ab9d888d3edcbdbb5f67c275ccc7188",
+    "semantic_hash": "6ab9d888d3edcbdbb5f67c275ccc7188"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103611066.jpg": {
+    "mtime": 1783852572.0,
+    "ast_hash": "bf4b773cbbc3244c697af18ec3b2422d",
+    "semantic_hash": "bf4b773cbbc3244c697af18ec3b2422d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103613856.jpg": {
+    "mtime": 1783852575.0,
+    "ast_hash": "40dd440b9c2d026f6d0a934551b35151",
+    "semantic_hash": "40dd440b9c2d026f6d0a934551b35151"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103620183.jpg": {
+    "mtime": 1783852581.0,
+    "ast_hash": "55f65b6ee5b9ab14ae0faf8487fed2ed",
+    "semantic_hash": "55f65b6ee5b9ab14ae0faf8487fed2ed"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103628542.jpg": {
+    "mtime": 1783852590.0,
+    "ast_hash": "5d9cd9b84fbaa9b89cc1254c2bbef874",
+    "semantic_hash": "5d9cd9b84fbaa9b89cc1254c2bbef874"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103635744.jpg": {
+    "mtime": 1783852597.0,
+    "ast_hash": "dccc86f8753e58c36ac3ac6a9cf74a10",
+    "semantic_hash": "dccc86f8753e58c36ac3ac6a9cf74a10"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103639479.jpg": {
+    "mtime": 1783852601.0,
+    "ast_hash": "4133a6e36e810894ae3e10c492b2fe9e",
+    "semantic_hash": "4133a6e36e810894ae3e10c492b2fe9e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103642917.jpg": {
+    "mtime": 1783852604.0,
+    "ast_hash": "2ad717c9809abf7b3781b7e8957a8bd4",
+    "semantic_hash": "2ad717c9809abf7b3781b7e8957a8bd4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103646803.jpg": {
+    "mtime": 1783852608.0,
+    "ast_hash": "1115a2c1932d9b069f5a757ffc83f7f4",
+    "semantic_hash": "1115a2c1932d9b069f5a757ffc83f7f4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103651556.jpg": {
+    "mtime": 1783852612.0,
+    "ast_hash": "833c4265c9a8789d2318b0655077c36f",
+    "semantic_hash": "833c4265c9a8789d2318b0655077c36f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103655009.jpg": {
+    "mtime": 1783852616.0,
+    "ast_hash": "7977745e0bb37710bf9626de05dcbd1c",
+    "semantic_hash": "7977745e0bb37710bf9626de05dcbd1c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103700697.jpg": {
+    "mtime": 1783852622.0,
+    "ast_hash": "f8a54732f334f3ac6d164c50315d2f6b",
+    "semantic_hash": "f8a54732f334f3ac6d164c50315d2f6b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103704661.jpg": {
+    "mtime": 1783852626.0,
+    "ast_hash": "962cf05c3073c62b49487d499654ab82",
+    "semantic_hash": "962cf05c3073c62b49487d499654ab82"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103709390.jpg": {
+    "mtime": 1783852630.0,
+    "ast_hash": "2796995e5c67bace8547afb6315d3e65",
+    "semantic_hash": "2796995e5c67bace8547afb6315d3e65"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103712915.jpg": {
+    "mtime": 1783852634.0,
+    "ast_hash": "477282ee25e861895f619a7694a536cb",
+    "semantic_hash": "477282ee25e861895f619a7694a536cb"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103758557.jpg": {
+    "mtime": 1783852680.0,
+    "ast_hash": "79f6f692da0f7742167177a493ab1c40",
+    "semantic_hash": "79f6f692da0f7742167177a493ab1c40"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103803206.jpg": {
+    "mtime": 1783852684.0,
+    "ast_hash": "3e4704d6255eae91e1040b231c1a4a1a",
+    "semantic_hash": "3e4704d6255eae91e1040b231c1a4a1a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103819830.jpg": {
+    "mtime": 1783852701.0,
+    "ast_hash": "a993b621deeb1bfa98785c930038aa87",
+    "semantic_hash": "a993b621deeb1bfa98785c930038aa87"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103828387.jpg": {
+    "mtime": 1783852709.0,
+    "ast_hash": "0d587c774553713889dd03c8ad0d78ef",
+    "semantic_hash": "0d587c774553713889dd03c8ad0d78ef"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103852410.jpg": {
+    "mtime": 1783852733.0,
+    "ast_hash": "7abf225bfc19e3389ecd1d66fe878be0",
+    "semantic_hash": "7abf225bfc19e3389ecd1d66fe878be0"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103902991.jpg": {
+    "mtime": 1783852744.0,
+    "ast_hash": "e3ae30f523cd404e3631449b75e39f0d",
+    "semantic_hash": "e3ae30f523cd404e3631449b75e39f0d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103919022.jpg": {
+    "mtime": 1783852760.0,
+    "ast_hash": "38f9c57cc368c332173e07831bddced8",
+    "semantic_hash": "38f9c57cc368c332173e07831bddced8"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103928962.jpg": {
+    "mtime": 1783852770.0,
+    "ast_hash": "fcf7ec67d671544fc34709fc02cfa1a3",
+    "semantic_hash": "fcf7ec67d671544fc34709fc02cfa1a3"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103932238.jpg": {
+    "mtime": 1783852773.0,
+    "ast_hash": "eae41c7e1d8f6d6aceae8a20f2884072",
+    "semantic_hash": "eae41c7e1d8f6d6aceae8a20f2884072"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103941212.jpg": {
+    "mtime": 1783852782.0,
+    "ast_hash": "b6a876a204cb45c5378fbc3409c7bf15",
+    "semantic_hash": "b6a876a204cb45c5378fbc3409c7bf15"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103945827.jpg": {
+    "mtime": 1783852787.0,
+    "ast_hash": "35f4042697aedf60e43af88ad20f86bc",
+    "semantic_hash": "35f4042697aedf60e43af88ad20f86bc"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103949402.jpg": {
+    "mtime": 1783852790.0,
+    "ast_hash": "f341e5bb9d92a12bbc2acfb88ba1a527",
+    "semantic_hash": "f341e5bb9d92a12bbc2acfb88ba1a527"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103952509.jpg": {
+    "mtime": 1783852794.0,
+    "ast_hash": "90247c52f3f7bcfc97bb14d4e4bd9caf",
+    "semantic_hash": "90247c52f3f7bcfc97bb14d4e4bd9caf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_103959139.jpg": {
+    "mtime": 1783852800.0,
+    "ast_hash": "bef7842aacc88eb880cbaedae181c9ce",
+    "semantic_hash": "bef7842aacc88eb880cbaedae181c9ce"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104005560.jpg": {
+    "mtime": 1783852807.0,
+    "ast_hash": "4647cc929dfc4a790c3ba74e15833066",
+    "semantic_hash": "4647cc929dfc4a790c3ba74e15833066"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104027333.jpg": {
+    "mtime": 1783852829.0,
+    "ast_hash": "b00f1f2e1cd05a25943b01a92caf468f",
+    "semantic_hash": "b00f1f2e1cd05a25943b01a92caf468f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104030631.jpg": {
+    "mtime": 1783852832.0,
+    "ast_hash": "63a0f90933f1153c0ef7af35573d183d",
+    "semantic_hash": "63a0f90933f1153c0ef7af35573d183d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104034560.jpg": {
+    "mtime": 1783852836.0,
+    "ast_hash": "2b19304b80455edb64e816fd4699197e",
+    "semantic_hash": "2b19304b80455edb64e816fd4699197e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104039306.jpg": {
+    "mtime": 1783852840.0,
+    "ast_hash": "372fd9023d75e5fadedb876eed9e0292",
+    "semantic_hash": "372fd9023d75e5fadedb876eed9e0292"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104041980.jpg": {
+    "mtime": 1783852843.0,
+    "ast_hash": "b5ce48b34fcba70c7cfa202cf2dbb5db",
+    "semantic_hash": "b5ce48b34fcba70c7cfa202cf2dbb5db"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104044788.jpg": {
+    "mtime": 1783852846.0,
+    "ast_hash": "989ce3a34d857af66ebdc80ce035ebbc",
+    "semantic_hash": "989ce3a34d857af66ebdc80ce035ebbc"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104048993.jpg": {
+    "mtime": 1783852850.0,
+    "ast_hash": "0b2e57e0a566a7670e298fbc841aecb3",
+    "semantic_hash": "0b2e57e0a566a7670e298fbc841aecb3"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104051608.jpg": {
+    "mtime": 1783852853.0,
+    "ast_hash": "e840f967f589b18447c3617693f89aed",
+    "semantic_hash": "e840f967f589b18447c3617693f89aed"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104057176.jpg": {
+    "mtime": 1783852858.0,
+    "ast_hash": "689c2cbb4b7732be4d79d4f24b70a7c6",
+    "semantic_hash": "689c2cbb4b7732be4d79d4f24b70a7c6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104106005.jpg": {
+    "mtime": 1783852867.0,
+    "ast_hash": "f9dc0b1341244efe518cde6dd7b59a2a",
+    "semantic_hash": "f9dc0b1341244efe518cde6dd7b59a2a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104110487.jpg": {
+    "mtime": 1783852872.0,
+    "ast_hash": "c99ef8c950c9d11e2c789d2c198e57eb",
+    "semantic_hash": "c99ef8c950c9d11e2c789d2c198e57eb"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104115346.jpg": {
+    "mtime": 1783852877.0,
+    "ast_hash": "d02c7213c869e463f7418b3316ed9367",
+    "semantic_hash": "d02c7213c869e463f7418b3316ed9367"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104118341.jpg": {
+    "mtime": 1783852880.0,
+    "ast_hash": "15291a441bda602fb01adf1842f89411",
+    "semantic_hash": "15291a441bda602fb01adf1842f89411"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104123932.jpg": {
+    "mtime": 1783852885.0,
+    "ast_hash": "5b1533a563c2a21145a9d327dcb2e052",
+    "semantic_hash": "5b1533a563c2a21145a9d327dcb2e052"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104128792.jpg": {
+    "mtime": 1783852890.0,
+    "ast_hash": "6c5cff8cb907a276065e5e8abf549672",
+    "semantic_hash": "6c5cff8cb907a276065e5e8abf549672"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104134207.jpg": {
+    "mtime": 1783852895.0,
+    "ast_hash": "3aabcb0e2715c75a6bb761181feb1efb",
+    "semantic_hash": "3aabcb0e2715c75a6bb761181feb1efb"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104139207.jpg": {
+    "mtime": 1783852900.0,
+    "ast_hash": "b7094528e3b619668b9828616128a1de",
+    "semantic_hash": "b7094528e3b619668b9828616128a1de"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104142901.jpg": {
+    "mtime": 1783852904.0,
+    "ast_hash": "c28af536d71faa9eb016e7c0bbd711cb",
+    "semantic_hash": "c28af536d71faa9eb016e7c0bbd711cb"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104146992.jpg": {
+    "mtime": 1783852908.0,
+    "ast_hash": "791f46d2935ac85dae4cfdd376a00ca2",
+    "semantic_hash": "791f46d2935ac85dae4cfdd376a00ca2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104151806.jpg": {
+    "mtime": 1783852913.0,
+    "ast_hash": "082ecb76d65911a3f9fdab163f1d0d75",
+    "semantic_hash": "082ecb76d65911a3f9fdab163f1d0d75"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104157081.jpg": {
+    "mtime": 1783852918.0,
+    "ast_hash": "1c5536f0f6293559451cee5773899ed4",
+    "semantic_hash": "1c5536f0f6293559451cee5773899ed4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104200538.jpg": {
+    "mtime": 1783852922.0,
+    "ast_hash": "346988f98b0560cc52b773d112afdff8",
+    "semantic_hash": "346988f98b0560cc52b773d112afdff8"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104208523.jpg": {
+    "mtime": 1783852930.0,
+    "ast_hash": "5f0cf3e176422ca2c1a24bead3805d17",
+    "semantic_hash": "5f0cf3e176422ca2c1a24bead3805d17"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104211381.jpg": {
+    "mtime": 1783852933.0,
+    "ast_hash": "9bd1c404664e90f3ff32bc70cc532cba",
+    "semantic_hash": "9bd1c404664e90f3ff32bc70cc532cba"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104214064.jpg": {
+    "mtime": 1783852935.0,
+    "ast_hash": "ac35c2dda7da80a953116d3b6434741f",
+    "semantic_hash": "ac35c2dda7da80a953116d3b6434741f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104217558.jpg": {
+    "mtime": 1783852939.0,
+    "ast_hash": "8e2eee944e1c832b0cee012e844162a5",
+    "semantic_hash": "8e2eee944e1c832b0cee012e844162a5"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104221938.jpg": {
+    "mtime": 1783852943.0,
+    "ast_hash": "8763ae64c190f960fd2d81c55194ce51",
+    "semantic_hash": "8763ae64c190f960fd2d81c55194ce51"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104227391.jpg": {
+    "mtime": 1783852949.0,
+    "ast_hash": "39b4ff8300c5f374715a90aa0982019f",
+    "semantic_hash": "39b4ff8300c5f374715a90aa0982019f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104232132.jpg": {
+    "mtime": 1783852953.0,
+    "ast_hash": "4fe7e8c58f1a55f9e7af9a6d33669ba3",
+    "semantic_hash": "4fe7e8c58f1a55f9e7af9a6d33669ba3"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104237916.jpg": {
+    "mtime": 1783852959.0,
+    "ast_hash": "9bd6fa9883495af0ff55b886462d625c",
+    "semantic_hash": "9bd6fa9883495af0ff55b886462d625c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104245662.jpg": {
+    "mtime": 1783852967.0,
+    "ast_hash": "07f1e3e3b03c4c4ce37367d3ef02a6d5",
+    "semantic_hash": "07f1e3e3b03c4c4ce37367d3ef02a6d5"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104250463.jpg": {
+    "mtime": 1783852971.0,
+    "ast_hash": "db19d0158979a5ded11145a1ed10d4f1",
+    "semantic_hash": "db19d0158979a5ded11145a1ed10d4f1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104253043.jpg": {
+    "mtime": 1783852974.0,
+    "ast_hash": "08f63b0cf201e54e7dc3be364626f892",
+    "semantic_hash": "08f63b0cf201e54e7dc3be364626f892"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104256049.jpg": {
+    "mtime": 1783852977.0,
+    "ast_hash": "ad360fd8e25e1b7b99aedd1467d89581",
+    "semantic_hash": "ad360fd8e25e1b7b99aedd1467d89581"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104302006.jpg": {
+    "mtime": 1783852983.0,
+    "ast_hash": "702c5683cb06fc5bf2ade291b96f2536",
+    "semantic_hash": "702c5683cb06fc5bf2ade291b96f2536"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104314095.jpg": {
+    "mtime": 1783852995.0,
+    "ast_hash": "be0de7b88887aa5311f92d734dc120a7",
+    "semantic_hash": "be0de7b88887aa5311f92d734dc120a7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104318217.jpg": {
+    "mtime": 1783852999.0,
+    "ast_hash": "1765c68d7c8d09fd20b577b1bd6f9513",
+    "semantic_hash": "1765c68d7c8d09fd20b577b1bd6f9513"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104327477.MP.jpg": {
+    "mtime": 1783853009.0,
+    "ast_hash": "6304b663b000a877d1e814bb0dd03ce2",
+    "semantic_hash": "6304b663b000a877d1e814bb0dd03ce2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104332233.jpg": {
+    "mtime": 1783853013.0,
+    "ast_hash": "b3e4ea8a0953e7781c729de2e42ddac7",
+    "semantic_hash": "b3e4ea8a0953e7781c729de2e42ddac7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104337015.jpg": {
+    "mtime": 1783853018.0,
+    "ast_hash": "5f71d3cce871cae4d68f997aeed5a641",
+    "semantic_hash": "5f71d3cce871cae4d68f997aeed5a641"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104340981.jpg": {
+    "mtime": 1783853022.0,
+    "ast_hash": "cf9ea8c4ceb54d4ac4ee68aa2a629330",
+    "semantic_hash": "cf9ea8c4ceb54d4ac4ee68aa2a629330"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104346559.jpg": {
+    "mtime": 1783853029.0,
+    "ast_hash": "d2c97339d48425f17b2e11837439abdf",
+    "semantic_hash": "d2c97339d48425f17b2e11837439abdf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104354302.jpg": {
+    "mtime": 1783853036.0,
+    "ast_hash": "16603e1b65a843fa286d90fc7841c299",
+    "semantic_hash": "16603e1b65a843fa286d90fc7841c299"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104403613.jpg": {
+    "mtime": 1783853046.0,
+    "ast_hash": "6aa35240ce3805c8723322d59daebb13",
+    "semantic_hash": "6aa35240ce3805c8723322d59daebb13"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104411512.jpg": {
+    "mtime": 1783853053.0,
+    "ast_hash": "2f0f67467d8e01b7b650528ab92652af",
+    "semantic_hash": "2f0f67467d8e01b7b650528ab92652af"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104416135.jpg": {
+    "mtime": 1783853058.0,
+    "ast_hash": "78cd96c563c31a1791b534ff8af9540c",
+    "semantic_hash": "78cd96c563c31a1791b534ff8af9540c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104420077.jpg": {
+    "mtime": 1783853062.0,
+    "ast_hash": "6cf01e5add80931991d517fbdf3bd956",
+    "semantic_hash": "6cf01e5add80931991d517fbdf3bd956"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104423761.jpg": {
+    "mtime": 1783853066.0,
+    "ast_hash": "489f64386c8a36c9b10f2b3dc5202705",
+    "semantic_hash": "489f64386c8a36c9b10f2b3dc5202705"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104426636.jpg": {
+    "mtime": 1783853068.0,
+    "ast_hash": "dca9c8d14261f6b3a9e3dea94dba6daf",
+    "semantic_hash": "dca9c8d14261f6b3a9e3dea94dba6daf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104433052.jpg": {
+    "mtime": 1783853076.0,
+    "ast_hash": "2d03db6acb94bfdbcc5383a883df6448",
+    "semantic_hash": "2d03db6acb94bfdbcc5383a883df6448"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104437372.jpg": {
+    "mtime": 1783853080.0,
+    "ast_hash": "abfa2f8778ba8e329ef6ab17988d4a71",
+    "semantic_hash": "abfa2f8778ba8e329ef6ab17988d4a71"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104441958.jpg": {
+    "mtime": 1783853084.0,
+    "ast_hash": "2c0b86669e4c54936d7864dd313a73e8",
+    "semantic_hash": "2c0b86669e4c54936d7864dd313a73e8"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104448834.jpg": {
+    "mtime": 1783853091.0,
+    "ast_hash": "40a2eaa929d7f4e74b34554c168965d1",
+    "semantic_hash": "40a2eaa929d7f4e74b34554c168965d1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104452864.jpg": {
+    "mtime": 1783853095.0,
+    "ast_hash": "65c58a0404d4243f51c1be25cf06cf53",
+    "semantic_hash": "65c58a0404d4243f51c1be25cf06cf53"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104456528.jpg": {
+    "mtime": 1783853098.0,
+    "ast_hash": "c3c86513e790fcfbd6929cceb21b4429",
+    "semantic_hash": "c3c86513e790fcfbd6929cceb21b4429"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104503476.jpg": {
+    "mtime": 1783853105.0,
+    "ast_hash": "98d204acf931075e69ce56d419938a0e",
+    "semantic_hash": "98d204acf931075e69ce56d419938a0e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104508323.jpg": {
+    "mtime": 1783853110.0,
+    "ast_hash": "656e0d201c4b078061df5c4806334368",
+    "semantic_hash": "656e0d201c4b078061df5c4806334368"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104512792.jpg": {
+    "mtime": 1783853115.0,
+    "ast_hash": "0b0959c4adbfedd3132aace99c690066",
+    "semantic_hash": "0b0959c4adbfedd3132aace99c690066"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104517144.jpg": {
+    "mtime": 1783853119.0,
+    "ast_hash": "c353bb832e65916aa4de754bef6ec8e6",
+    "semantic_hash": "c353bb832e65916aa4de754bef6ec8e6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104521745.jpg": {
+    "mtime": 1783853124.0,
+    "ast_hash": "9e71313c00a2314c27d3ea46bb1150b7",
+    "semantic_hash": "9e71313c00a2314c27d3ea46bb1150b7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104524231.jpg": {
+    "mtime": 1783853126.0,
+    "ast_hash": "940c20f35cc77736b4d2d7ddf42bb7c1",
+    "semantic_hash": "940c20f35cc77736b4d2d7ddf42bb7c1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104532841.jpg": {
+    "mtime": 1783853135.0,
+    "ast_hash": "26105f5df702f1df3a71d51c5ba3f66f",
+    "semantic_hash": "26105f5df702f1df3a71d51c5ba3f66f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104538977.jpg": {
+    "mtime": 1783853141.0,
+    "ast_hash": "2b8b559d2b32d791cf97408139228323",
+    "semantic_hash": "2b8b559d2b32d791cf97408139228323"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104545510.jpg": {
+    "mtime": 1783853147.0,
+    "ast_hash": "f91cba72835b093e1f370047d75b8e25",
+    "semantic_hash": "f91cba72835b093e1f370047d75b8e25"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104554634.jpg": {
+    "mtime": 1783853157.0,
+    "ast_hash": "cab625741111026f3cb8f332855db583",
+    "semantic_hash": "cab625741111026f3cb8f332855db583"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104559468.jpg": {
+    "mtime": 1783853161.0,
+    "ast_hash": "78b67f1680506d4762749154e86ce4a1",
+    "semantic_hash": "78b67f1680506d4762749154e86ce4a1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104604911.jpg": {
+    "mtime": 1783853167.0,
+    "ast_hash": "52edadc1831d5d03c87226229d8ff168",
+    "semantic_hash": "52edadc1831d5d03c87226229d8ff168"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104616023.jpg": {
+    "mtime": 1783853178.0,
+    "ast_hash": "e58edd0e94b5a7b9de3e31d7a8f7496b",
+    "semantic_hash": "e58edd0e94b5a7b9de3e31d7a8f7496b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104618946.jpg": {
+    "mtime": 1783853181.0,
+    "ast_hash": "5dbd1df5cca51b077080cc705f950581",
+    "semantic_hash": "5dbd1df5cca51b077080cc705f950581"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104623483.jpg": {
+    "mtime": 1783853185.0,
+    "ast_hash": "3951a9b537cabc2320302b8729919230",
+    "semantic_hash": "3951a9b537cabc2320302b8729919230"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104627047.jpg": {
+    "mtime": 1783853189.0,
+    "ast_hash": "8709ee21106b7b9807a6e6e329ec4731",
+    "semantic_hash": "8709ee21106b7b9807a6e6e329ec4731"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104629263.jpg": {
+    "mtime": 1783853191.0,
+    "ast_hash": "f535d9c85b811343c2ce12807eaef12a",
+    "semantic_hash": "f535d9c85b811343c2ce12807eaef12a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104637935.jpg": {
+    "mtime": 1783853200.0,
+    "ast_hash": "0a9c8d7664425f1445076741f4dd9f94",
+    "semantic_hash": "0a9c8d7664425f1445076741f4dd9f94"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104642176.jpg": {
+    "mtime": 1783853204.0,
+    "ast_hash": "8def75f94227f3f384faca0cd72fb5cf",
+    "semantic_hash": "8def75f94227f3f384faca0cd72fb5cf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104649205.jpg": {
+    "mtime": 1783853211.0,
+    "ast_hash": "e655257fff235e85c65b77b5a1f782dd",
+    "semantic_hash": "e655257fff235e85c65b77b5a1f782dd"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104653610.jpg": {
+    "mtime": 1783853215.0,
+    "ast_hash": "48af6cbde01deb428a233102fc08807e",
+    "semantic_hash": "48af6cbde01deb428a233102fc08807e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104656587.jpg": {
+    "mtime": 1783853218.0,
+    "ast_hash": "be6483c670040e72b12ca0e50a310258",
+    "semantic_hash": "be6483c670040e72b12ca0e50a310258"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104703249.jpg": {
+    "mtime": 1783853225.0,
+    "ast_hash": "640e7c3e99335ab3f7f2e739ea226020",
+    "semantic_hash": "640e7c3e99335ab3f7f2e739ea226020"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104707004.jpg": {
+    "mtime": 1783853229.0,
+    "ast_hash": "79f9f9d51ebec4f2644956624afaad7e",
+    "semantic_hash": "79f9f9d51ebec4f2644956624afaad7e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104712628.jpg": {
+    "mtime": 1783853234.0,
+    "ast_hash": "0a2e9bc4ee9d0c73531693b2feae87a6",
+    "semantic_hash": "0a2e9bc4ee9d0c73531693b2feae87a6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104718719.jpg": {
+    "mtime": 1783853240.0,
+    "ast_hash": "d1da2b51d5349e14c07541ee1eee3641",
+    "semantic_hash": "d1da2b51d5349e14c07541ee1eee3641"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104723149.jpg": {
+    "mtime": 1783853245.0,
+    "ast_hash": "a30fb9b417f245d07db0282ae393fcaa",
+    "semantic_hash": "a30fb9b417f245d07db0282ae393fcaa"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104726399.jpg": {
+    "mtime": 1783853248.0,
+    "ast_hash": "5d810d0c31a5d2b6c4946583da600c41",
+    "semantic_hash": "5d810d0c31a5d2b6c4946583da600c41"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104730959.jpg": {
+    "mtime": 1783853253.0,
+    "ast_hash": "6fd48813856b85fa5e4749d788072113",
+    "semantic_hash": "6fd48813856b85fa5e4749d788072113"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104733742.jpg": {
+    "mtime": 1783853256.0,
+    "ast_hash": "c6831d482b767d220c8ce25529267938",
+    "semantic_hash": "c6831d482b767d220c8ce25529267938"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104738407.jpg": {
+    "mtime": 1783853260.0,
+    "ast_hash": "972ac58a4dba33d3a868843f895a95a6",
+    "semantic_hash": "972ac58a4dba33d3a868843f895a95a6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104746746.jpg": {
+    "mtime": 1783853269.0,
+    "ast_hash": "3b8d73a4fdd8beac6e262e63cc061ff6",
+    "semantic_hash": "3b8d73a4fdd8beac6e262e63cc061ff6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104750181.jpg": {
+    "mtime": 1783853272.0,
+    "ast_hash": "73a6e23aec9786a977b998dc17102eaf",
+    "semantic_hash": "73a6e23aec9786a977b998dc17102eaf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104752835.jpg": {
+    "mtime": 1783853275.0,
+    "ast_hash": "4a33d535f2be0047d0d89332e901228f",
+    "semantic_hash": "4a33d535f2be0047d0d89332e901228f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104757883.jpg": {
+    "mtime": 1783853280.0,
+    "ast_hash": "cfeec0bf94d03a462a24ba26f05d5b09",
+    "semantic_hash": "cfeec0bf94d03a462a24ba26f05d5b09"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104802003.jpg": {
+    "mtime": 1783853284.0,
+    "ast_hash": "d8506fd72f63658a3a481130d2da6cfa",
+    "semantic_hash": "d8506fd72f63658a3a481130d2da6cfa"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104807375.jpg": {
+    "mtime": 1783853289.0,
+    "ast_hash": "fcd8fb2dc4f25d0dcbf8064f948c9f44",
+    "semantic_hash": "fcd8fb2dc4f25d0dcbf8064f948c9f44"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104811443.jpg": {
+    "mtime": 1783853293.0,
+    "ast_hash": "953b74c73c170440ae6002fad4253a83",
+    "semantic_hash": "953b74c73c170440ae6002fad4253a83"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104816397.jpg": {
+    "mtime": 1783853298.0,
+    "ast_hash": "c38d3a0d6faa4012889ba5cd16a83318",
+    "semantic_hash": "c38d3a0d6faa4012889ba5cd16a83318"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104821379.jpg": {
+    "mtime": 1783853303.0,
+    "ast_hash": "d3c60128e6e8618c90d1e6ce2170f819",
+    "semantic_hash": "d3c60128e6e8618c90d1e6ce2170f819"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104826396.jpg": {
+    "mtime": 1783853308.0,
+    "ast_hash": "1c4e86ff3328693e1858d41e949725ae",
+    "semantic_hash": "1c4e86ff3328693e1858d41e949725ae"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104831299.jpg": {
+    "mtime": 1783853313.0,
+    "ast_hash": "229293b870583454df36747e4535a049",
+    "semantic_hash": "229293b870583454df36747e4535a049"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104836009.jpg": {
+    "mtime": 1783853318.0,
+    "ast_hash": "1548f84ec9f745859a84be10ece1cace",
+    "semantic_hash": "1548f84ec9f745859a84be10ece1cace"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104845804.jpg": {
+    "mtime": 1783853328.0,
+    "ast_hash": "02eb73b4ae795e1a5dd333c43371045e",
+    "semantic_hash": "02eb73b4ae795e1a5dd333c43371045e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104848774.jpg": {
+    "mtime": 1783853331.0,
+    "ast_hash": "69d95c8a4e96e62bee1882a3b789b01c",
+    "semantic_hash": "69d95c8a4e96e62bee1882a3b789b01c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104853920.jpg": {
+    "mtime": 1783853336.0,
+    "ast_hash": "b079b6f7134493f6444cadbd7343b2b2",
+    "semantic_hash": "b079b6f7134493f6444cadbd7343b2b2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104857345.jpg": {
+    "mtime": 1783853339.0,
+    "ast_hash": "2a2b6309cbf3115c134928f14cb9ace2",
+    "semantic_hash": "2a2b6309cbf3115c134928f14cb9ace2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104902981.jpg": {
+    "mtime": 1783853345.0,
+    "ast_hash": "893054f103e6a106aed7ba037548a298",
+    "semantic_hash": "893054f103e6a106aed7ba037548a298"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104907136.jpg": {
+    "mtime": 1783853349.0,
+    "ast_hash": "3ce38b96a58a1bf26005766744bbadf3",
+    "semantic_hash": "3ce38b96a58a1bf26005766744bbadf3"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104913239.jpg": {
+    "mtime": 1783853355.0,
+    "ast_hash": "fb6ceb9c26178e262508fffb5b028498",
+    "semantic_hash": "fb6ceb9c26178e262508fffb5b028498"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104917255.jpg": {
+    "mtime": 1783853359.0,
+    "ast_hash": "6775dd2f077b23be50a704476bd25c2d",
+    "semantic_hash": "6775dd2f077b23be50a704476bd25c2d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104921720.jpg": {
+    "mtime": 1783853364.0,
+    "ast_hash": "c1a40dedaf06c1e88b89462ff38237c6",
+    "semantic_hash": "c1a40dedaf06c1e88b89462ff38237c6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104925347.jpg": {
+    "mtime": 1783853367.0,
+    "ast_hash": "ac3673b4fae2e29c161057f4aa2372f1",
+    "semantic_hash": "ac3673b4fae2e29c161057f4aa2372f1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104928763.jpg": {
+    "mtime": 1783853371.0,
+    "ast_hash": "407e96915d3ebdd1268ce8a3bea002d9",
+    "semantic_hash": "407e96915d3ebdd1268ce8a3bea002d9"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104936636.jpg": {
+    "mtime": 1783853378.0,
+    "ast_hash": "b791f9291ee392443366e764089cad77",
+    "semantic_hash": "b791f9291ee392443366e764089cad77"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104940069.jpg": {
+    "mtime": 1783853382.0,
+    "ast_hash": "b07452df894a11b94e57e19ba1791b82",
+    "semantic_hash": "b07452df894a11b94e57e19ba1791b82"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104944834.jpg": {
+    "mtime": 1783853386.0,
+    "ast_hash": "d2420ee986cd6110adda1342109bf040",
+    "semantic_hash": "d2420ee986cd6110adda1342109bf040"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104952425.jpg": {
+    "mtime": 1783853394.0,
+    "ast_hash": "f3572e1a92a38027d593fcd981530374",
+    "semantic_hash": "f3572e1a92a38027d593fcd981530374"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_104955954.jpg": {
+    "mtime": 1783853398.0,
+    "ast_hash": "ce54891eee964e9090c49588ad026ebc",
+    "semantic_hash": "ce54891eee964e9090c49588ad026ebc"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105001166.jpg": {
+    "mtime": 1783853403.0,
+    "ast_hash": "f22bc5da6a5ef2bc04470442e0e7f4b3",
+    "semantic_hash": "f22bc5da6a5ef2bc04470442e0e7f4b3"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105005134.jpg": {
+    "mtime": 1783853407.0,
+    "ast_hash": "c8d864044b9c28fee21bc03a6bd52d32",
+    "semantic_hash": "c8d864044b9c28fee21bc03a6bd52d32"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105011214.jpg": {
+    "mtime": 1783853413.0,
+    "ast_hash": "17f318428ec74bf9891e9ffc29fbab56",
+    "semantic_hash": "17f318428ec74bf9891e9ffc29fbab56"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105013205.jpg": {
+    "mtime": 1783853415.0,
+    "ast_hash": "5e0d54be3de7dfbc4b37e0ef7d8719f2",
+    "semantic_hash": "5e0d54be3de7dfbc4b37e0ef7d8719f2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105019622.jpg": {
+    "mtime": 1783853421.0,
+    "ast_hash": "2a4c63952772cca94087bfd080b93fcf",
+    "semantic_hash": "2a4c63952772cca94087bfd080b93fcf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105023220.jpg": {
+    "mtime": 1783853425.0,
+    "ast_hash": "a0fd5da5c79aebab4168cff87de3d6ca",
+    "semantic_hash": "a0fd5da5c79aebab4168cff87de3d6ca"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105028884.jpg": {
+    "mtime": 1783853431.0,
+    "ast_hash": "f5452d87343fca30b0526569e90b5c59",
+    "semantic_hash": "f5452d87343fca30b0526569e90b5c59"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105038355.jpg": {
+    "mtime": 1783853440.0,
+    "ast_hash": "b10557beb9fbc78cc78e5d7a80f54228",
+    "semantic_hash": "b10557beb9fbc78cc78e5d7a80f54228"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105040797.jpg": {
+    "mtime": 1783853443.0,
+    "ast_hash": "8fdd938154cf8d7d0b10529d0a600bcf",
+    "semantic_hash": "8fdd938154cf8d7d0b10529d0a600bcf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105043734.jpg": {
+    "mtime": 1783853446.0,
+    "ast_hash": "4d843fe02570337b4c3b36dec93b5134",
+    "semantic_hash": "4d843fe02570337b4c3b36dec93b5134"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105047169.jpg": {
+    "mtime": 1783853449.0,
+    "ast_hash": "ff60d9bcc1e738e103fa0ef6722a388a",
+    "semantic_hash": "ff60d9bcc1e738e103fa0ef6722a388a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105049828.jpg": {
+    "mtime": 1783853452.0,
+    "ast_hash": "afc73aa61d2c958458b99b5f839bab92",
+    "semantic_hash": "afc73aa61d2c958458b99b5f839bab92"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105054878.jpg": {
+    "mtime": 1783853457.0,
+    "ast_hash": "6ff7d7857e6bf96f1fb4875dc13d824e",
+    "semantic_hash": "6ff7d7857e6bf96f1fb4875dc13d824e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105058646.jpg": {
+    "mtime": 1783853461.0,
+    "ast_hash": "5e140ee32d4683dc569e3f902862bdec",
+    "semantic_hash": "5e140ee32d4683dc569e3f902862bdec"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105105319.jpg": {
+    "mtime": 1783853467.0,
+    "ast_hash": "e039527c095ff3e6caf76ddf599bf15a",
+    "semantic_hash": "e039527c095ff3e6caf76ddf599bf15a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105111398.jpg": {
+    "mtime": 1783853473.0,
+    "ast_hash": "0769505f31ca898a5f6a1737e6393a4e",
+    "semantic_hash": "0769505f31ca898a5f6a1737e6393a4e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105116125.jpg": {
+    "mtime": 1783853478.0,
+    "ast_hash": "e7a24aefb7507ba6939e30bc19b0819b",
+    "semantic_hash": "e7a24aefb7507ba6939e30bc19b0819b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105121476.jpg": {
+    "mtime": 1783853483.0,
+    "ast_hash": "e972b26fef9dbdb7d1b3bb8733613b50",
+    "semantic_hash": "e972b26fef9dbdb7d1b3bb8733613b50"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105128944.jpg": {
+    "mtime": 1783853491.0,
+    "ast_hash": "12855dd4dd6589337d33788694027ce2",
+    "semantic_hash": "12855dd4dd6589337d33788694027ce2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105135024.jpg": {
+    "mtime": 1783853497.0,
+    "ast_hash": "c3f5620a2319d9e8b3b78f79263af3f7",
+    "semantic_hash": "c3f5620a2319d9e8b3b78f79263af3f7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105139561.jpg": {
+    "mtime": 1783853501.0,
+    "ast_hash": "626464a7b9e93d787921b4226487b59c",
+    "semantic_hash": "626464a7b9e93d787921b4226487b59c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105143244.jpg": {
+    "mtime": 1783853505.0,
+    "ast_hash": "509ece4534ccc0cc42604dbab0c6ae0f",
+    "semantic_hash": "509ece4534ccc0cc42604dbab0c6ae0f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105148348.jpg": {
+    "mtime": 1783853510.0,
+    "ast_hash": "fdb0ccfea2d146246fb995d5c133b015",
+    "semantic_hash": "fdb0ccfea2d146246fb995d5c133b015"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105158432.jpg": {
+    "mtime": 1783853520.0,
+    "ast_hash": "b3039ac6d24c4d7b96b94fdd7c0f0914",
+    "semantic_hash": "b3039ac6d24c4d7b96b94fdd7c0f0914"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105200975.jpg": {
+    "mtime": 1783853523.0,
+    "ast_hash": "1b1bffa7e2581586c91a2b91cf586943",
+    "semantic_hash": "1b1bffa7e2581586c91a2b91cf586943"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105204534.jpg": {
+    "mtime": 1783853526.0,
+    "ast_hash": "7bb8a0fd2722b5c3ae4ba1e93ecb718d",
+    "semantic_hash": "7bb8a0fd2722b5c3ae4ba1e93ecb718d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105208426.jpg": {
+    "mtime": 1783853530.0,
+    "ast_hash": "6a92429339e591b2f49ebb45e39d367e",
+    "semantic_hash": "6a92429339e591b2f49ebb45e39d367e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105216618.jpg": {
+    "mtime": 1783853538.0,
+    "ast_hash": "7c4421a38982fed288997b6f6b884732",
+    "semantic_hash": "7c4421a38982fed288997b6f6b884732"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105219721.jpg": {
+    "mtime": 1783853541.0,
+    "ast_hash": "c8848e9b47954b302964d661e0e5132a",
+    "semantic_hash": "c8848e9b47954b302964d661e0e5132a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105225630.jpg": {
+    "mtime": 1783853547.0,
+    "ast_hash": "83adbb9ada418cf454ea7ae4263a9ced",
+    "semantic_hash": "83adbb9ada418cf454ea7ae4263a9ced"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105229220.jpg": {
+    "mtime": 1783853551.0,
+    "ast_hash": "25c768163bda3a4df3f46bb927fbd7a0",
+    "semantic_hash": "25c768163bda3a4df3f46bb927fbd7a0"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105233436.jpg": {
+    "mtime": 1783853555.0,
+    "ast_hash": "95a7dca242bdf852a7123b00e4b95529",
+    "semantic_hash": "95a7dca242bdf852a7123b00e4b95529"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105237497.jpg": {
+    "mtime": 1783853559.0,
+    "ast_hash": "31c80d4fcc6dfde0fbcf3a279fbe97f6",
+    "semantic_hash": "31c80d4fcc6dfde0fbcf3a279fbe97f6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105242152.jpg": {
+    "mtime": 1783853564.0,
+    "ast_hash": "1b83977082b964ddb98407cabc010513",
+    "semantic_hash": "1b83977082b964ddb98407cabc010513"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105246774.jpg": {
+    "mtime": 1783853568.0,
+    "ast_hash": "d8846f31c0e1660e2292f58434deec87",
+    "semantic_hash": "d8846f31c0e1660e2292f58434deec87"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105249904.jpg": {
+    "mtime": 1783853572.0,
+    "ast_hash": "428e557c98fb588d024b4713b61d048c",
+    "semantic_hash": "428e557c98fb588d024b4713b61d048c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105254595.jpg": {
+    "mtime": 1783853576.0,
+    "ast_hash": "38efc44a2c3f0575947819deb9d829b6",
+    "semantic_hash": "38efc44a2c3f0575947819deb9d829b6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105259568.jpg": {
+    "mtime": 1783853581.0,
+    "ast_hash": "0b520a3f4f54f95d269d9d09eecb2654",
+    "semantic_hash": "0b520a3f4f54f95d269d9d09eecb2654"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105304407.jpg": {
+    "mtime": 1783853586.0,
+    "ast_hash": "f6af441b10acb397ea7008897b9ca623",
+    "semantic_hash": "f6af441b10acb397ea7008897b9ca623"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105308271.jpg": {
+    "mtime": 1783853590.0,
+    "ast_hash": "d7594bfb25b298d972b3e7bf44dc3e25",
+    "semantic_hash": "d7594bfb25b298d972b3e7bf44dc3e25"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105312541.jpg": {
+    "mtime": 1783853594.0,
+    "ast_hash": "4c462d963f91f0df3f6be9e64ed1c1c7",
+    "semantic_hash": "4c462d963f91f0df3f6be9e64ed1c1c7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105315848.jpg": {
+    "mtime": 1783853598.0,
+    "ast_hash": "eb6d7aa65299c4392472fb6b2b0321bb",
+    "semantic_hash": "eb6d7aa65299c4392472fb6b2b0321bb"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105318796.jpg": {
+    "mtime": 1783853601.0,
+    "ast_hash": "09419d4e8c05592f17fec86b2b0c9b3f",
+    "semantic_hash": "09419d4e8c05592f17fec86b2b0c9b3f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105324974.jpg": {
+    "mtime": 1783853607.0,
+    "ast_hash": "7df8396b95b9389bacc0621384b314c3",
+    "semantic_hash": "7df8396b95b9389bacc0621384b314c3"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105329613.jpg": {
+    "mtime": 1783853611.0,
+    "ast_hash": "3b8f2f420883e1bac920b003f3418822",
+    "semantic_hash": "3b8f2f420883e1bac920b003f3418822"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105341448.jpg": {
+    "mtime": 1783853623.0,
+    "ast_hash": "0cc28169d91977c29b6f519b7e86557b",
+    "semantic_hash": "0cc28169d91977c29b6f519b7e86557b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105350492.jpg": {
+    "mtime": 1783853632.0,
+    "ast_hash": "7ecadc479f407541ff36a240914f04d0",
+    "semantic_hash": "7ecadc479f407541ff36a240914f04d0"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105352716.jpg": {
+    "mtime": 1783853635.0,
+    "ast_hash": "ec390ca9f6c08160313e2520874e5334",
+    "semantic_hash": "ec390ca9f6c08160313e2520874e5334"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105354627.jpg": {
+    "mtime": 1783853637.0,
+    "ast_hash": "bc9867f6de13c75687b3c0ed7710fa92",
+    "semantic_hash": "bc9867f6de13c75687b3c0ed7710fa92"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105405247.jpg": {
+    "mtime": 1783853647.0,
+    "ast_hash": "fcc0a0f71e892c547df7ac5d85432832",
+    "semantic_hash": "fcc0a0f71e892c547df7ac5d85432832"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105414442.jpg": {
+    "mtime": 1783853656.0,
+    "ast_hash": "e16b1b0416fbdd932e1903c7d89b1e31",
+    "semantic_hash": "e16b1b0416fbdd932e1903c7d89b1e31"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105420321.jpg": {
+    "mtime": 1783853662.0,
+    "ast_hash": "2c38679a62b224127e81bac2fa7a28ba",
+    "semantic_hash": "2c38679a62b224127e81bac2fa7a28ba"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105428018.jpg": {
+    "mtime": 1783853670.0,
+    "ast_hash": "0bbc6d9d39537b12b421380fa5db6652",
+    "semantic_hash": "0bbc6d9d39537b12b421380fa5db6652"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105432319.jpg": {
+    "mtime": 1783853674.0,
+    "ast_hash": "cf4586564debf9f829420d2df4f4231c",
+    "semantic_hash": "cf4586564debf9f829420d2df4f4231c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105436859.jpg": {
+    "mtime": 1783853679.0,
+    "ast_hash": "7c0182b73b0f65374c20654d213137aa",
+    "semantic_hash": "7c0182b73b0f65374c20654d213137aa"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105445966.jpg": {
+    "mtime": 1783853688.0,
+    "ast_hash": "83bae416c13f987244e3f22ebacaeab0",
+    "semantic_hash": "83bae416c13f987244e3f22ebacaeab0"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105451181.jpg": {
+    "mtime": 1783853693.0,
+    "ast_hash": "795694d1bffbbfff951d8cd8e1482bc8",
+    "semantic_hash": "795694d1bffbbfff951d8cd8e1482bc8"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105455060.jpg": {
+    "mtime": 1783853697.0,
+    "ast_hash": "064df82d2233f503a3cab12bc1e94313",
+    "semantic_hash": "064df82d2233f503a3cab12bc1e94313"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105502675.jpg": {
+    "mtime": 1783853704.0,
+    "ast_hash": "07a253e3aff9eff355b78e329cbfd077",
+    "semantic_hash": "07a253e3aff9eff355b78e329cbfd077"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105507561.jpg": {
+    "mtime": 1783853709.0,
+    "ast_hash": "1a5bd6d6d0d67bd094449e4fbc2bf3c1",
+    "semantic_hash": "1a5bd6d6d0d67bd094449e4fbc2bf3c1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105518984.jpg": {
+    "mtime": 1783853721.0,
+    "ast_hash": "3c805a4818c3055e097472a42c0c3a45",
+    "semantic_hash": "3c805a4818c3055e097472a42c0c3a45"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105526505.jpg": {
+    "mtime": 1783853728.0,
+    "ast_hash": "ec06b701184f4d2964bfebea1fc11fae",
+    "semantic_hash": "ec06b701184f4d2964bfebea1fc11fae"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105530001.jpg": {
+    "mtime": 1783853732.0,
+    "ast_hash": "bcea5c79a7051ea95a15d80db1dcd18c",
+    "semantic_hash": "bcea5c79a7051ea95a15d80db1dcd18c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105532229.jpg": {
+    "mtime": 1783853734.0,
+    "ast_hash": "9ffc1a28a15669fa7059617f557eaf66",
+    "semantic_hash": "9ffc1a28a15669fa7059617f557eaf66"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105534448.jpg": {
+    "mtime": 1783853736.0,
+    "ast_hash": "97a671ad79225260d2c06554add60122",
+    "semantic_hash": "97a671ad79225260d2c06554add60122"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105537024.jpg": {
+    "mtime": 1783853739.0,
+    "ast_hash": "3fa8f581bb159516bb721721095cb326",
+    "semantic_hash": "3fa8f581bb159516bb721721095cb326"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105540809.jpg": {
+    "mtime": 1783853743.0,
+    "ast_hash": "c21c0c86f5389484fcb5bc3f39bab921",
+    "semantic_hash": "c21c0c86f5389484fcb5bc3f39bab921"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105543320.jpg": {
+    "mtime": 1783853745.0,
+    "ast_hash": "480e499628efdff01f373faf39fb66de",
+    "semantic_hash": "480e499628efdff01f373faf39fb66de"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105554595.jpg": {
+    "mtime": 1783853756.0,
+    "ast_hash": "1e5c3f5082ca391c988100f5d96efb2b",
+    "semantic_hash": "1e5c3f5082ca391c988100f5d96efb2b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105600912.jpg": {
+    "mtime": 1783853763.0,
+    "ast_hash": "2e73231714320f7c62b69f9d028dd348",
+    "semantic_hash": "2e73231714320f7c62b69f9d028dd348"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105605924.jpg": {
+    "mtime": 1783853768.0,
+    "ast_hash": "e8a652637a285b70d6d56c441aa84e54",
+    "semantic_hash": "e8a652637a285b70d6d56c441aa84e54"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105608567.jpg": {
+    "mtime": 1783853770.0,
+    "ast_hash": "9d8fb75d61ab8607a6d710735277372e",
+    "semantic_hash": "9d8fb75d61ab8607a6d710735277372e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105612083.jpg": {
+    "mtime": 1783853774.0,
+    "ast_hash": "6b132349e25979f848f2aa2d4cefcf3a",
+    "semantic_hash": "6b132349e25979f848f2aa2d4cefcf3a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105615894.jpg": {
+    "mtime": 1783853779.0,
+    "ast_hash": "59d5c406e2591dab2cc5a607fd0b0271",
+    "semantic_hash": "59d5c406e2591dab2cc5a607fd0b0271"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105620567.jpg": {
+    "mtime": 1783853783.0,
+    "ast_hash": "d291aa0421a74b0c164dbdfb59c160a4",
+    "semantic_hash": "d291aa0421a74b0c164dbdfb59c160a4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105627220.jpg": {
+    "mtime": 1783853790.0,
+    "ast_hash": "8d198500c48bc282ee65a7640ae472f2",
+    "semantic_hash": "8d198500c48bc282ee65a7640ae472f2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105632516.jpg": {
+    "mtime": 1783853794.0,
+    "ast_hash": "b32875236a59a6be079c2ea6c72ceb0c",
+    "semantic_hash": "b32875236a59a6be079c2ea6c72ceb0c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105637590.jpg": {
+    "mtime": 1783853800.0,
+    "ast_hash": "3a71fa9e7549403783c57ba22412f06a",
+    "semantic_hash": "3a71fa9e7549403783c57ba22412f06a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105640995.jpg": {
+    "mtime": 1783853803.0,
+    "ast_hash": "5fbb95d3d9238ee71d05a0f184453dc5",
+    "semantic_hash": "5fbb95d3d9238ee71d05a0f184453dc5"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105647587.jpg": {
+    "mtime": 1783853809.0,
+    "ast_hash": "5b9746661e54cac5be583198a4dbbc84",
+    "semantic_hash": "5b9746661e54cac5be583198a4dbbc84"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105651346.jpg": {
+    "mtime": 1783853813.0,
+    "ast_hash": "9a900643f7e9e9070ebf7c3525c12d42",
+    "semantic_hash": "9a900643f7e9e9070ebf7c3525c12d42"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105655545.jpg": {
+    "mtime": 1783853817.0,
+    "ast_hash": "8e2a8c2031f65696105235a6c01a18d4",
+    "semantic_hash": "8e2a8c2031f65696105235a6c01a18d4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105700500.jpg": {
+    "mtime": 1783853822.0,
+    "ast_hash": "5f6f75c926384c17987f6d4644547e27",
+    "semantic_hash": "5f6f75c926384c17987f6d4644547e27"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105703617.jpg": {
+    "mtime": 1783853825.0,
+    "ast_hash": "2e41caacaef515958fff99152e49f829",
+    "semantic_hash": "2e41caacaef515958fff99152e49f829"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105706361.jpg": {
+    "mtime": 1783853828.0,
+    "ast_hash": "3c18641c3c4e50eebd409d3a76da3d01",
+    "semantic_hash": "3c18641c3c4e50eebd409d3a76da3d01"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105709449.jpg": {
+    "mtime": 1783853831.0,
+    "ast_hash": "ae4b64aa5ae1cb50d1947e58f5075b30",
+    "semantic_hash": "ae4b64aa5ae1cb50d1947e58f5075b30"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105713461.jpg": {
+    "mtime": 1783853835.0,
+    "ast_hash": "36be463696510d61d5994267c8b58d03",
+    "semantic_hash": "36be463696510d61d5994267c8b58d03"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105716772.jpg": {
+    "mtime": 1783853839.0,
+    "ast_hash": "93056f439df5c50378c59e37e0b72402",
+    "semantic_hash": "93056f439df5c50378c59e37e0b72402"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105720334.jpg": {
+    "mtime": 1783853842.0,
+    "ast_hash": "1a21e3d5272340c84cfca011f1a60ea7",
+    "semantic_hash": "1a21e3d5272340c84cfca011f1a60ea7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105723656.jpg": {
+    "mtime": 1783853845.0,
+    "ast_hash": "e4137d7eb0d206418e726d6c2d9f53ee",
+    "semantic_hash": "e4137d7eb0d206418e726d6c2d9f53ee"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105728184.jpg": {
+    "mtime": 1783853850.0,
+    "ast_hash": "b17b13df7e52722c4e9e9a08f38a5781",
+    "semantic_hash": "b17b13df7e52722c4e9e9a08f38a5781"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105730725.jpg": {
+    "mtime": 1783853852.0,
+    "ast_hash": "1143969ffc07f17819f91d6e69913312",
+    "semantic_hash": "1143969ffc07f17819f91d6e69913312"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105733656.jpg": {
+    "mtime": 1783853855.0,
+    "ast_hash": "eb9b8326d555a65a19602140a3741a0a",
+    "semantic_hash": "eb9b8326d555a65a19602140a3741a0a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105736499.jpg": {
+    "mtime": 1783853858.0,
+    "ast_hash": "6ec0ba4652f38b73708538e9f8bd08b1",
+    "semantic_hash": "6ec0ba4652f38b73708538e9f8bd08b1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105739830.jpg": {
+    "mtime": 1783853862.0,
+    "ast_hash": "62d343df8a2d16ba73645bb4a41e8ecf",
+    "semantic_hash": "62d343df8a2d16ba73645bb4a41e8ecf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105746569.jpg": {
+    "mtime": 1783853868.0,
+    "ast_hash": "3f40208a6bd96515bc287b1e016b3cc8",
+    "semantic_hash": "3f40208a6bd96515bc287b1e016b3cc8"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105751864.jpg": {
+    "mtime": 1783853874.0,
+    "ast_hash": "9ef9bb1206bd87a0201f4b9225dc3b64",
+    "semantic_hash": "9ef9bb1206bd87a0201f4b9225dc3b64"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105754953.jpg": {
+    "mtime": 1783853877.0,
+    "ast_hash": "e639111e9e6af5ad4ebbf7c61d37e800",
+    "semantic_hash": "e639111e9e6af5ad4ebbf7c61d37e800"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105759556.jpg": {
+    "mtime": 1783853881.0,
+    "ast_hash": "087151b3b30ec11cead41f6a3070c2d0",
+    "semantic_hash": "087151b3b30ec11cead41f6a3070c2d0"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105802716.jpg": {
+    "mtime": 1783853885.0,
+    "ast_hash": "a7ca0254d8fd7bc77f31bbe4867e5059",
+    "semantic_hash": "a7ca0254d8fd7bc77f31bbe4867e5059"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105805489.jpg": {
+    "mtime": 1783853887.0,
+    "ast_hash": "99c71f77784a5ef0e886c7ec2a2b6d14",
+    "semantic_hash": "99c71f77784a5ef0e886c7ec2a2b6d14"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105807687.jpg": {
+    "mtime": 1783853890.0,
+    "ast_hash": "6e0fe5bc463a5c67ec31ad309ed96f4a",
+    "semantic_hash": "6e0fe5bc463a5c67ec31ad309ed96f4a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105810421.jpg": {
+    "mtime": 1783853892.0,
+    "ast_hash": "2c155d00abb9bd73871eefab49aa3b0c",
+    "semantic_hash": "2c155d00abb9bd73871eefab49aa3b0c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105813620.jpg": {
+    "mtime": 1783853896.0,
+    "ast_hash": "2ac76b64734756d4486e4bcc1eb9537d",
+    "semantic_hash": "2ac76b64734756d4486e4bcc1eb9537d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105819792.jpg": {
+    "mtime": 1783853901.0,
+    "ast_hash": "20f226dd6f137f1458f3a8bf74018bc6",
+    "semantic_hash": "20f226dd6f137f1458f3a8bf74018bc6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105823348.jpg": {
+    "mtime": 1783853905.0,
+    "ast_hash": "87a91ab358482e15711a3330ce15c0e8",
+    "semantic_hash": "87a91ab358482e15711a3330ce15c0e8"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105826860.jpg": {
+    "mtime": 1783853909.0,
+    "ast_hash": "e8f5c31db5df4aa8cf4ce392caf6afed",
+    "semantic_hash": "e8f5c31db5df4aa8cf4ce392caf6afed"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105848073.jpg": {
+    "mtime": 1783853930.0,
+    "ast_hash": "3adb7f54b47799d6040a9102b449fc85",
+    "semantic_hash": "3adb7f54b47799d6040a9102b449fc85"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105858344.jpg": {
+    "mtime": 1783853940.0,
+    "ast_hash": "2fb9febc74d554b140ef42cbbc5fabb2",
+    "semantic_hash": "2fb9febc74d554b140ef42cbbc5fabb2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105900819.jpg": {
+    "mtime": 1783853943.0,
+    "ast_hash": "6cd2898ce2959642febf4c858bf83430",
+    "semantic_hash": "6cd2898ce2959642febf4c858bf83430"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105905255.jpg": {
+    "mtime": 1783853947.0,
+    "ast_hash": "071747727edd01f9d609eb0d724190ba",
+    "semantic_hash": "071747727edd01f9d609eb0d724190ba"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105910105.jpg": {
+    "mtime": 1783853952.0,
+    "ast_hash": "06580c901009541d98673ee939c42882",
+    "semantic_hash": "06580c901009541d98673ee939c42882"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105913543.jpg": {
+    "mtime": 1783853955.0,
+    "ast_hash": "7391b2195effee44b6b75957368e6463",
+    "semantic_hash": "7391b2195effee44b6b75957368e6463"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105916605.jpg": {
+    "mtime": 1783853958.0,
+    "ast_hash": "5888c580c3629e0c9b4b35bc7abbec86",
+    "semantic_hash": "5888c580c3629e0c9b4b35bc7abbec86"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105924528.jpg": {
+    "mtime": 1783853966.0,
+    "ast_hash": "152a4914bba6dd81bdf7413054b702c5",
+    "semantic_hash": "152a4914bba6dd81bdf7413054b702c5"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105937049.jpg": {
+    "mtime": 1783853979.0,
+    "ast_hash": "b2a1d95c1351124eb3ea352a940de5bd",
+    "semantic_hash": "b2a1d95c1351124eb3ea352a940de5bd"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105939832.jpg": {
+    "mtime": 1783853982.0,
+    "ast_hash": "84d35a102970741ede56c410eba75b03",
+    "semantic_hash": "84d35a102970741ede56c410eba75b03"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105948671.jpg": {
+    "mtime": 1783853991.0,
+    "ast_hash": "43e58b93d178d6109113f01593542bf1",
+    "semantic_hash": "43e58b93d178d6109113f01593542bf1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105951700.jpg": {
+    "mtime": 1783853994.0,
+    "ast_hash": "071eec94aa812ed93dcb953e96734a62",
+    "semantic_hash": "071eec94aa812ed93dcb953e96734a62"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_105955801.jpg": {
+    "mtime": 1783853998.0,
+    "ast_hash": "6e42d8eb080f9a042941de03fd78d548",
+    "semantic_hash": "6e42d8eb080f9a042941de03fd78d548"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110000548.jpg": {
+    "mtime": 1783854003.0,
+    "ast_hash": "0e73f30adb10c03cc0c199247ae891f9",
+    "semantic_hash": "0e73f30adb10c03cc0c199247ae891f9"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110009143.jpg": {
+    "mtime": 1783854011.0,
+    "ast_hash": "2f844c23b0c22240ca28fb8b2d7f486f",
+    "semantic_hash": "2f844c23b0c22240ca28fb8b2d7f486f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110015554.jpg": {
+    "mtime": 1783854017.0,
+    "ast_hash": "230e939576d5481a8ffc71b16416920b",
+    "semantic_hash": "230e939576d5481a8ffc71b16416920b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110025326.jpg": {
+    "mtime": 1783854028.0,
+    "ast_hash": "6147a3b09c723197593e4fcf082b739e",
+    "semantic_hash": "6147a3b09c723197593e4fcf082b739e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110030337.jpg": {
+    "mtime": 1783854032.0,
+    "ast_hash": "aa3be0c7ee063fa27b32c4a394939869",
+    "semantic_hash": "aa3be0c7ee063fa27b32c4a394939869"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110032057.jpg": {
+    "mtime": 1783854034.0,
+    "ast_hash": "6161c7a7f50fa22492349934c07b3c39",
+    "semantic_hash": "6161c7a7f50fa22492349934c07b3c39"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110037493.jpg": {
+    "mtime": 1783854039.0,
+    "ast_hash": "a0dccdb064b360af7bb011501ce4e7a4",
+    "semantic_hash": "a0dccdb064b360af7bb011501ce4e7a4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110040292.jpg": {
+    "mtime": 1783854042.0,
+    "ast_hash": "184a773b4b3f4a9c7f7ce1f625571936",
+    "semantic_hash": "184a773b4b3f4a9c7f7ce1f625571936"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110045834.jpg": {
+    "mtime": 1783854048.0,
+    "ast_hash": "9d2f7565d405feb8731724cc1717e494",
+    "semantic_hash": "9d2f7565d405feb8731724cc1717e494"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110056410.jpg": {
+    "mtime": 1783854058.0,
+    "ast_hash": "f46f0eb22606bcfc4a35b7973691d4f2",
+    "semantic_hash": "f46f0eb22606bcfc4a35b7973691d4f2"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110059359.jpg": {
+    "mtime": 1783854062.0,
+    "ast_hash": "f7b926e8a1c53e71b60396f6dd618b54",
+    "semantic_hash": "f7b926e8a1c53e71b60396f6dd618b54"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110113536.jpg": {
+    "mtime": 1783854075.0,
+    "ast_hash": "3f7e581a870a123ae44f37f302447a06",
+    "semantic_hash": "3f7e581a870a123ae44f37f302447a06"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110140149.jpg": {
+    "mtime": 1783854102.0,
+    "ast_hash": "7fcbdcfd705ebc3b871c061d921a9dec",
+    "semantic_hash": "7fcbdcfd705ebc3b871c061d921a9dec"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110145309.jpg": {
+    "mtime": 1783854107.0,
+    "ast_hash": "5a592645c1b39bd1a858e1e33adcfb53",
+    "semantic_hash": "5a592645c1b39bd1a858e1e33adcfb53"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110240581.jpg": {
+    "mtime": 1783854163.0,
+    "ast_hash": "f47641be32b040ce259874fd35510e9d",
+    "semantic_hash": "f47641be32b040ce259874fd35510e9d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110244653.jpg": {
+    "mtime": 1783854167.0,
+    "ast_hash": "ecd8d881f2977f14630150ac35a164f9",
+    "semantic_hash": "ecd8d881f2977f14630150ac35a164f9"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110250666.jpg": {
+    "mtime": 1783854173.0,
+    "ast_hash": "0ecf067ca44ad95fb7dc678129665e15",
+    "semantic_hash": "0ecf067ca44ad95fb7dc678129665e15"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110259756.jpg": {
+    "mtime": 1783854182.0,
+    "ast_hash": "08791be3a1a6dade4dc116808656b33a",
+    "semantic_hash": "08791be3a1a6dade4dc116808656b33a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110302841.jpg": {
+    "mtime": 1783854185.0,
+    "ast_hash": "6bbf49a2fde30f5ebe8c4922028e357c",
+    "semantic_hash": "6bbf49a2fde30f5ebe8c4922028e357c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110305618.jpg": {
+    "mtime": 1783854188.0,
+    "ast_hash": "6ea0b1780ab6e1ee057ff93dcd85845a",
+    "semantic_hash": "6ea0b1780ab6e1ee057ff93dcd85845a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110310751.jpg": {
+    "mtime": 1783854193.0,
+    "ast_hash": "2847cae1a06f418fba22ba435290847e",
+    "semantic_hash": "2847cae1a06f418fba22ba435290847e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110321488.jpg": {
+    "mtime": 1783854204.0,
+    "ast_hash": "15a1b01725e98018ed375ec075e57f63",
+    "semantic_hash": "15a1b01725e98018ed375ec075e57f63"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110325690.jpg": {
+    "mtime": 1783854208.0,
+    "ast_hash": "74ca1427d0361f768613a4e2725e6def",
+    "semantic_hash": "74ca1427d0361f768613a4e2725e6def"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110328911.jpg": {
+    "mtime": 1783854211.0,
+    "ast_hash": "b2a264041bc457b766cb17ab0d862f2c",
+    "semantic_hash": "b2a264041bc457b766cb17ab0d862f2c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110331212.jpg": {
+    "mtime": 1783854213.0,
+    "ast_hash": "4b86ac23e68e1bbbe597f8525d15496c",
+    "semantic_hash": "4b86ac23e68e1bbbe597f8525d15496c"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110335119.jpg": {
+    "mtime": 1783854217.0,
+    "ast_hash": "efe74cd3c93ca0c57c292066fa0a7e45",
+    "semantic_hash": "efe74cd3c93ca0c57c292066fa0a7e45"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110342358.jpg": {
+    "mtime": 1783854224.0,
+    "ast_hash": "4b1873c9109a980c7366a47d945c3706",
+    "semantic_hash": "4b1873c9109a980c7366a47d945c3706"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110346623.jpg": {
+    "mtime": 1783854228.0,
+    "ast_hash": "1acca315b93d13c335107aff7d328da4",
+    "semantic_hash": "1acca315b93d13c335107aff7d328da4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110355725.jpg": {
+    "mtime": 1783854238.0,
+    "ast_hash": "583e848ca06c39b9ba9c54c3382f60a1",
+    "semantic_hash": "583e848ca06c39b9ba9c54c3382f60a1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110402698.jpg": {
+    "mtime": 1783854245.0,
+    "ast_hash": "d437292f4065cc8d843b3d45269dabb6",
+    "semantic_hash": "d437292f4065cc8d843b3d45269dabb6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110406542.jpg": {
+    "mtime": 1783854248.0,
+    "ast_hash": "43a695c78b075661c0a54668d47ca7ff",
+    "semantic_hash": "43a695c78b075661c0a54668d47ca7ff"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110413456.jpg": {
+    "mtime": 1783854255.0,
+    "ast_hash": "b30347b7fc175e5dbc7832b6262264c4",
+    "semantic_hash": "b30347b7fc175e5dbc7832b6262264c4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110425530.jpg": {
+    "mtime": 1783854267.0,
+    "ast_hash": "d60ed09c3f22a6e52dd41a020a924bb5",
+    "semantic_hash": "d60ed09c3f22a6e52dd41a020a924bb5"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110430963.jpg": {
+    "mtime": 1783854273.0,
+    "ast_hash": "2fcd779aa1b66647526bbaf93073d3ab",
+    "semantic_hash": "2fcd779aa1b66647526bbaf93073d3ab"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110436798.jpg": {
+    "mtime": 1783854279.0,
+    "ast_hash": "9b30a8bde39d095779665e6d7055c2f0",
+    "semantic_hash": "9b30a8bde39d095779665e6d7055c2f0"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110439891.jpg": {
+    "mtime": 1783854282.0,
+    "ast_hash": "60039e94add72bd545c07ee53782b77b",
+    "semantic_hash": "60039e94add72bd545c07ee53782b77b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110451631.jpg": {
+    "mtime": 1783854294.0,
+    "ast_hash": "78c05f148884d9e8e2c0b0436f1a34ed",
+    "semantic_hash": "78c05f148884d9e8e2c0b0436f1a34ed"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110455328.jpg": {
+    "mtime": 1783854297.0,
+    "ast_hash": "449069e83c7a8144bc47ccd684045c41",
+    "semantic_hash": "449069e83c7a8144bc47ccd684045c41"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110505293.jpg": {
+    "mtime": 1783854307.0,
+    "ast_hash": "35d39f4b3fc9d46d7bfbaa2a5147c17e",
+    "semantic_hash": "35d39f4b3fc9d46d7bfbaa2a5147c17e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110513054.jpg": {
+    "mtime": 1783854316.0,
+    "ast_hash": "338545f1d1b594c86612f59d6506d4b7",
+    "semantic_hash": "338545f1d1b594c86612f59d6506d4b7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110516984.jpg": {
+    "mtime": 1783854319.0,
+    "ast_hash": "4e808faf6d1ae47ab3c97327848a6b56",
+    "semantic_hash": "4e808faf6d1ae47ab3c97327848a6b56"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110523698.jpg": {
+    "mtime": 1783854326.0,
+    "ast_hash": "08a1b8215a3545daf9ca7551b380e157",
+    "semantic_hash": "08a1b8215a3545daf9ca7551b380e157"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110529087.jpg": {
+    "mtime": 1783854331.0,
+    "ast_hash": "79063e4dd3c4fdd97f304fc6fa06b4af",
+    "semantic_hash": "79063e4dd3c4fdd97f304fc6fa06b4af"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110531902.jpg": {
+    "mtime": 1783854334.0,
+    "ast_hash": "80fd1a454544264039cb9b4c0fe7c88b",
+    "semantic_hash": "80fd1a454544264039cb9b4c0fe7c88b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110533982.jpg": {
+    "mtime": 1783854336.0,
+    "ast_hash": "fd0429f400fa8758f0a9f12dfc1ce7c7",
+    "semantic_hash": "fd0429f400fa8758f0a9f12dfc1ce7c7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110541500.jpg": {
+    "mtime": 1783854344.0,
+    "ast_hash": "9ae28c36d110291765f655b78c8e2fe8",
+    "semantic_hash": "9ae28c36d110291765f655b78c8e2fe8"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110543417.jpg": {
+    "mtime": 1783854346.0,
+    "ast_hash": "c3a12efd24d053e80a8a520b519b7d8b",
+    "semantic_hash": "c3a12efd24d053e80a8a520b519b7d8b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110547147.jpg": {
+    "mtime": 1783854349.0,
+    "ast_hash": "0451f9f2b385d0ba46feac51597c806f",
+    "semantic_hash": "0451f9f2b385d0ba46feac51597c806f"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110551994.jpg": {
+    "mtime": 1783854354.0,
+    "ast_hash": "38ffd4c90ca8ad95a2810f17fa2e6440",
+    "semantic_hash": "38ffd4c90ca8ad95a2810f17fa2e6440"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110604086.jpg": {
+    "mtime": 1783854366.0,
+    "ast_hash": "40281e9efd1d19f0229b273075032c98",
+    "semantic_hash": "40281e9efd1d19f0229b273075032c98"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110607477.jpg": {
+    "mtime": 1783854369.0,
+    "ast_hash": "4b119d5e8c51163736348112ae35ba96",
+    "semantic_hash": "4b119d5e8c51163736348112ae35ba96"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110611964.jpg": {
+    "mtime": 1783854374.0,
+    "ast_hash": "cf7c8e7dc04652949771d5603f2b787a",
+    "semantic_hash": "cf7c8e7dc04652949771d5603f2b787a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110617053.jpg": {
+    "mtime": 1783854380.0,
+    "ast_hash": "86c80424348c58866f1546699bbf688a",
+    "semantic_hash": "86c80424348c58866f1546699bbf688a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110628752.jpg": {
+    "mtime": 1783854391.0,
+    "ast_hash": "e1c2681a202c9156bf2c9e2d7f8a12a4",
+    "semantic_hash": "e1c2681a202c9156bf2c9e2d7f8a12a4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110637943.jpg": {
+    "mtime": 1783854400.0,
+    "ast_hash": "c1c459b8d6220b7ec96f4e929a450bdf",
+    "semantic_hash": "c1c459b8d6220b7ec96f4e929a450bdf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110641703.jpg": {
+    "mtime": 1783854404.0,
+    "ast_hash": "5493a1bdb09779ad2b10be4d683b0c6e",
+    "semantic_hash": "5493a1bdb09779ad2b10be4d683b0c6e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110647544.jpg": {
+    "mtime": 1783854410.0,
+    "ast_hash": "27e17ddc378aebe2dce6d5b2458c8ba6",
+    "semantic_hash": "27e17ddc378aebe2dce6d5b2458c8ba6"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110651076.jpg": {
+    "mtime": 1783854413.0,
+    "ast_hash": "6642d443683865063fc168e4a8a32878",
+    "semantic_hash": "6642d443683865063fc168e4a8a32878"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110654704.jpg": {
+    "mtime": 1783854417.0,
+    "ast_hash": "45fd1be86a51ae3cfa094f8ebdf2ca5d",
+    "semantic_hash": "45fd1be86a51ae3cfa094f8ebdf2ca5d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110657579.jpg": {
+    "mtime": 1783854419.0,
+    "ast_hash": "619ae748f557e1a3f05e968e4b8671cc",
+    "semantic_hash": "619ae748f557e1a3f05e968e4b8671cc"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110702130.jpg": {
+    "mtime": 1783854424.0,
+    "ast_hash": "a02b522d13f32351777246228a531866",
+    "semantic_hash": "a02b522d13f32351777246228a531866"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110706154.jpg": {
+    "mtime": 1783854428.0,
+    "ast_hash": "e9e4c266f7d92326b68303f2b2e9c275",
+    "semantic_hash": "e9e4c266f7d92326b68303f2b2e9c275"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110709369.jpg": {
+    "mtime": 1783854431.0,
+    "ast_hash": "68a1de7f7fdcedd856224b527e809ebb",
+    "semantic_hash": "68a1de7f7fdcedd856224b527e809ebb"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110712459.jpg": {
+    "mtime": 1783854435.0,
+    "ast_hash": "7d436b1307f48f9f10846f83b4078a3b",
+    "semantic_hash": "7d436b1307f48f9f10846f83b4078a3b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110716843.jpg": {
+    "mtime": 1783854439.0,
+    "ast_hash": "64cd357c0d4c8c16a4c832f02270b3c4",
+    "semantic_hash": "64cd357c0d4c8c16a4c832f02270b3c4"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110725810.jpg": {
+    "mtime": 1783854448.0,
+    "ast_hash": "4df69ae8a8634cc2a5dbd015bcdb40bf",
+    "semantic_hash": "4df69ae8a8634cc2a5dbd015bcdb40bf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110729847.jpg": {
+    "mtime": 1783854452.0,
+    "ast_hash": "fa0d225a2f8817515a32e9347aa0f378",
+    "semantic_hash": "fa0d225a2f8817515a32e9347aa0f378"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110736769.jpg": {
+    "mtime": 1783854459.0,
+    "ast_hash": "60c06dda6c94fcf2a988d8b693bf545d",
+    "semantic_hash": "60c06dda6c94fcf2a988d8b693bf545d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110740430.jpg": {
+    "mtime": 1783854462.0,
+    "ast_hash": "a4f685b8b2bd35a96fc58e107cbf0fd1",
+    "semantic_hash": "a4f685b8b2bd35a96fc58e107cbf0fd1"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110745620.jpg": {
+    "mtime": 1783854468.0,
+    "ast_hash": "d018422bfd349733c4bae4b10badee0e",
+    "semantic_hash": "d018422bfd349733c4bae4b10badee0e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110751084.jpg": {
+    "mtime": 1783854473.0,
+    "ast_hash": "73061c58e77457d219e5f6b6c9a90c7a",
+    "semantic_hash": "73061c58e77457d219e5f6b6c9a90c7a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110857779.jpg": {
+    "mtime": 1783854540.0,
+    "ast_hash": "9f75f8e0bb3f6e8801521d56a099e296",
+    "semantic_hash": "9f75f8e0bb3f6e8801521d56a099e296"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110903576.jpg": {
+    "mtime": 1783854545.0,
+    "ast_hash": "efc11b22ff93de232faab6d0d3481226",
+    "semantic_hash": "efc11b22ff93de232faab6d0d3481226"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110906116.jpg": {
+    "mtime": 1783854547.0,
+    "ast_hash": "e4f658e972cda96f252a8188c9e9c418",
+    "semantic_hash": "e4f658e972cda96f252a8188c9e9c418"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_110940824.jpg": {
+    "mtime": 1783854583.0,
+    "ast_hash": "2d77d69167d34c0e7b03638619d919c9",
+    "semantic_hash": "2d77d69167d34c0e7b03638619d919c9"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111305527.jpg": {
+    "mtime": 1783854788.0,
+    "ast_hash": "1697e8cc5603fda98199002c1529d097",
+    "semantic_hash": "1697e8cc5603fda98199002c1529d097"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111308383.jpg": {
+    "mtime": 1783854790.0,
+    "ast_hash": "b37ebb0fb301d6fbdbad251c0045377d",
+    "semantic_hash": "b37ebb0fb301d6fbdbad251c0045377d"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111320794.jpg": {
+    "mtime": 1783854803.0,
+    "ast_hash": "3aa4bd5d3e1186355010e49ee6ebdf78",
+    "semantic_hash": "3aa4bd5d3e1186355010e49ee6ebdf78"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111326091.jpg": {
+    "mtime": 1783854808.0,
+    "ast_hash": "efcb422d168c7a96d0cbf9dcd893fc91",
+    "semantic_hash": "efcb422d168c7a96d0cbf9dcd893fc91"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111334207.jpg": {
+    "mtime": 1783854816.0,
+    "ast_hash": "19bc3d613b907e8f3ff6f90ccbeaf887",
+    "semantic_hash": "19bc3d613b907e8f3ff6f90ccbeaf887"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111338249.jpg": {
+    "mtime": 1783854820.0,
+    "ast_hash": "59ba8713756184bb53f4273a58988590",
+    "semantic_hash": "59ba8713756184bb53f4273a58988590"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111342168.jpg": {
+    "mtime": 1783854824.0,
+    "ast_hash": "c7d98c419fb05c8bfdd5cd67dbbb5c8a",
+    "semantic_hash": "c7d98c419fb05c8bfdd5cd67dbbb5c8a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111345455.jpg": {
+    "mtime": 1783854827.0,
+    "ast_hash": "f2387ea4f8768d4f614cb04930b7960e",
+    "semantic_hash": "f2387ea4f8768d4f614cb04930b7960e"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111349420.jpg": {
+    "mtime": 1783854831.0,
+    "ast_hash": "4dc5e70628d173f8b7b6dc7551044f98",
+    "semantic_hash": "4dc5e70628d173f8b7b6dc7551044f98"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111351668.jpg": {
+    "mtime": 1783854833.0,
+    "ast_hash": "606fc8fea9ca1dd318cdfcc50a77e211",
+    "semantic_hash": "606fc8fea9ca1dd318cdfcc50a77e211"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111354225.jpg": {
+    "mtime": 1783854836.0,
+    "ast_hash": "4d15a02d19ae6ca9fcea3a7b0db8d80b",
+    "semantic_hash": "4d15a02d19ae6ca9fcea3a7b0db8d80b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111357727.jpg": {
+    "mtime": 1783854839.0,
+    "ast_hash": "72313006716fd397ca555f3fbfaf9127",
+    "semantic_hash": "72313006716fd397ca555f3fbfaf9127"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111401559.jpg": {
+    "mtime": 1783854843.0,
+    "ast_hash": "248ac44bcc58c849cef6a53d778a3801",
+    "semantic_hash": "248ac44bcc58c849cef6a53d778a3801"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111407911.jpg": {
+    "mtime": 1783854849.0,
+    "ast_hash": "5d4f6e90fc8fb59affda7a27cbb20dac",
+    "semantic_hash": "5d4f6e90fc8fb59affda7a27cbb20dac"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111416035.jpg": {
+    "mtime": 1783854857.0,
+    "ast_hash": "4440007d8f7f54778d8103becc0165eb",
+    "semantic_hash": "4440007d8f7f54778d8103becc0165eb"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111420892.jpg": {
+    "mtime": 1783854862.0,
+    "ast_hash": "4d4f60663f13e32246fcb311828f4308",
+    "semantic_hash": "4d4f60663f13e32246fcb311828f4308"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111428013.jpg": {
+    "mtime": 1783854869.0,
+    "ast_hash": "6f044070fe61da46a969c4da780c1ee7",
+    "semantic_hash": "6f044070fe61da46a969c4da780c1ee7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111436160.jpg": {
+    "mtime": 1783854878.0,
+    "ast_hash": "5e13cf37bc3a2187cb6f537406bd612b",
+    "semantic_hash": "5e13cf37bc3a2187cb6f537406bd612b"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111440051.jpg": {
+    "mtime": 1783854881.0,
+    "ast_hash": "7eba54bd33644b3a75a1b2ed8a395054",
+    "semantic_hash": "7eba54bd33644b3a75a1b2ed8a395054"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111444396.jpg": {
+    "mtime": 1783854886.0,
+    "ast_hash": "558fea1b44b970c19be5cc885ed14ac0",
+    "semantic_hash": "558fea1b44b970c19be5cc885ed14ac0"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111449177.jpg": {
+    "mtime": 1783854890.0,
+    "ast_hash": "47b1d77f1d9fb864dd0d8c3090a97ca3",
+    "semantic_hash": "47b1d77f1d9fb864dd0d8c3090a97ca3"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111452389.jpg": {
+    "mtime": 1783854894.0,
+    "ast_hash": "05b7567683cc2fa32da1dc52b7727890",
+    "semantic_hash": "05b7567683cc2fa32da1dc52b7727890"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111458126.jpg": {
+    "mtime": 1783854899.0,
+    "ast_hash": "92bebeff32664f60778b4b1558f34ca8",
+    "semantic_hash": "92bebeff32664f60778b4b1558f34ca8"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111501653.jpg": {
+    "mtime": 1783854903.0,
+    "ast_hash": "2b5b0a47cda51e1c25ad76169ba5fa34",
+    "semantic_hash": "2b5b0a47cda51e1c25ad76169ba5fa34"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111505847.jpg": {
+    "mtime": 1783854907.0,
+    "ast_hash": "45987fdece4e62f1f957630fd3abd523",
+    "semantic_hash": "45987fdece4e62f1f957630fd3abd523"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111508873.jpg": {
+    "mtime": 1783854910.0,
+    "ast_hash": "fcdf554e5c0393b2c5c27987abfbdae3",
+    "semantic_hash": "fcdf554e5c0393b2c5c27987abfbdae3"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111516238.jpg": {
+    "mtime": 1783854918.0,
+    "ast_hash": "87b1d9bb0ba354a6aff1bc7508e102bf",
+    "semantic_hash": "87b1d9bb0ba354a6aff1bc7508e102bf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111522982.jpg": {
+    "mtime": 1783854924.0,
+    "ast_hash": "c648091a6265712607106c3f9627a6dc",
+    "semantic_hash": "c648091a6265712607106c3f9627a6dc"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111529165.jpg": {
+    "mtime": 1783854930.0,
+    "ast_hash": "034f955af5f909b2f4a26dc8f13348b7",
+    "semantic_hash": "034f955af5f909b2f4a26dc8f13348b7"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111535509.jpg": {
+    "mtime": 1783854937.0,
+    "ast_hash": "26e9195ac0182d014cdc28e8d125649a",
+    "semantic_hash": "26e9195ac0182d014cdc28e8d125649a"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111539728.jpg": {
+    "mtime": 1783854941.0,
+    "ast_hash": "a77180f6213b43f50587edc26ef167bf",
+    "semantic_hash": "a77180f6213b43f50587edc26ef167bf"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111547411.jpg": {
+    "mtime": 1783854949.0,
+    "ast_hash": "d21c4e17e0c6ee642b8e2ec6e225b471",
+    "semantic_hash": "d21c4e17e0c6ee642b8e2ec6e225b471"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111549474.jpg": {
+    "mtime": 1783854951.0,
+    "ast_hash": "a2ef50179c008fb07310b2551c96c9fc",
+    "semantic_hash": "a2ef50179c008fb07310b2551c96c9fc"
+  },
+  "reference-data/OCR/FG Batch Code/PXL_20260712_111557514.jpg": {
+    "mtime": 1783854959.0,
+    "ast_hash": "576abb257763fcb139413e66779c0500",
+    "semantic_hash": "576abb257763fcb139413e66779c0500"
+  }
+}

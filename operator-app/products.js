@@ -77,6 +77,62 @@ const PRODUCTS = [
     { name: "XP-16", packSize: "", prefix: "" }
 ];
 
+// AGI Code mapping (from reference data)
+const AGI_CODE_MAP = {
+    "Actara|5g": "34779",
+    "Alika|50ml": "69667",
+    "Amistar|50ml": "53294",
+    "Armure|100ml": "85250",
+    "Atresia|50ml": "88294",
+    "Bingo|100g": "63728",
+    "Bingo|500g": "63728",
+    "Caliber|100g": "68507",
+    "Caliber|500g": "68507",
+    "Cruiser|20g": "63913",
+    "Denim Fit|10g": "87224",
+    "Filia|50ml": "55458",
+    "Filia|100ml": "46420",
+    "Filia|500ml": "57918",
+    "Gayte|100g": "69037",
+    "Grozin|1kg": "35440",
+    "Grozin|2kg": "56655",
+    "Incipio|40ml": "80926",
+    "Jazz|100g": "52539",
+    "Jazz|500g": "52537",
+    "Karate|50ml": "58896",
+    "Lanirat|100g": "35723",
+    "Laser|25g": "43868",
+    "Magma|1kg": "63731",
+    "Miravis Duo|50ml": "80927",
+    "Miravis Duo|100ml": "81359",
+    "Pegasus|100ml": "61124",
+    "Plenum|50g": "64213",
+    "Proclam|10g": "70887",
+    "Proclam|30g": "70897",
+    "Protozim|50ml": "59703",
+    "Revus|50ml": "58513",
+    "Revus|100ml": "53508",
+    "Revus|500ml": "53924",
+    "Ridomil|100g": "38775",
+    "Ridomil|500g": "38776",
+    "Rifit|100ml": "35348",
+    "Score|50ml": "34002",
+    "Score|100ml": "30593",
+    "Score|500ml": "34001",
+    "Shobicron|50ml": "29568",
+    "Silika|1kg": "58337",
+    "Thiovit|1kg": "92798",
+    "Tilt|50ml": "58888",
+    "Vestoria|15g": "84793",
+    "Vertimec|50ml": "63105",
+    "Virtako|10g": "72598",
+    "Voliam|50ml": "43978"
+};
+
+function getProductAgiCode(name, packSize) {
+    return AGI_CODE_MAP[name + '|' + (packSize || '')] || '';
+}
+
 // Helper: Get unique product names
 function getUniqueProductNames() {
     const names = [...new Set(PRODUCTS.map(p => p.name))];

@@ -143,6 +143,19 @@
             var txRows = results[0].data || [];
             var invRows = results[1].data || [];
 
+            var localData = loadRaw('operator-data');
+
+            // Guard: if Supabase returned empty but local has data, keep local
+            var hasSupabaseData = txRows.length > 0 || invRows.length > 0;
+            var hasLocalData = localData && (
+                (localData.transactions && localData.transactions.length > 0) ||
+                (localData.inventory && localData.inventory.length > 0)
+            );
+            if (!hasSupabaseData && hasLocalData) {
+                syncCallbacks.forEach(function (cb) { try { cb(); } catch (e) {} });
+                return;
+            }
+
             var pulled = {
                 transactions: txRows.map(function (t) {
                     return {
@@ -173,7 +186,6 @@
             };
 
             // Merge with local — keep any pending items not yet pushed
-            var localData = loadRaw('operator-data');
             if (localData) {
                 var localPendingTx = (localData.transactions || []).filter(function (t) { return t.sync_status === 'pending'; });
                 var localPendingInv = (localData.inventory || []).filter(function (i) { return i.sync_status === 'pending'; });
