@@ -966,7 +966,8 @@ function clearSupabaseData() {
     if (!confirm('Delete ALL data from Supabase cloud? This will clear tables: transactions, inventory, products, config, operators.')) return;
     if (!confirm('FINAL WARNING: This removes ALL data from the cloud database. Continue?')) return;
 
-    if (!window.supabase) {
+    var client = window.syncManager && window.syncManager.supabase;
+    if (!client) {
         alert('Supabase not connected. Data may already be cleared, or the app needs a reload.');
         return;
     }
@@ -976,7 +977,7 @@ function clearSupabaseData() {
     if (btn) { btn.disabled = true; btn.textContent = 'Clearing...'; }
 
     Promise.all(tables.map(function(t) {
-        return supabase.from(t).delete().neq('id', '0');
+        return client.from(t).delete().neq('id', '0');
     })).then(function(results) {
         var errors = results.filter(function(r) { return r.error; });
         if (errors.length > 0) {
