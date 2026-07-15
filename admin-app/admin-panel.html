@@ -118,6 +118,28 @@
                         </div>
                     </div>
 
+                    <div class="filter-bar chart-filter-bar" id="chart-filter-bar">
+                        <span class="filter-label">Year:</span>
+                        <button class="filter-btn active" onclick="setChartYearFilter('all')">All</button>
+                        <span class="filter-separator"></span>
+                        <span class="filter-label">Month:</span>
+                        <select class="chart-month-select" id="chart-month-select" onchange="setChartMonthFilter(this.value)">
+                            <option value="all">All</option>
+                            <option value="A">Jan (A)</option>
+                            <option value="B">Feb (B)</option>
+                            <option value="C">Mar (C)</option>
+                            <option value="D">Apr (D)</option>
+                            <option value="E">May (E)</option>
+                            <option value="F">Jun (F)</option>
+                            <option value="G">Jul (G)</option>
+                            <option value="H">Aug (H)</option>
+                            <option value="I">Sep (I)</option>
+                            <option value="J">Oct (J)</option>
+                            <option value="K">Nov (K)</option>
+                            <option value="L">Dec (L)</option>
+                        </select>
+                    </div>
+
                     <div class="chart-grid">
                         <div class="chart-card chart-card-full" id="chart-top-products">
                             <div class="chart-title">Top Products by Quantity</div>
@@ -132,7 +154,7 @@
                             </div>
                         </div>
                         <div class="chart-card" id="chart-stock-by-code">
-                            <div class="chart-title">Stock by Production Month</div>
+                            <div class="chart-title">Stock by Batch Code</div>
                             <div class="chart-container">
                                 <div class="empty-state">
                                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4;margin-bottom:16px;">

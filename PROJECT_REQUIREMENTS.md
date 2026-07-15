@@ -239,25 +239,39 @@ Warehouse Assistant (phone)
     | Views inventory with FEFO highlighting
     | Views 12M expiry report
     |
+    ├──→ Data saved to localStorage (offline-first)
+    |
     v
-Data saved to localStorage
+Supabase (PostgreSQL cloud)
+    |
+    ├──↕── Operator App syncs pending data when online
+    |
+    |──↕── Admin Dashboard reads/writes via Supabase
     |
     v
 Warehouse Officer (laptop)
     |
-    | Opens Admin Dashboard
-    | Sees consolidated data from all warehouses
+    | Opens Admin Dashboard (PIN-gated)
+    | Sees consolidated data from all 4 warehouses
+    | Manages products (synced to operator app)
+    | Manages settings and operator PINs
     | Exports Excel reports
-    | Manages products and settings
+    | Clears cloud data via RPC function
     |
     v
 Dashboard / Reports / Excel Export
 ```
 
+**Key Principles:**
+- **Admin is authoritative:** Products added/edited/deleted in Admin are synced to Supabase `config` table as `product-list`. Operator app reads this on startup and overrides its hardcoded catalog.
+- **Multi-operator at same warehouse:** All operators at the same warehouse share inventory via Supabase. Quantities are re-aggregated per `(product, packSize, productionMonth, warehouse)` — they sum, not overwrite.
+- **AGI codes:** 5-digit numeric IDs auto-derived from product+pack lookup. Displayed in admin only (Product table, Activity Log). The warehouse assistant never sees or enters AGI codes.
+
 ### 6.3 Technology Stack
 
 - **Frontend:** HTML, CSS, JavaScript (no framework — simple, fast, no build step)
 - **Storage:** localStorage (browser-based, works offline)
+- **Cloud Sync:** Supabase (PostgreSQL via anon key, RLS policies for public access)
 - **PWA:** Installable to home screen, works without internet
 - **Design:** Syngenta green (#00843D), Inter font, SVG icons
 
@@ -274,17 +288,36 @@ Dashboard / Reports / Excel Export
 │   ├── index.html               ← Main HTML (6 screens)
 │   ├── style.css                ← Syngenta-branded mobile CSS
 │   ├── app.js                   ← All application logic
-│   └── products.js              ← 69 SKU product catalog
+│   ├── products.js              ← 69 SKU product catalog
+│   └── syncManager.js           ← Offline-first Supabase sync layer
 ├── admin-app/                   ← Warehouse Officer Dashboard
-│   └── admin-panel.html         ← Single-page admin dashboard
+│   ├── admin-panel.html         ← Single-page admin dashboard
+│   ├── admin-app.js             ← Admin application logic
+│   └── admin-style.css          ← Admin dashboard styles
+├── supabase-schema.sql          ← Definitive Supabase SQL schema (run-once)
+├── supabase sql codes/          ← Archived SQL scripts (for reference)
+│   ├── init_tables.sql          ← (superseded by root supabase-schema.sql)
+│   ├── migration_add_warehouse.sql
+│   └── clear_all_data.sql
 └── reference-data/              ← Reference documents
     ├── 12_Month_Shelf_Life_Data.md
     └── System_Export_Data.md
 ```
 
-### 7.2 Shared Data
+### 7.2 Data Layer Architecture
 
-Both apps read/write to `localStorage` using the same key (`shelf-life-config`). The admin panel configuration (operator PINs, warehouses, year ranges) is stored here and read by the operator app.
+**Three storage layers work together:**
+
+1. **localStorage (`operator-data`)** — Primary data store for the operator app. Contains `transactions[]` and `inventory[]` arrays. Works fully offline.
+2. **localStorage (`shelf-life-config`)** — Shared configuration written by admin, read by operator. Contains operator PINs, warehouses, year ranges.
+3. **Supabase (PostgreSQL cloud)** — Central sync point. Tables: `transactions`, `inventory`, `config`. Operator app syncs pending data when online. Admin app reads/writes directly via Supabase JS client.
+
+**Sync Flow:**
+- Operator app marks new transactions as `sync_status: 'pending'`
+- On next network availability, `syncManager.syncAll()` pushes pending records to Supabase
+- `syncManager.pullFromSupabase()` downloads all cloud data, merges with local pending items
+- Admin app reads/writes directly — no pending queue needed
+- Products managed in Admin are synced to Supabase `config` table as key `product-list`; operator reads this on init
 
 ---
 
@@ -620,8 +653,17 @@ A left sidebar with 6 sections:
 **Charts:**
 
 1. **Top Products by Quantity** — horizontal bar chart showing the 5 products with highest total quantity
-2. **Stock by Production Code** — bar chart showing quantity distribution across production codes (5A, 5B, 6A, 6B, etc.)
+2. **Stock by Batch Code** — bar chart showing quantity distribution across production batches (5A, 5B, 6A, 6B, etc.)
 3. **Warehouse Breakdown** — when multiple warehouses sync data, shows quantity per warehouse
+
+**Chart Filters:**
+
+A filter bar sits between the stat cards and the chart grid with:
+
+- **Year pills:** dynamically generated from available production years in inventory data. Includes an "All" option that shows every year. Clicking a year refreshes all charts to show only data from that year.
+- **Month dropdown:** months A (Jan) through L (Dec) with an "All" option. Selecting a month narrows charts further to only that month's data.
+- Filters stack: the warehouse filter (from the top-bar) also applies to charts, so the chart shows data matching all active warehouse + year + month selections simultaneously.
+- Only months with data are shown in the chart (no zero-filled columns).
 
 **Recent Activity** — last 5 transactions with operator name, product, type, quantity, and time.
 
@@ -700,20 +742,24 @@ Score | 50ml | SCH | SCH6A | Chittagong | Aug 2026 | 250 | 1M
 **Purpose:** Manage the product catalog (69 SKUs).
 
 **Features:**
-- Searchable table: Prefix, Product Name, Pack Size
-- Add Product button → opens modal with fields: Name, Pack Size, Prefix
-- Edit button per row → opens modal pre-filled
-- Delete button per row → confirms before removing
+- Searchable table: Prefix, Product Name, Pack Size, AGI Code
+- **AGI Code column** — Shows the 5-digit AGI code for each product+pack. Auto-populated from a default mapping (48 entries) when the product is first created. Editable per-row in the modal.
+- Add Product button → opens modal with fields: Name, Pack Size, Prefix, AGI Code
+- Edit button per row → opens modal pre-filled with all fields including AGI Code
+- Delete button per row → confirms before removing; deletes the AGI code mapping but preserves inventory records (existing data has fallback AGI lookup)
+- Products are synced to Supabase (`config` table as `product-list`) so the operator app stays up to date
 
 **Example:**
 ```
-Prefix │ Product Name │ Pack Size │ Actions
-───────┼──────────────┼───────────┼──────────────────
-SCH    │ Karate       │ 50ml      │ [Edit] [Delete]
-SCH    │ Karate       │ 100ml     │ [Edit] [Delete]
-SCH    │ Karate       │ 500ml     │ [Edit] [Delete]
-DKC    │ Jazz         │ 100g      │ [Edit] [Delete]
+Prefix │ Product Name │ Pack Size │ AGI Code │ Actions
+───────┼──────────────┼───────────┼──────────┼──────────────────
+SCH    │ Karate       │ 50ml      │ 58896    │ [Edit] [Delete]
+SCH    │ Karate       │ 100ml     │ —        │ [Edit] [Delete]
+SCH    │ Karate       │ 500ml     │ —        │ [Edit] [Delete]
+DKC    │ Jazz         │ 100g      │ 52539    │ [Edit] [Delete]
 ```
+
+**Delete Safety:** Deleting a product from the catalog does NOT delete existing inventory records. It only removes the product from the product list and its AGI code mapping. Existing inventory records persist — the AGI code is looked up at render time and falls back to an empty string if the mapping is gone.
 
 ---
 
@@ -748,19 +794,29 @@ Start: [5] End: [6]
 
 Add new warehouse: Enter name → Add button.
 
+#### Clear Cloud Data
+A **"Clear Supabase Data"** button (red) in the settings footer. Deletes all data from `transactions`, `inventory`, and `config` tables via a Supabase RPC function (`clear_all_data_rpc`) that bypasses RLS, instead of the client-side `delete().neq()` approach.
+
+**Why RPC:** The client-side approach fails on type-mismatch columns. The RPC function uses `TRUNCATE` or `DELETE FROM` with full table privileges.
+
+**Console warning:** Also clears local `operator-data` from localStorage to keep things in sync.
+
 ---
 
 ## 10. Data Model
 
 ### 10.1 Inventory Item
 
+**LocalStorage format:**
 ```json
 {
   "product": "Karate",
   "packSize": "50ml",
   "productionMonth": "6F",
   "expiryMonth": "Jun 2028",
-  "quantity": 125
+  "quantity": 125,
+  "warehouse": "Chittagong",
+  "sync_status": "synced"
 }
 ```
 
@@ -771,9 +827,27 @@ Add new warehouse: Enter name → Add button.
 | productionMonth | string | 2-character code: year digit + month letter (e.g., "6F") |
 | expiryMonth | string | Full expiry string (e.g., "Jun 2028") |
 | quantity | number | Current carton count (received minus dispatched) |
+| warehouse | string | Warehouse name (e.g., "Chittagong") |
+| sync_status | string | "synced" or "pending" |
+
+**Supabase `inventory` table (UNIQUE on product, pack_size, production_month, warehouse):**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGSERIAL | Primary key |
+| product | TEXT | Product name |
+| pack_size | TEXT | Pack size |
+| production_month | TEXT | Production month code |
+| expiry_month | TEXT | Expiry date string |
+| quantity | INTEGER | Current carton count |
+| warehouse | TEXT | Warehouse name |
+| operator_name | TEXT | Last operator who modified |
+| sync_status | TEXT | Default 'synced' |
+| created_at | TIMESTAMPTZ | Auto-generated timestamp |
 
 ### 10.2 Transaction Record
 
+**LocalStorage format:**
 ```json
 {
   "product": "Karate",
@@ -783,7 +857,9 @@ Add new warehouse: Enter name → Add button.
   "quantity": 125,
   "type": "receive",
   "timestamp": "2026-07-13T10:30:00.000Z",
-  "operator": "Karim"
+  "operator_name": "Karim",
+  "warehouse": "Chittagong",
+  "sync_status": "pending"
 }
 ```
 
@@ -796,7 +872,27 @@ Add new warehouse: Enter name → Add button.
 | quantity | number | Quantity transacted |
 | type | string | "receive" or "dispatch" |
 | timestamp | string | ISO 8601 timestamp |
-| operator | string | Name of the operator who performed the count |
+| operator_name | string | Name of the operator who performed the count |
+| warehouse | string | Warehouse where the transaction occurred |
+| sync_status | string | "synced" or "pending" (pending items get pushed to Supabase) |
+
+**Supabase `transactions` table:**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGSERIAL | Primary key |
+| product | TEXT | Product name |
+| pack_size | TEXT | Pack size |
+| production_month | TEXT | Production month code |
+| expiry_month | TEXT | Expiry date string |
+| quantity | INTEGER | Quantity transacted |
+| type | TEXT | 'receive' or 'dispatch' (CHECK constraint) |
+| operator_name | TEXT | Operator name |
+| warehouse | TEXT | Warehouse name |
+| client_timestamp | TEXT | Original timestamp from client |
+| client_date | TEXT | Original date string from client |
+| sync_status | TEXT | Default 'synced' |
+| created_at | TIMESTAMPTZ | Auto-generated timestamp |
 
 ### 10.3 Configuration
 
@@ -958,9 +1054,7 @@ All 4 warehouses share the same product catalog and counting process. The admin 
 
 | Item | Reason |
 |------|--------|
-| Server-side database | Using localStorage for simplicity — no backend server |
-| User authentication beyond PIN | Single-user admin, PIN-only for operator accountability |
-| Multi-device real-time sync | Data syncs via shared localStorage (same device or manual transfer) |
+| Full user authentication | PIN-only for operator accountability; admin has a single shared password (9876) |
 | Barcode scanning | Operator manually reads batch codes from cartons |
 | Photo capture | Not required — operator reads codes visually |
 | GPS/location tracking | Not needed — operator is physically in the warehouse |
@@ -973,19 +1067,22 @@ All 4 warehouses share the same product catalog and counting process. The admin 
 
 ## 15. Open Questions / Decisions Needed
 
-| # | Question | Current State | Decision Needed |
-|---|----------|---------------|-----------------|
-| 1 | How does data get from operator phones to admin dashboard? | Same localStorage (same device) | Do operators and officer share the same laptop? Or do we need data export/import? |
-| 2 | Should the operator app work fully offline? | Yes (PWA with localStorage) | Confirm warehouses have poor/no internet |
-| 3 | Should there be a "Back to Product List" button after confirmation? | Currently goes to Product List | Or should it stay on Count Screen for the same product? |
-| 4 | Can an operator edit/delete a previous count? | No — only receive/dispatch adds new transactions | Should there be an edit capability? |
-| 5 | Should the 12M report show ALL products or only those with inventory > 0? | Only products with inventory | Confirm |
-| 6 | Should the admin dashboard auto-refresh or require manual refresh? | Manual (on screen switch) | Confirm |
-| 7 | Is the "Other" production month option needed? | Button exists but no logic | What does "Other" mean — non-standard batch codes? |
-| 8 | Should products without a prefix (PJ-16, XP-16) have batch codes? | They have no prefix in the catalog | Confirm batch code format for these |
+| # | Question | Current State | Decision |
+|---|----------|---------------|----------|
+| 1 | How does data get from operator phones to admin dashboard? | ✅ **Supabase cloud sync** — offline-first localStorage, syncs pending records when online | Operators and officer can be on different devices. Admin reads/writes directly to Supabase. |
+| 2 | Should the operator app work fully offline? | ✅ **Yes** — PWA with localStorage. Syncs when online. | Confirmed — warehouses have poor/unreliable internet. |
+| 3 | Should there be a "Back to Product List" button after confirmation? | ✅ Goes to Product List | Confirmed — operators count one product, then move to the next. |
+| 4 | Can an operator edit/delete a previous count? | ❌ **No** — only receive/dispatch adds new transactions | Edit capability not needed. Corrections are done via dispatch (negative) or new receive. |
+| 5 | Should the 12M report show ALL products or only those with inventory > 0? | ✅ Only products with inventory | Confirmed. |
+| 6 | Should the admin dashboard auto-refresh or require manual refresh? | ✅ Manual (on screen switch or refresh button) | Confirmed. |
+| 7 | Is the "Other" production month option needed? | ✅ Button exists but no special logic — treated as a separate code | "Other" covers non-standard batch codes. Stored as-is. |
+| 8 | Should products without a prefix (PJ-16, XP-16) have batch codes? | ✅ They exist without prefix. AGI codes not defined for these. | These are non-chemical items. |
+| 9 | How are AGI codes handled? | ✅ Auto-derived from product+pack lookup in both apps | Admin can edit AGI codes per product. Operator never sees them. |
+| 10 | Can multiple operators count at the same warehouse at the same time? | ✅ **Yes** — inventory sums per (product, pack, prodMonth, warehouse) | Quantities from all operators at the same warehouse are aggregated, not overwritten. |
+| 11 | What happens when admin deletes a product that has inventory? | ✅ **Delete is catalog-only** — existing inventory records persist with fallback AGI lookup | Inventory records reference product name+pack, not a foreign key. No orphan data. |
 
 ---
 
-*Document version: 1.0*
-*Last updated: 2026-07-13*
+*Document version: 2.0*
+*Last updated: 2026-07-15*
 *Prepared for: App development team*

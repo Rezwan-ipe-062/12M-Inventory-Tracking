@@ -172,17 +172,27 @@
                         sync_status: 'synced'
                     };
                 }),
-                inventory: invRows.map(function (i) {
-                    return {
-                        product: i.product,
-                        packSize: i.pack_size || '',
-                        productionMonth: i.production_month || '',
-                        expiryMonth: i.expiry_month || '',
-                        quantity: i.quantity || 0,
-                        warehouse: i.warehouse || '',
-                        sync_status: 'synced'
-                    };
-                })
+                inventory: (function () {
+                    // Re-aggregate by (product, packSize, productionMonth, warehouse)
+                    // so multiple operators at the same warehouse sum, not overwrite.
+                    var agg = {};
+                    invRows.forEach(function (i) {
+                        var key = (i.product || '') + '|' + (i.pack_size || '') + '|' + (i.production_month || '') + '|' + (i.warehouse || '');
+                        if (!agg[key]) {
+                            agg[key] = {
+                                product: i.product,
+                                packSize: i.pack_size || '',
+                                productionMonth: i.production_month || '',
+                                expiryMonth: i.expiry_month || '',
+                                quantity: 0,
+                                warehouse: i.warehouse || '',
+                                sync_status: 'synced'
+                            };
+                        }
+                        agg[key].quantity = (agg[key].quantity || 0) + (i.quantity || 0);
+                    });
+                    return Object.values(agg);
+                })()
             };
 
             // Merge with local — keep any pending items not yet pushed
@@ -218,4 +228,23 @@
     };
 
     window.syncManager = syncManager;
+
+    syncManager.pullProducts = function () {
+        if (!supabase) return Promise.resolve();
+        return supabase.from('config').select('value').eq('key', 'product-list').single().then(function (res) {
+            if (res.error && res.error.code !== 'PGRST116') {
+                console.warn('syncManager: pullProducts failed', res.error);
+                return;
+            }
+            if (res.data && res.data.value) {
+                var val = res.data.value;
+                var list = typeof val === 'string' ? JSON.parse(val) : val;
+                if (list && list.length > 0) {
+                    localStorage.setItem('synced-products', JSON.stringify(list));
+                }
+            }
+        }).catch(function (e) {
+            console.warn('syncManager: pullProducts error', e.message || e);
+        });
+    };
 })();

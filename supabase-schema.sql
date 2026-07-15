@@ -1,23 +1,13 @@
--- Paste this entire SQL into the Supabase SQL Editor (https://supabase.com/dashboard/project/ytirmuuchcxzlwethvsg/sql/new)
--- Then click "Run" to create all tables.
+-- ==========================================================
+-- Definitive Supabase Schema — 12M Shelf Life Inventory System
+-- ==========================================================
+-- Paste this entire SQL into the Supabase SQL Editor:
+-- https://supabase.com/dashboard/project/ytirmuuchcxzlwethvsg/sql/new
+-- Then click "Run" to create all tables, RLS policies, and RPC functions.
+-- Safe to re-run (uses IF NOT EXISTS and DROP POLICY IF EXISTS).
+-- ==========================================================
 
-CREATE TABLE IF NOT EXISTS products (
-  id BIGSERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  pack_size TEXT NOT NULL DEFAULT '',
-  prefix TEXT NOT NULL DEFAULT '',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(name, pack_size)
-);
-
-CREATE TABLE IF NOT EXISTS operators (
-  id BIGSERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  pin TEXT NOT NULL,
-  warehouse TEXT DEFAULT '',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
+-- 1. TRANSACTIONS TABLE
 CREATE TABLE IF NOT EXISTS transactions (
   id BIGSERIAL PRIMARY KEY,
   product TEXT NOT NULL,
@@ -34,6 +24,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- 2. INVENTORY TABLE (aggregated stock snapshot)
 CREATE TABLE IF NOT EXISTS inventory (
   id BIGSERIAL PRIMARY KEY,
   product TEXT NOT NULL,
@@ -48,24 +39,46 @@ CREATE TABLE IF NOT EXISTS inventory (
   UNIQUE(product, pack_size, production_month, warehouse)
 );
 
+-- 3. CONFIG TABLE (app settings + synced product catalog)
 CREATE TABLE IF NOT EXISTS config (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Insert default shelf-life config (safe to re-run)
 INSERT INTO config (key, value) VALUES ('shelf-life-config', '{"operatorPins":[],"expiryYears":{"start":2025,"end":2030},"prodYears":{"start":5,"end":6},"warehouses":["Chittagong","Gazipur","Jessore","Bogura"]}') ON CONFLICT (key) DO NOTHING;
 
--- Enable Row Level Security (open access with anon key — locked to your Supabase project)
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
-ALTER TABLE operators ENABLE ROW LEVEL SECURITY;
+-- 4. ROW LEVEL SECURITY — allow full access for anon key
 ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE inventory ENABLE ROW LEVEL SECURITY;
 ALTER TABLE config ENABLE ROW LEVEL SECURITY;
 
--- Allow all operations for anon users (since your app manages auth internally)
-CREATE POLICY "Allow anon all" ON products FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow anon all" ON operators FOR ALL USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow anon all" ON transactions;
+DROP POLICY IF EXISTS "Allow anon all" ON inventory;
+DROP POLICY IF EXISTS "Allow anon all" ON config;
+
 CREATE POLICY "Allow anon all" ON transactions FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow anon all" ON inventory FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow anon all" ON config FOR ALL USING (true) WITH CHECK (true);
+
+-- 5. RPC FUNCTION: clear_all_data_rpc
+-- Called by admin "Clear Supabase Data" button.
+-- Uses TRUNCATE (bypasses RLS) to delete all rows from all tables.
+-- Config default row is re-inserted after truncate.
+CREATE OR REPLACE FUNCTION clear_all_data_rpc()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = 'public'
+AS $$
+BEGIN
+  TRUNCATE TABLE transactions CASCADE;
+  TRUNCATE TABLE inventory CASCADE;
+  TRUNCATE TABLE config CASCADE;
+
+  -- Re-insert default config rows
+  INSERT INTO config (key, value) VALUES ('shelf-life-config', '{"operatorPins":[],"expiryYears":{"start":2025,"end":2030},"prodYears":{"start":5,"end":6},"warehouses":["Chittagong","Gazipur","Jessore","Bogura"]}');
+  INSERT INTO config (key, value) VALUES ('product-list', '[]');
+END;
+$$;

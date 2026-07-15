@@ -1,6 +1,7 @@
 // Product Master Data - 69 SKUs
 // Format: { name, packSize, prefix }
-const PRODUCTS = [
+// Overridden by synced products from admin via syncManager.pullProducts()
+let PRODUCTS = [
     // SCH Products
     { name: "Actara", packSize: "5g", prefix: "SCH" },
     { name: "Amistar", packSize: "50ml", prefix: "SCH" },
@@ -171,3 +172,26 @@ function filterProducts(searchTerm, selectedProduct) {
 
     return filtered;
 }
+
+// Load synced products from admin (if available)
+function loadSyncedProducts() {
+    try {
+        var saved = localStorage.getItem('synced-products');
+        if (saved) {
+            var list = JSON.parse(saved);
+            if (list && list.length > 0) {
+                PRODUCTS.length = 0;
+                list.forEach(function(p) {
+                    PRODUCTS.push({ name: p.name, packSize: p.pack || p.packSize || '', prefix: p.prefix || '' });
+                });
+                return true;
+            }
+        }
+    } catch(e) {}
+    return false;
+}
+
+// Call on init to check for synced products
+(function() {
+    loadSyncedProducts();
+})();

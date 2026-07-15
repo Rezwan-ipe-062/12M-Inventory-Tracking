@@ -226,8 +226,27 @@ function saveConfig(cfg) {
     }
 }
 
+function syncProducts() {
+    var client = window.syncManager && window.syncManager.supabase;
+    if (client) {
+        var productList = PRODUCTS.map(function(p) {
+            return { name: p.name, pack: p.pack, prefix: p.prefix };
+        });
+        client.from('config').upsert({
+            key: 'product-list',
+            value: JSON.stringify(productList)
+        }, { onConflict: 'key' }).then(function(res) {
+            if (res.error) console.warn('product sync failed', res.error);
+        }).catch(function(e) {
+            console.warn('product sync error', e.message || e);
+        });
+    }
+}
+
 let CONFIG = loadConfig();
 let selectedWarehouses = new Set(CONFIG.warehouses);
+let chartYearFilter = 'all';
+let chartMonthFilter = 'all';
 
 function rebuildWarehouseChips() {
     const bar = document.getElementById('warehouse-filter-bar');
@@ -290,6 +309,19 @@ function toggleWarehouse(name, btn) {
         btn.classList.add('active');
     }
     refreshCurrentScreen();
+}
+
+function setChartYearFilter(year) {
+    chartYearFilter = year;
+    document.querySelectorAll('#chart-filter-bar .filter-btn').forEach(function(b) {
+        b.classList.toggle('active', b.getAttribute('data-year') === year);
+    });
+    renderDashboard();
+}
+
+function setChartMonthFilter(month) {
+    chartMonthFilter = month;
+    renderDashboard();
 }
 
 function isActiveScreen(id) {
@@ -386,11 +418,61 @@ function renderDashboard() {
         ).join('');
     }
 
-    renderCharts(opData);
+    // Build chart year filter pills from available data
+    buildChartYearFilters(opData.inventory || []);
+
+    // Apply all dashboard filters for chart rendering
+    var chartInventory = filterChartInventory(opData.inventory || []);
+
+    renderCharts(chartInventory);
 }
 
-function renderCharts(opData) {
-    const inventory = opData.inventory || [];
+function buildChartYearFilters(inventory) {
+    var years = new Set();
+    inventory.forEach(function(item) {
+        if (item.productionMonth && item.productionMonth.length >= 1) {
+            years.add(item.productionMonth[0]);
+        }
+    });
+    var sortedYears = Array.from(years).sort();
+
+    var bar = document.getElementById('chart-filter-bar');
+    if (!bar) return;
+
+    var html = '<span class="filter-label">Year:</span>';
+    html += '<button class="filter-btn ' + (chartYearFilter === 'all' ? 'active' : '') + '" data-year="all" onclick="setChartYearFilter(\'all\')">All</button>';
+    sortedYears.forEach(function(y) {
+        html += '<button class="filter-btn ' + (chartYearFilter === y ? 'active' : '') + '" data-year="' + y + '" onclick="setChartYearFilter(\'' + y + '\')">' + y + '</button>';
+    });
+    html += '<span class="filter-separator"></span>';
+    html += '<span class="filter-label">Month:</span>';
+    html += '<select class="chart-month-select" id="chart-month-select" onchange="setChartMonthFilter(this.value)">';
+    html += '<option value="all">All</option>';
+    html += '<option value="A">Jan (A)</option><option value="B">Feb (B)</option><option value="C">Mar (C)</option>';
+    html += '<option value="D">Apr (D)</option><option value="E">May (E)</option><option value="F">Jun (F)</option>';
+    html += '<option value="G">Jul (G)</option><option value="H">Aug (H)</option><option value="I">Sep (I)</option>';
+    html += '<option value="J">Oct (J)</option><option value="K">Nov (K)</option><option value="L">Dec (L)</option>';
+    html += '</select>';
+
+    bar.innerHTML = html;
+    // Restore month dropdown selection
+    var sel = document.getElementById('chart-month-select');
+    if (sel) sel.value = chartMonthFilter;
+}
+
+function filterChartInventory(inventory) {
+    return inventory.filter(function(item) {
+        // Warehouse filter
+        if (!selectedWarehouses.has(item.warehouse)) return false;
+        // Year filter
+        if (chartYearFilter !== 'all' && (!item.productionMonth || item.productionMonth[0] !== chartYearFilter)) return false;
+        // Month filter
+        if (chartMonthFilter !== 'all' && (!item.productionMonth || item.productionMonth.length < 2 || item.productionMonth[1] !== chartMonthFilter)) return false;
+        return true;
+    });
+}
+
+function renderCharts(inventory) {
     const isEmpty = inventory.length === 0;
 
     if (typeof Chart === 'undefined') return;
@@ -441,7 +523,7 @@ function renderCharts(opData) {
         }
     });
 
-    // Chart 2: Stock by Production Month
+    // Chart 2: Stock by Batch Code
     const monthTotals = {};
     inventory.forEach(item => {
         const m = item.productionMonth || 'N/A';
@@ -466,7 +548,7 @@ function renderCharts(opData) {
             maintainAspectRatio: false,
             plugins: {
                 legend: { display: false },
-                title: { display: true, text: 'Stock by Production Month', font: { size: 13, weight: '600' }, padding: { bottom: 12 } }
+                title: { display: true, text: 'Stock by Batch Code', font: { size: 13, weight: '600' }, padding: { bottom: 12 } }
             },
             scales: {
                 y: { beginAtZero: true, ticks: { precision: 0 } },
@@ -730,6 +812,7 @@ function saveProduct() {
     localStorage.setItem('custom-products', JSON.stringify(PRODUCTS));
     closeProductModal();
     renderProducts();
+    syncProducts();
 }
 
 function editProduct(idx) {
@@ -746,6 +829,7 @@ function deleteProduct(idx) {
     PRODUCTS.splice(idx, 1);
     localStorage.setItem('custom-products', JSON.stringify(PRODUCTS));
     renderProducts();
+    syncProducts();
 }
 
 // ==============================
@@ -1024,23 +1108,15 @@ function clearSupabaseData() {
         return;
     }
 
-    var tables = [
-        { name: 'transactions', column: 'id' },
-        { name: 'inventory', column: 'id' },
-        { name: 'config', column: 'key' }
-    ];
     var btn = document.querySelector('button[onclick*="clearSupabaseData"]');
     if (btn) { btn.disabled = true; btn.textContent = 'Clearing...'; }
 
-    Promise.all(tables.map(function(t) {
-        return client.from(t.name).delete().neq(t.column, '');
-    })).then(function(results) {
-        var errors = results.filter(function(r) { return r.error; });
-        if (errors.length > 0) {
-            alert('Cleared with some errors. Check console for details.');
-            console.warn('Clear errors:', errors);
+    client.rpc('clear_all_data_rpc').then(function(result) {
+        if (result.error) {
+            alert('Failed to clear: ' + (result.error.message || JSON.stringify(result.error)));
+            console.warn('Clear error:', result.error);
         } else {
-            alert('All Supabase tables cleared successfully! Also clearing local data to keep in sync.');
+            alert('All Supabase data cleared successfully! Also clearing local data to keep in sync.');
             localStorage.removeItem('operator-data');
         }
     }).catch(function(e) {

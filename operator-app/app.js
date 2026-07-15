@@ -291,8 +291,6 @@ function selectProduct(name, packSize) {
 
         document.getElementById('count-product-name').textContent = product.name;
         document.getElementById('count-pack-size').textContent = product.packSize || '';
-        var agi = getProductAgiCode(product.name, product.packSize);
-        document.getElementById('count-agi-code').textContent = agi ? 'AGI: ' + agi : '';
 
         // Reset production month
         document.querySelectorAll('#year-buttons .year-btn').forEach(b => b.classList.remove('selected'));
@@ -638,15 +636,14 @@ function renderInventoryList() {
         const items = groups[key];
         const first = items[0];
         // Group header row
-        html += '<tr class="inv-group-header"><td colspan="5">' + first.product + ' ' + first.packSize + '</td></tr>';
+        html += '<tr class="inv-group-header"><td colspan="4">' + first.product + ' ' + first.packSize + '</td></tr>';
         items.forEach(d => {
             const fefoClass = highlighted.has(d.product + '|' + d.packSize + '|' + d.productionMonth) ? ' row-fefo-highlight' : '';
-            var agi = getProductAgiCode(d.product, d.packSize);
-            html += '<tr class="' + fefoClass + '"><td>' + d.product + '</td><td>' + d.packSize + '</td><td>' + (agi || '\u2014') + '</td><td>' + d.productionMonth + '</td><td>' + d.quantity + '</td></tr>';
+            html += '<tr class="' + fefoClass + '"><td>' + d.product + '</td><td>' + d.packSize + '</td><td>' + d.productionMonth + '</td><td>' + d.quantity + '</td></tr>';
         });
     }
 
-    tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted);">No results found</td></tr>';
+    tbody.innerHTML = html || '<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-muted);">No results found</td></tr>';
 }
 
 // ==================== TRANSACTIONS (Receive / Dispatch) ====================
@@ -846,8 +843,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.syncManager) {
         window.syncManager.init();
         window.syncManager.pullConfig().then(function() {
+            return window.syncManager.pullProducts();
+        }).then(function() {
+            loadSyncedProducts();
             return window.syncManager.pullFromSupabase().then(function() {
                 loadFromStorage();
+                // Rebuild product list UI after loading synced products
+                initProductList();
             });
         });
         window.syncManager.onSync(() => {
