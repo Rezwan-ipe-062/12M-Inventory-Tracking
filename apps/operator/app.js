@@ -17,7 +17,9 @@ const state = {
 
 // Load config from admin panel (localStorage)
 var DEFAULT_OP_CONFIG = {
-    operatorPins: [],
+    operatorPins: [
+        { name: 'Default', pin: '1234', warehouse: 'Chittagong' }
+    ],
     expiryYears: { start: 2025, end: 2030 },
     prodYears: { start: 5, end: 6 },
     warehouses: ['Chittagong', 'Gazipur', 'Jessore', 'Bogura']
