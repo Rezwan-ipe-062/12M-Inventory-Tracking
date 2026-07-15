@@ -54,6 +54,8 @@
 
             if (navigator.onLine && !isSyncing && supabase) {
                 syncManager.syncAll();
+            } else if (navigator.onLine && isSyncing && supabase) {
+                syncManager._retryNeeded = true;
             }
         },
 
@@ -106,19 +108,26 @@
 
             Promise.all(promises)
                 .then(function () {
-                    if (opData.transactions) {
-                        opData.transactions = opData.transactions.map(function (t) {
-                            t.sync_status = 'synced';
-                            return t;
+                    var currentData = loadRaw('operator-data') || opData;
+                    var syncedTx = {};
+                    pendingTx.forEach(function (t) { syncedTx[t.timestamp] = true; });
+                    var syncedInv = {};
+                    pendingInv.forEach(function (i) {
+                        var k = (i.product || '') + '|' + (i.packSize || '') + '|' + (i.productionMonth || '') + '|' + (i.warehouse || '');
+                        syncedInv[k] = true;
+                    });
+                    if (currentData.transactions) {
+                        currentData.transactions.forEach(function (t) {
+                            if (syncedTx[t.timestamp]) t.sync_status = 'synced';
                         });
                     }
-                    if (opData.inventory) {
-                        opData.inventory = opData.inventory.map(function (i) {
-                            i.sync_status = 'synced';
-                            return i;
+                    if (currentData.inventory) {
+                        currentData.inventory.forEach(function (i) {
+                            var k = (i.product || '') + '|' + (i.packSize || '') + '|' + (i.productionMonth || '') + '|' + (i.warehouse || '');
+                            if (syncedInv[k]) i.sync_status = 'synced';
                         });
                     }
-                    localStorage.setItem('operator-data', JSON.stringify(opData));
+                    localStorage.setItem('operator-data', JSON.stringify(currentData));
                     syncCallbacks.forEach(function (cb) { try { cb(); } catch (e) {} });
                 })
                 .catch(function (e) {
@@ -126,6 +135,10 @@
                 })
                 .finally(function () {
                     isSyncing = false;
+                    if (syncManager._retryNeeded) {
+                        syncManager._retryNeeded = false;
+                        syncManager.syncAll();
+                    }
                 });
         }
     };
