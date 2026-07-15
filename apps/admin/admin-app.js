@@ -1049,7 +1049,10 @@ function saveProdYears() {
 function renderWarehouseList() {
     const list = document.getElementById('warehouse-list');
     list.innerHTML = CONFIG.warehouses.map((w, i) =>
-        '<div class="settings-wh-row"><span class="wh-name">' + w + '</span><button class="wh-remove" onclick="removeWarehouse(' + i + ')">Remove</button></div>'
+        '<div class="settings-wh-row"><span class="wh-name">' + w + '</span>' +
+        '<div style="display:flex;gap:6px;">' +
+        '<button class="wh-delete-data" onclick="clearLocalDataForWarehouse(\'' + w.replace(/'/g, "\\'") + '\')">Delete Data</button>' +
+        '<button class="wh-remove" onclick="removeWarehouse(' + i + ')">Remove</button></div></div>'
     ).join('');
 }
 
@@ -1098,6 +1101,22 @@ function clearLocalData() {
     alert('Local data cleared. Note: auto-sync may re-download data from the cloud. Use "Clear Supabase Data" first to fully reset.');
 }
 
+function clearLocalDataForWarehouse(warehouse) {
+    if (!confirm('Delete all local data for "' + warehouse + '"? This cannot be undone.')) return;
+    try {
+        var raw = localStorage.getItem('operator-data');
+        if (!raw) { alert('No local data found.'); return; }
+        var data = JSON.parse(raw);
+        data.transactions = (data.transactions || []).filter(function(t) { return t.warehouse !== warehouse; });
+        data.inventory = (data.inventory || []).filter(function(i) { return i.warehouse !== warehouse; });
+        localStorage.setItem('operator-data', JSON.stringify(data));
+        renderAll();
+        alert('Cleared local data for "' + warehouse + '".');
+    } catch (e) {
+        alert('Error clearing data: ' + e.message);
+    }
+}
+
 function clearSupabaseData() {
     if (!confirm('Delete ALL data from Supabase cloud? This will clear tables: transactions, inventory, config.')) return;
     if (!confirm('FINAL WARNING: This removes ALL data from the cloud database. Continue?')) return;
@@ -1116,8 +1135,10 @@ function clearSupabaseData() {
             alert('Failed to clear: ' + (result.error.message || JSON.stringify(result.error)));
             console.warn('Clear error:', result.error);
         } else {
-            alert('All Supabase data cleared successfully! Also clearing local data to keep in sync.');
+            alert('All Supabase data cleared successfully! Re-saving config and products.');
             localStorage.removeItem('operator-data');
+            saveConfig(CONFIG);
+            syncProducts();
         }
     }).catch(function(e) {
         alert('Failed to clear: ' + (e.message || e));

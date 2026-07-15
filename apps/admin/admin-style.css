@@ -310,6 +310,16 @@
             color:var(--red);
         }
         .settings-wh-row .wh-remove:hover { background:#fee2e2; }
+        .settings-wh-row .wh-delete-data {
+            background:none;
+            border:1px solid #DC2626;
+            color:#DC2626;
+            padding:4px 10px;
+            border-radius:6px;
+            font-size:12px;
+            cursor:pointer;
+        }
+        .settings-wh-row .wh-delete-data:hover { background:#FEF2F2; }
 
         .stat-sub {
             font-size: 12px;
