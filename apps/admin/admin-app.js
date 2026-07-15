@@ -353,7 +353,7 @@ function showScreen(id, btn) {
     document.getElementById('page-title').textContent = titles[id] || 'Dashboard';
 
     if (id === 'screen-dashboard') renderDashboard();
-    if (id === 'screen-activity') renderActivity(currentActivityFilter);
+    if (id === 'screen-activity') { renderActivityWarehouseChips(); renderActivity(currentActivityFilter); }
     if (id === 'screen-inventory') renderInventory();
     if (id === 'screen-12m') render12M(currentFilter || 'all');
     if (id === 'screen-products') renderProducts();
@@ -648,11 +648,32 @@ function filter12M(filter, btn) {
 // ACTIVITY LOG
 // ==============================
 let currentActivityFilter = 'all';
+let activityWhFilter = 'all';
+
+function renderActivityWarehouseChips() {
+    const container = document.getElementById('activity-wh-chips');
+    if (!container) return;
+    const chips = CONFIG.warehouses.map(w =>
+        '<button class="wh-filter-chip ' + (activityWhFilter === w ? 'active' : '') + '" onclick="filterActivityWh(\'' + w + '\', this)">' + w + '</button>'
+    ).join('');
+    container.innerHTML = '<button class="wh-filter-chip ' + (activityWhFilter === 'all' ? 'active' : '') + '" onclick="filterActivityWh(\'all\', this)">All</button>' + chips;
+}
+
+function filterActivityWh(warehouse, btn) {
+    activityWhFilter = warehouse;
+    document.querySelectorAll('#screen-activity .wh-filter-chip').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderActivity(currentActivityFilter);
+}
 
 function renderActivity(filter) {
     const tbody = document.getElementById('tbody-activity');
     const opData = loadOperatorData();
-    let txs = filterByWarehouse(opData.transactions || []);
+    let txs = opData.transactions || [];
+
+    if (activityWhFilter !== 'all') {
+        txs = txs.filter(d => d.warehouse === activityWhFilter);
+    }
 
     if (filter !== 'all') {
         const typeMap = { 'add': 'receive', 'sub': 'dispatch' };
@@ -1162,6 +1183,7 @@ function renderAll() {
     renderDashboard();
     render12M('all');
     renderInventory();
+    renderActivityWarehouseChips();
     renderActivity('all');
     renderProducts();
     renderSettings();
@@ -1170,6 +1192,7 @@ function renderAll() {
 }
 
 function initApp() {
+    renderAll(); // Show localStorage data immediately before async pull
     if (window.syncManager) {
         window.syncManager.init();
         (window.syncManager.pullConfig ? window.syncManager.pullConfig() : Promise.resolve()).then(function() {
@@ -1192,14 +1215,18 @@ function startAutoRefresh() {
     if (_refreshInterval) clearInterval(_refreshInterval);
     _refreshInterval = setInterval(function() {
         if (window.syncManager && window.syncManager.pullFromSupabase) {
-            window.syncManager.pullFromSupabase();
+            window.syncManager.pullFromSupabase().then(function() {
+                refreshCurrentScreen();
+            });
         }
     }, 15000);
 }
 
 function manualRefresh() {
     if (window.syncManager && window.syncManager.pullFromSupabase) {
-        window.syncManager.pullFromSupabase();
+        window.syncManager.pullFromSupabase().then(function() {
+            refreshCurrentScreen();
+        });
     }
 }
 
@@ -1219,7 +1246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (document.getElementById('screen-dashboard').classList.contains('active')) renderDashboard();
             if (document.getElementById('screen-12m').classList.contains('active')) render12M(currentFilter);
             if (document.getElementById('screen-inventory').classList.contains('active')) renderInventory();
-            if (document.getElementById('screen-activity').classList.contains('active')) renderActivity(currentActivityFilter);
+            if (document.getElementById('screen-activity').classList.contains('active')) { renderActivityWarehouseChips(); renderActivity(currentActivityFilter); }
         });
     }
 });
@@ -1230,7 +1257,7 @@ window.addEventListener('storage', function(e) {
         if (document.getElementById('screen-dashboard').classList.contains('active')) renderDashboard();
         if (document.getElementById('screen-12m').classList.contains('active')) render12M(currentFilter);
         if (document.getElementById('screen-inventory').classList.contains('active')) renderInventory();
-        if (document.getElementById('screen-activity').classList.contains('active')) renderActivity(currentActivityFilter);
+        if (document.getElementById('screen-activity').classList.contains('active')) { renderActivityWarehouseChips(); renderActivity(currentActivityFilter); }
     }
 });
 

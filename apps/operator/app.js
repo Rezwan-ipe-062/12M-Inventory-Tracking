@@ -852,6 +852,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadFromStorage();
                 // Rebuild product list UI after loading synced products
                 initProductList();
+                // Sync any pending items only after pull completes
+                if (navigator.onLine) window.syncManager.syncAll();
             });
         });
         window.syncManager.onSync(() => {

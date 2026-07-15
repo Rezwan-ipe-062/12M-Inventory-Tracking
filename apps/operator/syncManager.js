@@ -31,10 +31,6 @@
             window.addEventListener('online', function () {
                 syncManager.syncAll();
             });
-
-            if (navigator.onLine) {
-                setTimeout(function () { syncManager.syncAll(); }, 3000);
-            }
         },
 
         onSync: function (cb) {
@@ -155,6 +151,8 @@
                 var cfg = loadRaw('shelf-life-config');
                 if (cfg && cfg._lastReset) {
                     localStorage.removeItem('operator-data');
+                    syncCallbacks.forEach(function (cb) { try { cb(); } catch (e) {} });
+                    return;
                 } else {
                     syncCallbacks.forEach(function (cb) { try { cb(); } catch (e) {} });
                     return;
@@ -200,11 +198,17 @@
                 })()
             };
 
-            // Merge with local — keep any pending items not yet pushed
+            // Merge transactions: keep all local + new Supabase rows (dedup by timestamp)
+            // Prevents history loss when Supabase transactions table is empty but inventory exists
             if (localData) {
-                var localPendingTx = (localData.transactions || []).filter(function (t) { return t.sync_status === 'pending'; });
+                var localTxns = localData.transactions || [];
+                var supabaseTxKeys = {};
+                pulled.transactions.forEach(function (t) { supabaseTxKeys[t.timestamp] = true; });
+                var unmatchedLocal = localTxns.filter(function (t) { return !supabaseTxKeys[t.timestamp]; });
+                pulled.transactions = pulled.transactions.concat(unmatchedLocal);
+
+                // Inventory: keep pending items not yet pushed (re-aggregation handles rest)
                 var localPendingInv = (localData.inventory || []).filter(function (i) { return i.sync_status === 'pending'; });
-                pulled.transactions = pulled.transactions.concat(localPendingTx);
                 pulled.inventory = pulled.inventory.concat(localPendingInv);
             }
 

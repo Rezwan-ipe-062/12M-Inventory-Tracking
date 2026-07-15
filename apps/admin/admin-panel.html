@@ -260,6 +260,9 @@
                         <button class="filter-btn active" onclick="filterActivity('all', this)">All</button>
                         <button class="filter-btn" onclick="filterActivity('add', this)" style="border-color:#16A34A;color:#16A34A;">Additions +</button>
                         <button class="filter-btn" onclick="filterActivity('sub', this)" style="border-color:#DC2626;color:#DC2626;">Subtractions −</button>
+                        <span class="filter-separator"></span>
+                        <span class="filter-label">Warehouse:</span>
+                        <span id="activity-wh-chips"></span>
                         <span class="filter-count" id="activity-count">Showing 16 entries</span>
                         <button class="filter-btn export-btn" onclick="exportActivity()">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
