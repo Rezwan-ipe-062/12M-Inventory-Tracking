@@ -255,26 +255,39 @@
                         </div>
                     </div>
 
-                    <div class="kpi-row">
-                        <div class="kpi-card">
-                            <div class="kpi-label">LM Total</div>
-                            <div class="kpi-value" id="kpi-lm-total">--</div>
+                    <div class="monthly-kpi-comparison">
+                        <div class="comparison-card lm-card">
+                            <div class="comparison-label">Last Month</div>
+                            <div class="comparison-value" id="kpi-lm-total">--</div>
+                            <div class="comparison-month" id="kpi-lm-month"></div>
                         </div>
-                        <div class="kpi-card">
-                            <div class="kpi-label">CM Total</div>
-                            <div class="kpi-value" id="kpi-cm-total">--</div>
+                        <div class="comparison-arrow">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                         </div>
-                        <div class="kpi-card">
-                            <div class="kpi-label">MoM Change</div>
-                            <div class="kpi-value" id="kpi-mom-change">--</div>
+                        <div class="comparison-card cm-card">
+                            <div class="comparison-label">Current Month</div>
+                            <div class="comparison-value" id="kpi-cm-total">--</div>
+                            <div class="comparison-month" id="kpi-cm-month"></div>
                         </div>
-                        <div class="kpi-card">
-                            <div class="kpi-label">Expired</div>
+                        <div class="comparison-delta" id="kpi-mom-change">
+                            <div class="delta-label">Change</div>
+                            <div class="delta-value">--</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);">
+                        <div class="kpi-card expired-card">
+                            <div class="kpi-label">Expired Stock</div>
                             <div class="kpi-value" id="kpi-expired">--</div>
+                            <div class="kpi-sub" id="kpi-expired-month"></div>
                         </div>
                         <div class="kpi-card">
-                            <div class="kpi-label">≤6 Mo / 7-12 Mo</div>
-                            <div class="kpi-value" id="kpi-bucket-split" style="font-size:13px;">--</div>
+                            <div class="kpi-label">≤6 Months</div>
+                            <div class="kpi-value" id="kpi-short-total">--</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">7-12 Months</div>
+                            <div class="kpi-value" id="kpi-medium-total">--</div>
                         </div>
                     </div>
 
@@ -288,13 +301,12 @@
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Pack Size</th>
+                                    <th>Product</th>
                                     <th>Prod Month</th>
                                     <th>LM Qty</th>
                                     <th>CM Qty</th>
                                     <th>Δ</th>
                                     <th>Δ%</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody id="bucket-expired-body"></tbody>
@@ -305,13 +317,12 @@
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Pack Size</th>
+                                    <th>Product</th>
                                     <th>Prod Month</th>
                                     <th>LM Qty</th>
                                     <th>CM Qty</th>
                                     <th>Δ</th>
                                     <th>Δ%</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody id="bucket-short-body"></tbody>
@@ -322,13 +333,12 @@
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Pack Size</th>
+                                    <th>Product</th>
                                     <th>Prod Month</th>
                                     <th>LM Qty</th>
                                     <th>CM Qty</th>
                                     <th>Δ</th>
                                     <th>Δ%</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody id="bucket-medium-body"></tbody>

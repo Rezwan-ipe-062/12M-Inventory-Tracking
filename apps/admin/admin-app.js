@@ -960,8 +960,9 @@ function exportProducts() {
 // ==============================
 
 function formatMonth(ym) {
-    if (!ym) return '';
+    if (!ym) return '\u2014';
     var d = new Date(ym + '-01');
+    if (isNaN(d.getTime())) return '\u2014';
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return months[d.getMonth()] + ' ' + d.getFullYear();
 }
@@ -991,7 +992,7 @@ function initMonthlyReportDropdowns(availableMonths) {
 function indexByProduct(rows) {
     var idx = {};
     (rows || []).forEach(function (r) {
-        var key = (r.pack_size || '') + '|' + (r.production_month || '');
+        var key = (r.product || '') + '|' + (r.pack_size || '') + '|' + (r.production_month || '');
         idx[key] = (idx[key] || 0) + (r.quantity || 0);
     });
     return idx;
@@ -1003,6 +1004,7 @@ function renderMonthlyReport() {
     if (typeof syncManager === 'undefined' || !syncManager.getMonthlySnapshots) { showNoData(); return; }
     syncManager.getMonthlySnapshots().then(function (snapshots) {
         snapshots = snapshots || [];
+        snapshots = filterByWarehouse(snapshots);
         var monthSet = {};
         snapshots.forEach(function (s) { monthSet[s.snapshot_month] = true; });
         var availableMonths = Object.keys(monthSet).sort();
@@ -1021,13 +1023,24 @@ function renderMonthlyReport() {
 }
 
 function showNoData() {
-    ['kpi-lm-total','kpi-cm-total','kpi-mom-change','kpi-expired','kpi-bucket-split'].forEach(function (id) {
-        var el = document.getElementById(id);
-        if (el) el.textContent = '--';
-    });
+    setText('kpi-lm-total', '--');
+    setText('kpi-lm-month', '');
+    setText('kpi-cm-total', '--');
+    setText('kpi-cm-month', '');
+    setText('kpi-expired', '--');
+    setText('kpi-expired-month', '');
+    setText('kpi-short-total', '--');
+    setText('kpi-medium-total', '--');
+    var deltaEl = document.getElementById('kpi-mom-change');
+    if (deltaEl) {
+        var dv = deltaEl.querySelector('.delta-value');
+        if (dv) dv.textContent = '--';
+        var dl = deltaEl.querySelector('.delta-label');
+        if (dl) dl.textContent = 'Change';
+    }
     ['bucket-expired-body','bucket-short-body','bucket-medium-body'].forEach(function (id) {
         var el = document.getElementById(id);
-        if (el) el.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshot data. Click "Capture Snapshot" to record inventory.</td></tr>';
+        if (el) el.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshot data. Click "Capture Snapshot" to record inventory.</td></tr>';
     });
 }
 
@@ -1036,7 +1049,7 @@ function renderSingleMonth(snapshots, month) {
     var expired = monthSnaps.filter(function (s) { return (s.age_months || 0) >= 12; });
     var short = monthSnaps.filter(function (s) { return (s.age_months || 0) >= 6 && (s.age_months || 0) < 12; });
     var medium = monthSnaps.filter(function (s) { return (s.age_months || 0) >= 0 && (s.age_months || 0) < 6; });
-    updateKPIs_SingleMonth(monthSnaps, expired, short, medium);
+    updateKPIs_SingleMonth(monthSnaps, expired, short, medium, month);
     renderBucket_SingleMonth(expired, 'bucket-expired-body');
     renderBucket_SingleMonth(short, 'bucket-short-body');
     renderBucket_SingleMonth(medium, 'bucket-medium-body');
@@ -1051,7 +1064,7 @@ function renderComparison(snapshots, lmMonth, cmMonth) {
     var cmExpired = cmSnaps.filter(function (s) { return (s.age_months || 0) >= 12; });
     var cmShort = cmSnaps.filter(function (s) { return (s.age_months || 0) >= 6 && (s.age_months || 0) < 12; });
     var cmMedium = cmSnaps.filter(function (s) { return (s.age_months || 0) >= 0 && (s.age_months || 0) < 6; });
-    updateKPIs_Comparison(lmSnaps, cmSnaps, lmExpired, cmExpired, lmShort, cmShort, lmMedium, cmMedium);
+    updateKPIs_Comparison(lmSnaps, cmSnaps, lmExpired, cmExpired, lmShort, cmShort, lmMedium, cmMedium, lmMonth, cmMonth);
     renderBucket_Comparison(lmExpired, cmExpired, 'bucket-expired-body');
     renderBucket_Comparison(lmShort, cmShort, 'bucket-short-body');
     renderBucket_Comparison(lmMedium, cmMedium, 'bucket-medium-body');
@@ -1062,29 +1075,47 @@ function setText(id, text) {
     if (el) el.textContent = text;
 }
 
-function updateKPIs_SingleMonth(allSnaps, expired, short, medium) {
+function updateKPIs_SingleMonth(allSnaps, expired, short, medium, month) {
     var total = allSnaps.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
+    var shortQty = short.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
+    var medQty = medium.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
+    var expQty = expired.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
     setText('kpi-lm-total', '--');
+    setText('kpi-lm-month', '');
     setText('kpi-cm-total', total.toLocaleString() + ' ct');
-    setText('kpi-mom-change', 'Single month (no comparison)');
-    setText('kpi-expired', expired.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' ct');
-    setText('kpi-bucket-split',
-        '\u22646mo: ' + short.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() +
-        ' | 7-12mo: ' + medium.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString());
+    setText('kpi-cm-month', formatMonth(month));
+    var deltaEl = document.getElementById('kpi-mom-change');
+    if (deltaEl) {
+        var dv = deltaEl.querySelector('.delta-value');
+        if (dv) { dv.textContent = 'Single Month'; dv.style.color = ''; }
+        var dl = deltaEl.querySelector('.delta-label');
+        if (dl) dl.textContent = 'Mode';
+    }
+    setText('kpi-expired', expQty.toLocaleString() + ' ct');
+    setText('kpi-expired-month', '');
+    setText('kpi-short-total', shortQty.toLocaleString() + ' ct');
+    setText('kpi-medium-total', medQty.toLocaleString() + ' ct');
 }
 
-function updateKPIs_Comparison(lmSnaps, cmSnaps, lmExp, cmExp, lmShort, cmShort, lmMed, cmMed) {
+function updateKPIs_Comparison(lmSnaps, cmSnaps, lmExp, cmExp, lmShort, cmShort, lmMed, cmMed, lmMonth, cmMonth) {
     var lmTotal = lmSnaps.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
     var cmTotal = cmSnaps.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
     var diff = cmTotal - lmTotal;
     var pct = lmTotal > 0 ? ((diff / lmTotal) * 100) : 0;
     setText('kpi-lm-total', lmTotal.toLocaleString() + ' ct');
+    setText('kpi-lm-month', formatMonth(lmMonth));
     setText('kpi-cm-total', cmTotal.toLocaleString() + ' ct');
-    var sign = diff >= 0 ? '+' : '';
-    var momEl = document.getElementById('kpi-mom-change');
-    if (momEl) {
-        momEl.textContent = sign + diff.toLocaleString() + ' (' + sign + pct.toFixed(1) + '%)';
-        momEl.style.color = diff <= 0 ? '#16A34A' : '#DC2626';
+    setText('kpi-cm-month', formatMonth(cmMonth));
+    var deltaEl = document.getElementById('kpi-mom-change');
+    if (deltaEl) {
+        var dv = deltaEl.querySelector('.delta-value');
+        if (dv) {
+            var sign = diff >= 0 ? '+' : '';
+            dv.textContent = sign + diff.toLocaleString() + ' (' + sign + pct.toFixed(1) + '%)';
+            dv.style.color = diff <= 0 ? '#16A34A' : '#DC2626';
+        }
+        var dl = deltaEl.querySelector('.delta-label');
+        if (dl) dl.textContent = diff <= 0 ? 'Reduction' : 'Increase';
     }
     var expLM = lmExp.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
     var expCM = cmExp.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
@@ -1094,11 +1125,9 @@ function updateKPIs_Comparison(lmSnaps, cmSnaps, lmExp, cmExp, lmShort, cmShort,
         expStr += ' (' + (expDiff >= 0 ? '+' : '') + expDiff.toLocaleString() + ')';
     }
     setText('kpi-expired', expStr);
-    setText('kpi-bucket-split',
-        '\u22646mo: ' + lmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() +
-        ' \u2192 ' + cmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() +
-        ' | 7-12mo: ' + lmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() +
-        ' \u2192 ' + cmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString());
+    setText('kpi-expired-month', '');
+    setText('kpi-short-total', lmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' \u2192 ' + cmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' ct');
+    setText('kpi-medium-total', lmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' \u2192 ' + cmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' ct');
 }
 
 function renderBucket_Comparison(lmRows, cmRows, bodyId) {
@@ -1111,7 +1140,7 @@ function renderBucket_Comparison(lmRows, cmRows, bodyId) {
     Object.keys(cmIdx).forEach(function (k) { allKeys[k] = true; });
     var keys = Object.keys(allKeys);
     if (keys.length === 0) {
-        body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
+        body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
         return;
     }
     var items = keys.map(function (key) {
@@ -1120,8 +1149,7 @@ function renderBucket_Comparison(lmRows, cmRows, bodyId) {
         var cmQty = cmIdx[key] || 0;
         var delta = cmQty - lmQty;
         var deltaPct = lmQty > 0 ? ((delta / lmQty) * 100).toFixed(1) : (cmQty > 0 ? 'new' : '0.0');
-        var status = lmQty === 0 && cmQty > 0 ? 'New' : (lmQty > 0 && cmQty === 0 ? 'Cleared' : (delta < 0 ? 'Reduced' : (delta > 0 ? 'Increased' : 'No change')));
-        return { packSize: parts[0] || '', prodMonth: parts[1] || '', lmQty: lmQty, cmQty: cmQty, delta: delta, deltaPct: deltaPct, status: status };
+        return { product: parts[0] || '', packSize: parts[1] || '', prodMonth: parts[2] || '', lmQty: lmQty, cmQty: cmQty, delta: delta, deltaPct: deltaPct };
     });
     items.sort(function (a, b) { return b.cmQty - a.cmQty; });
     var lmTotal = 0, cmTotal = 0;
@@ -1132,14 +1160,15 @@ function renderBucket_Comparison(lmRows, cmRows, bodyId) {
         if (r.deltaPct === 'new') dsp = 'New';
         else if (r.deltaPct === '0.0') dsp = '\u2014';
         else dsp = (r.delta > 0 ? '+' : '') + r.deltaPct + '%';
-        return '<tr><td>' + r.packSize + '</td><td>' + formatMonth(r.prodMonth) + '</td><td>' + r.lmQty.toLocaleString() +
+        var displayName = r.product ? r.product + ' ' + r.packSize : r.packSize;
+        return '<tr><td>' + displayName + '</td><td>' + formatMonth(r.prodMonth) + '</td><td>' + r.lmQty.toLocaleString() +
             '</td><td>' + r.cmQty.toLocaleString() + '</td><td class="' + cls + '">' + (r.delta > 0 ? '+' : '') +
-            r.delta.toLocaleString() + '</td><td class="' + cls + '">' + dsp + '</td><td>' + r.status + '</td></tr>';
+            r.delta.toLocaleString() + '</td><td class="' + cls + '">' + dsp + '</td></tr>';
     }).join('') +
     '<tr class="total-row"><td><strong>Total</strong></td><td></td><td><strong>' + lmTotal.toLocaleString() +
     '</strong></td><td><strong>' + cmTotal.toLocaleString() + '</strong></td><td><strong>' +
     (cmTotal - lmTotal > 0 ? '+' : '') + (cmTotal - lmTotal).toLocaleString() + '</strong></td><td><strong>' +
-    (lmTotal > 0 ? ((cmTotal - lmTotal) / lmTotal * 100).toFixed(1) + '%' : '\u2014') + '</strong></td><td></td></tr>';
+    (lmTotal > 0 ? ((cmTotal - lmTotal) / lmTotal * 100).toFixed(1) + '%' : '\u2014') + '</strong></td></tr>';
 }
 
 function renderBucket_SingleMonth(rows, bodyId) {
@@ -1148,22 +1177,23 @@ function renderBucket_SingleMonth(rows, bodyId) {
     var idx = indexByProduct(rows);
     var keys = Object.keys(idx);
     if (keys.length === 0) {
-        body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
+        body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
         return;
     }
     var items = keys.map(function (k) {
         var parts = k.split('|');
-        return { packSize: parts[0] || '', prodMonth: parts[1] || '', qty: idx[k] };
+        return { product: parts[0] || '', packSize: parts[1] || '', prodMonth: parts[2] || '', qty: idx[k] };
     });
     items.sort(function (a, b) { return b.qty - a.qty; });
     var total = 0;
     body.innerHTML = items.map(function (r) {
         total += r.qty;
-        return '<tr><td>' + r.packSize + '</td><td>' + formatMonth(r.prodMonth) + '</td><td>\u2014</td><td>' +
-            r.qty.toLocaleString() + '</td><td>\u2014</td><td>\u2014</td><td>Current</td></tr>';
+        var displayName = r.product ? r.product + ' ' + r.packSize : r.packSize;
+        return '<tr><td>' + displayName + '</td><td>' + formatMonth(r.prodMonth) + '</td><td>\u2014</td><td>' +
+            r.qty.toLocaleString() + '</td><td>\u2014</td><td>\u2014</td></tr>';
     }).join('') +
     '<tr class="total-row"><td><strong>Total</strong></td><td></td><td></td><td><strong>' +
-    total.toLocaleString() + '</strong></td><td></td><td></td><td></td></tr>';
+    total.toLocaleString() + '</strong></td><td></td><td></td></tr>';
 }
 
 function exportMonthlyReport() {
@@ -1174,12 +1204,12 @@ function exportMonthlyReport() {
     ];
     var csv = 'Monthly Report: MoM Comparison\nGenerated: ' + new Date().toLocaleString() + '\n\n';
     sections.forEach(function (sec) {
-        csv += '### ' + sec.name + '\nPack Size,Prod Month,LM Qty,CM Qty,Delta,Delta%,Status\n';
+        csv += '### ' + sec.name + '\nProduct,Prod Month,LM Qty,CM Qty,Delta,Delta%\n';
         var body = document.getElementById(sec.bodyId);
         if (body) {
             body.querySelectorAll('tr').forEach(function (tr) {
                 var cells = tr.querySelectorAll('td');
-                if (cells.length >= 7) {
+                if (cells.length >= 6) {
                     csv += Array.from(cells).map(function (c) {
                         return '"' + c.textContent.trim().replace(/"/g, '""') + '"';
                     }).join(',') + '\n';
@@ -1220,8 +1250,8 @@ function captureMonthlySnapshot() {
     var rows = [];
     var agg = {};
     inventory.filter(i => i.quantity > 0).forEach(item => {
-        var key = item.packSize + '|' + (item.productionMonth || '');
-        if (!agg[key]) agg[key] = { packSize: item.packSize, productionMonth: item.productionMonth || '', quantity: 0 };
+        var key = (item.product || '') + '|' + item.packSize + '|' + (item.productionMonth || '');
+        if (!agg[key]) agg[key] = { product: item.product || '', packSize: item.packSize, productionMonth: item.productionMonth || '', quantity: 0 };
         agg[key].quantity += (item.quantity || 0);
     });
     Object.values(agg).forEach(item => {
@@ -1232,7 +1262,7 @@ function captureMonthlySnapshot() {
         }
         rows.push({
             snapshot_month: snapshotMonth,
-            product: 'All Products',
+            product: item.product,
             pack_size: item.packSize,
             production_month: item.productionMonth,
             warehouse: warehouse,
@@ -1248,27 +1278,6 @@ function captureMonthlySnapshot() {
         }
         renderMonthlyReport();
     });
-}
-
-function exportMonthlyReport() {
-    var summaryBody = document.getElementById('monthly-summary-body');
-    var flowBody = document.getElementById('monthly-flow-body');
-    if (!summaryBody || !flowBody) return;
-    var csv = 'Monthly Report\nMonth,Total Qty,0-6 Mo,6-9 Mo,9-12 Mo,12+ Mo,Cum 12M+,% of Total,Disposal Req\n';
-    summaryBody.querySelectorAll('tr').forEach(tr => {
-        var cells = tr.querySelectorAll('td');
-        if (cells.length >= 9) {
-            csv += Array.from(cells).map(c => c.textContent.trim()).join(',') + '\n';
-        }
-    });
-    csv += '\nInventory Flow\nMonth,Opening Stock,Received,Dispatched,Expired/Disposed,Closing Stock\n';
-    flowBody.querySelectorAll('tr').forEach(tr => {
-        var cells = tr.querySelectorAll('td');
-        if (cells.length >= 6) {
-            csv += Array.from(cells).map(c => c.textContent.trim()).join(',') + '\n';
-        }
-    });
-    downloadCSV(csv, 'Monthly_Report_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
 
 // ==============================

@@ -947,3 +947,102 @@
     border-top: 2px solid var(--border);
     font-weight: 600;
 }
+
+/* MONTHLY REPORT KPI COMPARISON CARDS */
+.monthly-kpi-comparison {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+.comparison-card {
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+.lm-card { background: #eef2ff; }
+.cm-card { background: #f0fdf4; }
+.comparison-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+}
+.comparison-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.1;
+}
+.comparison-month {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+.comparison-arrow {
+    font-size: 20px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+}
+.comparison-delta {
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    min-width: 100px;
+}
+.delta-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+}
+.delta-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+.kpi-row {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+}
+.kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+.kpi-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+.kpi-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.expired-card .kpi-value { font-size: 18px; }
+@media (prefers-color-scheme: dark) {
+    .lm-card { background: #1e293b; }
+    .cm-card { background: #0f2d1a; }
+}
