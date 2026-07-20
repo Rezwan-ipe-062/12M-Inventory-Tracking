@@ -979,15 +979,19 @@ function getSnapshotDateRange() {
     return months;
 }
 
+var monthlyDropdownsInitialized = false;
+
 function initMonthlyReportDropdowns() {
     const months = getSnapshotDateRange();
     const startSel = document.getElementById('monthly-start');
     const endSel = document.getElementById('monthly-end');
     if (!startSel || !endSel) return;
+    if (monthlyDropdownsInitialized) return;
     startSel.innerHTML = months.map(m => '<option value="' + m + '">' + formatMonth(m) + '</option>').join('');
     endSel.innerHTML = months.map(m => '<option value="' + m + '">' + formatMonth(m) + '</option>').join('');
     startSel.value = months[0];
     endSel.value = months[months.length - 1];
+    monthlyDropdownsInitialized = true;
 }
 
 function getSnapshotMonths() {
