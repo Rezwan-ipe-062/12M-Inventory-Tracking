@@ -961,167 +961,247 @@ function exportProducts() {
 
 function formatMonth(ym) {
     if (!ym) return '';
-    const d = new Date(ym + '-01');
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var d = new Date(ym + '-01');
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return months[d.getMonth()] + ' ' + d.getFullYear();
 }
 
-function getInventoryByProductMonth(inventory) {
-    const agg = {};
-    inventory.filter(i => i.quantity > 0).forEach(item => {
-        const key = (item.packSize || '') + '|' + (item.productionMonth || '');
-        if (!agg[key]) agg[key] = { packSize: item.packSize, productionMonth: item.productionMonth, quantity: 0 };
-        agg[key].quantity += (item.quantity || 0);
-    });
-    return Object.values(agg);
-}
-
-function getSnapshotDateRange() {
-    const today = new Date();
-    const months = [];
-    for (let i = 11; i >= 0; i--) {
-        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-        months.push(d.toISOString().slice(0, 7));
+function initMonthlyReportDropdowns(availableMonths) {
+    var startSel = document.getElementById('monthly-start');
+    var endSel = document.getElementById('monthly-end');
+    if (!startSel || !endSel || !availableMonths || availableMonths.length === 0) return;
+    var currentOpts = Array.from(startSel.options).map(function (o) { return o.value; }).join(',');
+    var newOpts = availableMonths.join(',');
+    if (currentOpts === newOpts) return;
+    startSel.innerHTML = availableMonths.map(function (m) {
+        return '<option value="' + m + '">' + formatMonth(m) + '</option>';
+    }).join('');
+    endSel.innerHTML = availableMonths.map(function (m) {
+        return '<option value="' + m + '">' + formatMonth(m) + '</option>';
+    }).join('');
+    if (availableMonths.length >= 2) {
+        startSel.value = availableMonths[availableMonths.length - 2];
+        endSel.value = availableMonths[availableMonths.length - 1];
+    } else if (availableMonths.length === 1) {
+        startSel.value = availableMonths[0];
+        endSel.value = availableMonths[0];
     }
-    return months;
 }
 
-var monthlyDropdownsInitialized = false;
-
-function initMonthlyReportDropdowns() {
-    const months = getSnapshotDateRange();
-    const startSel = document.getElementById('monthly-start');
-    const endSel = document.getElementById('monthly-end');
-    if (!startSel || !endSel) return;
-    if (monthlyDropdownsInitialized) return;
-    startSel.innerHTML = months.map(m => '<option value="' + m + '">' + formatMonth(m) + '</option>').join('');
-    endSel.innerHTML = months.map(m => '<option value="' + m + '">' + formatMonth(m) + '</option>').join('');
-    startSel.value = months[0];
-    endSel.value = months[months.length - 1];
-    monthlyDropdownsInitialized = true;
-}
-
-function getSnapshotMonths() {
-    const startSel = document.getElementById('monthly-start');
-    const endSel = document.getElementById('monthly-end');
-    if (!startSel || !endSel) return [];
-    return [startSel.value, endSel.value];
-}
-
-function getSnapshotsByMonth(snapshots, startMonth, endMonth) {
-    const byMonth = {};
-    snapshots.forEach(s => {
-        if (s.snapshot_month >= startMonth && s.snapshot_month <= endMonth) {
-            if (!byMonth[s.snapshot_month]) byMonth[s.snapshot_month] = [];
-            byMonth[s.snapshot_month].push(s);
-        }
+function indexByProduct(rows) {
+    var idx = {};
+    (rows || []).forEach(function (r) {
+        var key = (r.pack_size || '') + '|' + (r.production_month || '');
+        idx[key] = (idx[key] || 0) + (r.quantity || 0);
     });
-    return byMonth;
+    return idx;
 }
 
 function renderMonthlyReport() {
-    const months = getSnapshotDateRange();
-    const now = new Date();
-    const currentMonth = now.toISOString().slice(0, 7);
-    const currentMonthEl = document.getElementById('monthly-current-month');
-    if (currentMonthEl) currentMonthEl.textContent = 'Current Month: ' + formatMonth(currentMonth);
-
-    initMonthlyReportDropdowns();
-
-    if (typeof syncManager !== 'undefined' && syncManager.getMonthlySnapshots) {
-        syncManager.getMonthlySnapshots().then(function (snapshots) {
-            if (!snapshots || snapshots.length === 0) {
-                renderMonthlyReportWithSnapshots([], months[0], months[months.length - 1]);
-                return;
-            }
-            var range = getSnapshotMonths();
-            renderMonthlyReportWithSnapshots(snapshots, range[0], range[1]);
-        });
-    } else {
-        renderMonthlyReportWithSnapshots([], months[0], months[months.length - 1]);
-    }
-}
-
-function renderMonthlyReportWithSnapshots(snapshots, startMonth, endMonth) {
-    var summaryBody = document.getElementById('monthly-summary-body');
-    var flowBody = document.getElementById('monthly-flow-body');
-    if (!summaryBody || !flowBody) return;
-
-    if (!snapshots || snapshots.length === 0) {
-        summaryBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshots captured yet. Click "Capture Snapshot" to record current month.</td></tr>';
-        flowBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshots captured yet.</td></tr>';
-        updateMonthlyKPIs([], startMonth, endMonth);
-        return;
-    }
-
-    var byMonth = getSnapshotsByMonth(snapshots, startMonth, endMonth);
-    var sortedMonths = Object.keys(byMonth).sort();
-
-    summaryBody.innerHTML = sortedMonths.map(m => {
-        var rows = byMonth[m];
-        var totalQty = rows.reduce((sum, r) => sum + (r.quantity || 0), 0);
-        var count06 = rows.filter(r => (r.age_months || 0) <= 6).reduce((sum, r) => sum + (r.quantity || 0), 0);
-        var count69 = rows.filter(r => (r.age_months || 0) > 6 && (r.age_months || 0) <= 9).reduce((sum, r) => sum + (r.quantity || 0), 0);
-        var count912 = rows.filter(r => (r.age_months || 0) > 9 && (r.age_months || 0) <= 12).reduce((sum, r) => sum + (r.quantity || 0), 0);
-        var count12plus = rows.filter(r => (r.age_months || 0) > 12).reduce((sum, r) => sum + (r.quantity || 0), 0);
-        var cum12plus = count12plus;
-        var pctTotal = totalQty > 0 ? ((count12plus / totalQty) * 100).toFixed(1) : '0.0';
-        var disposal = count12plus > 0 ? count12plus + ' cartons' : '\u2014';
-        return '<tr><td>' + formatMonth(m) + '</td><td>' + totalQty + '</td><td>' + count06 + '</td><td>' + count69 + '</td><td>' + count912 + '</td><td>' + count12plus + '</td><td>' + cum12plus + '</td><td>' + pctTotal + '%</td><td>' + disposal + '</td></tr>';
-    }).join('');
-
-    flowBody.innerHTML = sortedMonths.map((m, idx) => {
-        var rows = byMonth[m];
-        var totalQty = rows.reduce((sum, r) => sum + (r.quantity || 0), 0);
-        var opening = idx > 0 ? byMonth[sortedMonths[idx - 1]].reduce((sum, r) => sum + (r.quantity || 0), 0) : totalQty;
-        var received = (rows.filter(r => r.snapshot_month === m).length > 0 && idx === 0) ? 0 : 0;
-        var dispatched = 0;
-        var expired = 0;
-        var closing = totalQty;
-        return '<tr><td>' + formatMonth(m) + '</td><td>' + opening + '</td><td>' + received + '</td><td>' + dispatched + '</td><td>' + expired + '</td><td>' + closing + '</td></tr>';
-    }).join('');
-
-    updateMonthlyKPIs(snapshots, startMonth, endMonth);
-}
-
-function updateMonthlyKPIs(snapshots, startMonth, endMonth) {
-    var currentTotal = document.getElementById('kpi-current-total');
-    var momChange = document.getElementById('kpi-mom-change');
-    var totalReceived = document.getElementById('kpi-total-received');
-    var totalDispatched = document.getElementById('kpi-total-dispatched');
-
-    if (!snapshots || snapshots.length === 0) {
-        if (currentTotal) currentTotal.textContent = '--';
-        if (momChange) momChange.textContent = '--';
-        if (totalReceived) totalReceived.textContent = '--';
-        if (totalDispatched) totalDispatched.textContent = '--';
-        return;
-    }
-
-    var byMonth = getSnapshotsByMonth(snapshots, startMonth, endMonth);
-    var sortedMonths = Object.keys(byMonth).sort();
-
-    var latestMonth = sortedMonths[sortedMonths.length - 1];
-    var latestTotal = (byMonth[latestMonth] || []).reduce((sum, r) => sum + (r.quantity || 0), 0);
-    if (currentTotal) currentTotal.textContent = latestTotal.toLocaleString() + ' ct';
-
-    if (sortedMonths.length >= 2) {
-        var prevMonth = sortedMonths[sortedMonths.length - 2];
-        var prevTotal = (byMonth[prevMonth] || []).reduce((sum, r) => sum + (r.quantity || 0), 0);
-        var diff = latestTotal - prevTotal;
-        var pct = prevTotal > 0 ? ((diff / prevTotal) * 100).toFixed(1) : '0.0';
-        var sign = diff >= 0 ? '+' : '';
-        if (momChange) {
-            momChange.textContent = sign + diff.toLocaleString() + ' (' + sign + pct + '%)';
-            momChange.style.color = diff >= 0 ? '#16A34A' : '#DC2626';
+    var currentMonthEl = document.getElementById('monthly-current-month');
+    if (currentMonthEl) currentMonthEl.textContent = 'Report: Month-over-Month Comparison';
+    if (typeof syncManager === 'undefined' || !syncManager.getMonthlySnapshots) { showNoData(); return; }
+    syncManager.getMonthlySnapshots().then(function (snapshots) {
+        snapshots = snapshots || [];
+        var monthSet = {};
+        snapshots.forEach(function (s) { monthSet[s.snapshot_month] = true; });
+        var availableMonths = Object.keys(monthSet).sort();
+        if (availableMonths.length === 0) { showNoData(); return; }
+        initMonthlyReportDropdowns(availableMonths);
+        var startSel = document.getElementById('monthly-start');
+        var endSel = document.getElementById('monthly-end');
+        var lmMonth = startSel ? startSel.value : availableMonths[0];
+        var cmMonth = endSel ? endSel.value : availableMonths[availableMonths.length - 1];
+        if (lmMonth === cmMonth) {
+            renderSingleMonth(snapshots, lmMonth);
+        } else {
+            renderComparison(snapshots, lmMonth, cmMonth);
         }
-    } else {
-        if (momChange) momChange.textContent = '--';
-    }
-
-    if (totalReceived) totalReceived.textContent = '\u2014';
-    if (totalDispatched) totalDispatched.textContent = '\u2014';
+    });
 }
+
+function showNoData() {
+    ['kpi-lm-total','kpi-cm-total','kpi-mom-change','kpi-expired','kpi-bucket-split'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = '--';
+    });
+    ['bucket-expired-body','bucket-short-body','bucket-medium-body'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshot data. Click "Capture Snapshot" to record inventory.</td></tr>';
+    });
+}
+
+function renderSingleMonth(snapshots, month) {
+    var monthSnaps = snapshots.filter(function (s) { return s.snapshot_month === month; });
+    var expired = monthSnaps.filter(function (s) { return (s.age_months || 0) >= 12; });
+    var short = monthSnaps.filter(function (s) { return (s.age_months || 0) >= 6 && (s.age_months || 0) < 12; });
+    var medium = monthSnaps.filter(function (s) { return (s.age_months || 0) >= 0 && (s.age_months || 0) < 6; });
+    updateKPIs_SingleMonth(monthSnaps, expired, short, medium);
+    renderBucket_SingleMonth(expired, 'bucket-expired-body');
+    renderBucket_SingleMonth(short, 'bucket-short-body');
+    renderBucket_SingleMonth(medium, 'bucket-medium-body');
+}
+
+function renderComparison(snapshots, lmMonth, cmMonth) {
+    var lmSnaps = snapshots.filter(function (s) { return s.snapshot_month === lmMonth; });
+    var cmSnaps = snapshots.filter(function (s) { return s.snapshot_month === cmMonth; });
+    var lmExpired = lmSnaps.filter(function (s) { return (s.age_months || 0) >= 12; });
+    var lmShort = lmSnaps.filter(function (s) { return (s.age_months || 0) >= 6 && (s.age_months || 0) < 12; });
+    var lmMedium = lmSnaps.filter(function (s) { return (s.age_months || 0) >= 0 && (s.age_months || 0) < 6; });
+    var cmExpired = cmSnaps.filter(function (s) { return (s.age_months || 0) >= 12; });
+    var cmShort = cmSnaps.filter(function (s) { return (s.age_months || 0) >= 6 && (s.age_months || 0) < 12; });
+    var cmMedium = cmSnaps.filter(function (s) { return (s.age_months || 0) >= 0 && (s.age_months || 0) < 6; });
+    updateKPIs_Comparison(lmSnaps, cmSnaps, lmExpired, cmExpired, lmShort, cmShort, lmMedium, cmMedium);
+    renderBucket_Comparison(lmExpired, cmExpired, 'bucket-expired-body');
+    renderBucket_Comparison(lmShort, cmShort, 'bucket-short-body');
+    renderBucket_Comparison(lmMedium, cmMedium, 'bucket-medium-body');
+}
+
+function setText(id, text) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = text;
+}
+
+function updateKPIs_SingleMonth(allSnaps, expired, short, medium) {
+    var total = allSnaps.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
+    setText('kpi-lm-total', '--');
+    setText('kpi-cm-total', total.toLocaleString() + ' ct');
+    setText('kpi-mom-change', 'Single month (no comparison)');
+    setText('kpi-expired', expired.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' ct');
+    setText('kpi-bucket-split',
+        '\u22646mo: ' + short.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() +
+        ' | 7-12mo: ' + medium.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString());
+}
+
+function updateKPIs_Comparison(lmSnaps, cmSnaps, lmExp, cmExp, lmShort, cmShort, lmMed, cmMed) {
+    var lmTotal = lmSnaps.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
+    var cmTotal = cmSnaps.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
+    var diff = cmTotal - lmTotal;
+    var pct = lmTotal > 0 ? ((diff / lmTotal) * 100) : 0;
+    setText('kpi-lm-total', lmTotal.toLocaleString() + ' ct');
+    setText('kpi-cm-total', cmTotal.toLocaleString() + ' ct');
+    var sign = diff >= 0 ? '+' : '';
+    var momEl = document.getElementById('kpi-mom-change');
+    if (momEl) {
+        momEl.textContent = sign + diff.toLocaleString() + ' (' + sign + pct.toFixed(1) + '%)';
+        momEl.style.color = diff <= 0 ? '#16A34A' : '#DC2626';
+    }
+    var expLM = lmExp.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
+    var expCM = cmExp.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
+    var expStr = expLM.toLocaleString() + ' \u2192 ' + expCM.toLocaleString() + ' ct';
+    if (expCM !== expLM) {
+        var expDiff = expCM - expLM;
+        expStr += ' (' + (expDiff >= 0 ? '+' : '') + expDiff.toLocaleString() + ')';
+    }
+    setText('kpi-expired', expStr);
+    setText('kpi-bucket-split',
+        '\u22646mo: ' + lmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() +
+        ' \u2192 ' + cmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() +
+        ' | 7-12mo: ' + lmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() +
+        ' \u2192 ' + cmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString());
+}
+
+function renderBucket_Comparison(lmRows, cmRows, bodyId) {
+    var body = document.getElementById(bodyId);
+    if (!body) return;
+    var lmIdx = indexByProduct(lmRows);
+    var cmIdx = indexByProduct(cmRows);
+    var allKeys = {};
+    Object.keys(lmIdx).forEach(function (k) { allKeys[k] = true; });
+    Object.keys(cmIdx).forEach(function (k) { allKeys[k] = true; });
+    var keys = Object.keys(allKeys);
+    if (keys.length === 0) {
+        body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
+        return;
+    }
+    var items = keys.map(function (key) {
+        var parts = key.split('|');
+        var lmQty = lmIdx[key] || 0;
+        var cmQty = cmIdx[key] || 0;
+        var delta = cmQty - lmQty;
+        var deltaPct = lmQty > 0 ? ((delta / lmQty) * 100).toFixed(1) : (cmQty > 0 ? 'new' : '0.0');
+        var status = lmQty === 0 && cmQty > 0 ? 'New' : (lmQty > 0 && cmQty === 0 ? 'Cleared' : (delta < 0 ? 'Reduced' : (delta > 0 ? 'Increased' : 'No change')));
+        return { packSize: parts[0] || '', prodMonth: parts[1] || '', lmQty: lmQty, cmQty: cmQty, delta: delta, deltaPct: deltaPct, status: status };
+    });
+    items.sort(function (a, b) { return b.cmQty - a.cmQty; });
+    var lmTotal = 0, cmTotal = 0;
+    body.innerHTML = items.map(function (r) {
+        lmTotal += r.lmQty; cmTotal += r.cmQty;
+        var cls = r.delta > 0 ? 'movement-up' : (r.delta < 0 ? 'movement-down' : '');
+        var dsp = '';
+        if (r.deltaPct === 'new') dsp = 'New';
+        else if (r.deltaPct === '0.0') dsp = '\u2014';
+        else dsp = (r.delta > 0 ? '+' : '') + r.deltaPct + '%';
+        return '<tr><td>' + r.packSize + '</td><td>' + formatMonth(r.prodMonth) + '</td><td>' + r.lmQty.toLocaleString() +
+            '</td><td>' + r.cmQty.toLocaleString() + '</td><td class="' + cls + '">' + (r.delta > 0 ? '+' : '') +
+            r.delta.toLocaleString() + '</td><td class="' + cls + '">' + dsp + '</td><td>' + r.status + '</td></tr>';
+    }).join('') +
+    '<tr class="total-row"><td><strong>Total</strong></td><td></td><td><strong>' + lmTotal.toLocaleString() +
+    '</strong></td><td><strong>' + cmTotal.toLocaleString() + '</strong></td><td><strong>' +
+    (cmTotal - lmTotal > 0 ? '+' : '') + (cmTotal - lmTotal).toLocaleString() + '</strong></td><td><strong>' +
+    (lmTotal > 0 ? ((cmTotal - lmTotal) / lmTotal * 100).toFixed(1) + '%' : '\u2014') + '</strong></td><td></td></tr>';
+}
+
+function renderBucket_SingleMonth(rows, bodyId) {
+    var body = document.getElementById(bodyId);
+    if (!body) return;
+    var idx = indexByProduct(rows);
+    var keys = Object.keys(idx);
+    if (keys.length === 0) {
+        body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
+        return;
+    }
+    var items = keys.map(function (k) {
+        var parts = k.split('|');
+        return { packSize: parts[0] || '', prodMonth: parts[1] || '', qty: idx[k] };
+    });
+    items.sort(function (a, b) { return b.qty - a.qty; });
+    var total = 0;
+    body.innerHTML = items.map(function (r) {
+        total += r.qty;
+        return '<tr><td>' + r.packSize + '</td><td>' + formatMonth(r.prodMonth) + '</td><td>\u2014</td><td>' +
+            r.qty.toLocaleString() + '</td><td>\u2014</td><td>\u2014</td><td>Current</td></tr>';
+    }).join('') +
+    '<tr class="total-row"><td><strong>Total</strong></td><td></td><td></td><td><strong>' +
+    total.toLocaleString() + '</strong></td><td></td><td></td><td></td></tr>';
+}
+
+function exportMonthlyReport() {
+    var sections = [
+        { name: 'Expired Stock', bodyId: 'bucket-expired-body' },
+        { name: '\u22646 Months', bodyId: 'bucket-short-body' },
+        { name: '7-12 Months', bodyId: 'bucket-medium-body' }
+    ];
+    var csv = 'Monthly Report: MoM Comparison\nGenerated: ' + new Date().toLocaleString() + '\n\n';
+    sections.forEach(function (sec) {
+        csv += '### ' + sec.name + '\nPack Size,Prod Month,LM Qty,CM Qty,Delta,Delta%,Status\n';
+        var body = document.getElementById(sec.bodyId);
+        if (body) {
+            body.querySelectorAll('tr').forEach(function (tr) {
+                var cells = tr.querySelectorAll('td');
+                if (cells.length >= 7) {
+                    csv += Array.from(cells).map(function (c) {
+                        return '"' + c.textContent.trim().replace(/"/g, '""') + '"';
+                    }).join(',') + '\n';
+                }
+            });
+        }
+        csv += '\n';
+    });
+    downloadCSV(csv, 'Monthly_Report_' + new Date().toISOString().slice(0, 10) + '.csv');
+}
+
+(function initBucketTabs() {
+    document.addEventListener('click', function (e) {
+        var tab = e.target.closest('.bucket-tab');
+        if (!tab) return;
+        document.querySelectorAll('.bucket-tab').forEach(function (b) { b.classList.remove('active'); });
+        tab.classList.add('active');
+        document.querySelectorAll('.bucket-section').forEach(function (s) { s.style.display = 'none'; });
+        var target = document.getElementById('bucket-' + tab.dataset.bucket);
+        if (target) target.style.display = '';
+    });
+})();
 
 function captureMonthlySnapshot() {
     if (typeof syncManager === 'undefined' || !syncManager.saveSnapshot) {

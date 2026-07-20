@@ -257,57 +257,81 @@
 
                     <div class="kpi-row">
                         <div class="kpi-card">
-                            <div class="kpi-label">Current Total</div>
-                            <div class="kpi-value" id="kpi-current-total">--</div>
+                            <div class="kpi-label">LM Total</div>
+                            <div class="kpi-value" id="kpi-lm-total">--</div>
                         </div>
                         <div class="kpi-card">
-                            <div class="kpi-label">Month-over-Month</div>
+                            <div class="kpi-label">CM Total</div>
+                            <div class="kpi-value" id="kpi-cm-total">--</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label">MoM Change</div>
                             <div class="kpi-value" id="kpi-mom-change">--</div>
                         </div>
                         <div class="kpi-card">
-                            <div class="kpi-label">Total Received (Period)</div>
-                            <div class="kpi-value" id="kpi-total-received">--</div>
+                            <div class="kpi-label">Expired</div>
+                            <div class="kpi-value" id="kpi-expired">--</div>
                         </div>
                         <div class="kpi-card">
-                            <div class="kpi-label">Total Dispatched (Period)</div>
-                            <div class="kpi-value" id="kpi-total-dispatched">--</div>
+                            <div class="kpi-label">≤6 Mo / 7-12 Mo</div>
+                            <div class="kpi-value" id="kpi-bucket-split" style="font-size:13px;">--</div>
                         </div>
                     </div>
 
-                    <div class="table-wrap" style="margin-bottom:24px;">
-                        <div style="padding:16px 20px;font-weight:600;font-size:14px;border-bottom:1px solid var(--border);">Inventory by Month</div>
+                    <div class="bucket-tabs">
+                        <button class="bucket-tab active" data-bucket="expired">Expired</button>
+                        <button class="bucket-tab" data-bucket="short">≤6 Months</button>
+                        <button class="bucket-tab" data-bucket="medium">7-12 Months</button>
+                    </div>
+
+                    <div class="table-wrap bucket-section" id="bucket-expired">
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Month</th>
-                                    <th>Total Qty</th>
-                                    <th>0-6 Mo</th>
-                                    <th>6-9 Mo</th>
-                                    <th>9-12 Mo</th>
-                                    <th>12+ Mo</th>
-                                    <th>Cum. 12M+</th>
-                                    <th>% of Total</th>
-                                    <th>Disposal Req.</th>
+                                    <th>Pack Size</th>
+                                    <th>Prod Month</th>
+                                    <th>LM Qty</th>
+                                    <th>CM Qty</th>
+                                    <th>Δ</th>
+                                    <th>Δ%</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="monthly-summary-body"></tbody>
+                            <tbody id="bucket-expired-body"></tbody>
                         </table>
                     </div>
 
-                    <div class="table-wrap">
-                        <div style="padding:16px 20px;font-weight:600;font-size:14px;border-bottom:1px solid var(--border);">Inventory Flow</div>
+                    <div class="table-wrap bucket-section" id="bucket-short" style="display:none;">
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Month</th>
-                                    <th>Opening Stock</th>
-                                    <th>Received</th>
-                                    <th>Dispatched</th>
-                                    <th>Expired/Disposed</th>
-                                    <th>Closing Stock</th>
+                                    <th>Pack Size</th>
+                                    <th>Prod Month</th>
+                                    <th>LM Qty</th>
+                                    <th>CM Qty</th>
+                                    <th>Δ</th>
+                                    <th>Δ%</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="monthly-flow-body"></tbody>
+                            <tbody id="bucket-short-body"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-wrap bucket-section" id="bucket-medium" style="display:none;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Pack Size</th>
+                                    <th>Prod Month</th>
+                                    <th>LM Qty</th>
+                                    <th>CM Qty</th>
+                                    <th>Δ</th>
+                                    <th>Δ%</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bucket-medium-body"></tbody>
                         </table>
                     </div>
                 </div>

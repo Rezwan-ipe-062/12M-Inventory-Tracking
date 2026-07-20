@@ -916,3 +916,34 @@
     background: var(--card);
     color: var(--text);
 }
+
+/* MONTHLY REPORT BUCKET TABS */
+.bucket-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+}
+.bucket-tab {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+}
+.bucket-tab:hover { color: var(--text); }
+.bucket-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+.movement-up { color: #DC2626; }
+.movement-down { color: #16A34A; }
+.total-row td {
+    border-top: 2px solid var(--border);
+    font-weight: 600;
+}
