@@ -959,6 +959,13 @@ function exportProducts() {
 // MONTHLY REPORT
 // ==============================
 
+function formatMonth(ym) {
+    if (!ym) return '';
+    const d = new Date(ym + '-01');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getFullYear();
+}
+
 function getInventoryByProductMonth(inventory) {
     const agg = {};
     inventory.filter(i => i.quantity > 0).forEach(item => {
