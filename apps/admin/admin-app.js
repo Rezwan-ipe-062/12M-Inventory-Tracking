@@ -1082,7 +1082,7 @@ function updateKPIs_SingleMonth(allSnaps, expired, short, medium, month) {
     var expQty = expired.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
     setText('kpi-lm-total', '--');
     setText('kpi-lm-month', '');
-    setText('kpi-cm-total', total.toLocaleString() + ' ct');
+    setText('kpi-cm-total', total.toLocaleString());
     setText('kpi-cm-month', formatMonth(month));
     var deltaEl = document.getElementById('kpi-mom-change');
     if (deltaEl) {
@@ -1091,10 +1091,10 @@ function updateKPIs_SingleMonth(allSnaps, expired, short, medium, month) {
         var dl = deltaEl.querySelector('.delta-label');
         if (dl) dl.textContent = 'Mode';
     }
-    setText('kpi-expired', expQty.toLocaleString() + ' ct');
+    setText('kpi-expired', expQty.toLocaleString());
     setText('kpi-expired-month', '');
-    setText('kpi-short-total', shortQty.toLocaleString() + ' ct');
-    setText('kpi-medium-total', medQty.toLocaleString() + ' ct');
+    setText('kpi-short-total', shortQty.toLocaleString());
+    setText('kpi-medium-total', medQty.toLocaleString());
 }
 
 function updateKPIs_Comparison(lmSnaps, cmSnaps, lmExp, cmExp, lmShort, cmShort, lmMed, cmMed, lmMonth, cmMonth) {
@@ -1102,9 +1102,9 @@ function updateKPIs_Comparison(lmSnaps, cmSnaps, lmExp, cmExp, lmShort, cmShort,
     var cmTotal = cmSnaps.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
     var diff = cmTotal - lmTotal;
     var pct = lmTotal > 0 ? ((diff / lmTotal) * 100) : 0;
-    setText('kpi-lm-total', lmTotal.toLocaleString() + ' ct');
+    setText('kpi-lm-total', lmTotal.toLocaleString());
     setText('kpi-lm-month', formatMonth(lmMonth));
-    setText('kpi-cm-total', cmTotal.toLocaleString() + ' ct');
+    setText('kpi-cm-total', cmTotal.toLocaleString());
     setText('kpi-cm-month', formatMonth(cmMonth));
     var deltaEl = document.getElementById('kpi-mom-change');
     if (deltaEl) {
@@ -1119,15 +1119,15 @@ function updateKPIs_Comparison(lmSnaps, cmSnaps, lmExp, cmExp, lmShort, cmShort,
     }
     var expLM = lmExp.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
     var expCM = cmExp.reduce(function (s, r) { return s + (r.quantity || 0); }, 0);
-    var expStr = expLM.toLocaleString() + ' \u2192 ' + expCM.toLocaleString() + ' ct';
+    var expStr = expLM.toLocaleString() + ' \u2192 ' + expCM.toLocaleString();
     if (expCM !== expLM) {
         var expDiff = expCM - expLM;
         expStr += ' (' + (expDiff >= 0 ? '+' : '') + expDiff.toLocaleString() + ')';
     }
     setText('kpi-expired', expStr);
     setText('kpi-expired-month', '');
-    setText('kpi-short-total', lmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' \u2192 ' + cmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' ct');
-    setText('kpi-medium-total', lmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' \u2192 ' + cmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' ct');
+    setText('kpi-short-total', lmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' \u2192 ' + cmShort.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString());
+    setText('kpi-medium-total', lmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString() + ' \u2192 ' + cmMed.reduce(function (s, r) { return s + (r.quantity || 0); }, 0).toLocaleString());
 }
 
 function renderBucket_Comparison(lmRows, cmRows, bodyId) {
