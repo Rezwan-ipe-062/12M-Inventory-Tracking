@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   production_month TEXT NOT NULL DEFAULT '',
   expiry_month TEXT DEFAULT '',
   quantity INTEGER NOT NULL DEFAULT 0,
-  type TEXT NOT NULL CHECK (type IN ('receive', 'dispatch')),
+  type TEXT NOT NULL CHECK (type IN ('receive', 'dispatch', 'adjustment')),
   operator_name TEXT DEFAULT '',
   warehouse TEXT DEFAULT '',
   client_timestamp TEXT DEFAULT '',
@@ -39,7 +39,21 @@ CREATE TABLE IF NOT EXISTS inventory (
   UNIQUE(product, pack_size, production_month, warehouse)
 );
 
--- 3. CONFIG TABLE (app settings + synced product catalog)
+-- 3. MONTHLY SNAPSHOTS TABLE (for monthly comparison report)
+CREATE TABLE IF NOT EXISTS monthly_snapshots (
+  id BIGSERIAL PRIMARY KEY,
+  snapshot_month TEXT NOT NULL,
+  product TEXT NOT NULL,
+  pack_size TEXT NOT NULL DEFAULT '',
+  production_month TEXT NOT NULL DEFAULT '',
+  expiry_month TEXT DEFAULT '',
+  quantity INTEGER NOT NULL DEFAULT 0,
+  warehouse TEXT DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(snapshot_month, product, pack_size, production_month, warehouse)
+);
+
+-- 4. CONFIG TABLE (app settings + synced product catalog)
 CREATE TABLE IF NOT EXISTS config (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL,
@@ -52,14 +66,17 @@ INSERT INTO config (key, value) VALUES ('shelf-life-config', '{"operatorPins":[]
 -- 4. ROW LEVEL SECURITY — allow full access for anon key
 ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE inventory ENABLE ROW LEVEL SECURITY;
+ALTER TABLE monthly_snapshots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE config ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Allow anon all" ON transactions;
 DROP POLICY IF EXISTS "Allow anon all" ON inventory;
+DROP POLICY IF EXISTS "Allow anon all" ON monthly_snapshots;
 DROP POLICY IF EXISTS "Allow anon all" ON config;
 
 CREATE POLICY "Allow anon all" ON transactions FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow anon all" ON inventory FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all" ON monthly_snapshots FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow anon all" ON config FOR ALL USING (true) WITH CHECK (true);
 
 -- 5. RPC FUNCTION: clear_all_data_rpc
@@ -75,6 +92,7 @@ AS $$
 BEGIN
   TRUNCATE TABLE transactions CASCADE;
   TRUNCATE TABLE inventory CASCADE;
+  TRUNCATE TABLE monthly_snapshots CASCADE;
   TRUNCATE TABLE config CASCADE;
 
   -- Re-insert default config rows

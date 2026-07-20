@@ -347,6 +347,7 @@ function initCountScreen() {
     const qtyTotalValue = document.getElementById('qty-total-value');
     const qtyMinus = document.getElementById('qty-minus');
     const qtyPlus = document.getElementById('qty-plus');
+    const qtySet = document.getElementById('qty-set');
     
     // Stack calculator
     const stackToggle = document.getElementById('stack-calc-toggle');
@@ -473,6 +474,20 @@ function initCountScreen() {
         const qty = parseInt(qtyTotalValue.textContent) || 0;
         if (qty === 0) return;
         doTransaction('dispatch', qty);
+    };
+
+    // Set button: sets inventory quantity directly (adjustment)
+    qtySet.onclick = () => {
+        const qty = parseInt(qtyTotalValue.textContent);
+        if (qty < 0) return;
+        const prodMonthCode = state.selectedYear && state.selectedMonth ? state.selectedYear + state.selectedMonth : '';
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const expiryFullYear = state.selectedExpiryYear ? 2020 + parseInt(state.selectedExpiryYear) : '';
+        const expiryMonthName = state.selectedExpiryMonth !== null ? monthNames[parseInt(state.selectedExpiryMonth)] : '';
+        const expiryDate = expiryMonthName && expiryFullYear ? `${expiryMonthName} ${expiryFullYear}` : '';
+        if (confirm(`Set ${state.selectedProduct} ${state.selectedPackSize} (${prodMonthCode}) to ${qty} cartons?`)) {
+            doTransaction('adjustment', qty);
+        }
     };
 
     // Stack calculator toggle
@@ -706,7 +721,7 @@ function doTransaction(type, qty) {
                 warehouse: state.warehouse
             });
         }
-    } else {
+    } else if (type === 'dispatch') {
         // Dispatch: subtract from inventory, remove if zero
         if (existingIndex >= 0) {
             state.inventory[existingIndex].quantity = Math.max(0, state.inventory[existingIndex].quantity - qty);
@@ -714,13 +729,31 @@ function doTransaction(type, qty) {
                 state.inventory.splice(existingIndex, 1);
             }
         }
+    } else if (type === 'adjustment') {
+        // Set: directly set quantity
+        if (existingIndex >= 0) {
+            state.inventory[existingIndex].quantity = qty;
+            state.inventory[existingIndex].warehouse = state.warehouse;
+        } else {
+            state.inventory.push({
+                product: state.selectedProduct,
+                packSize: state.selectedPackSize,
+                productionMonth: prodMonthCode,
+                expiryMonth: expiryDate,
+                quantity: qty,
+                warehouse: state.warehouse
+            });
+        }
     }
+
+    // Auto-delete zero-quantity inventory rows
+    state.inventory = state.inventory.filter(item => item.quantity > 0);
 
     // Sync to localStorage for admin panel
     syncToStorage();
 
     // Show confirmation
-    const typeLabel = type === 'receive' ? 'Received' : 'Dispatched';
+    const typeLabel = type === 'receive' ? 'Received' : type === 'dispatch' ? 'Dispatched' : 'Set';
     document.getElementById('confirm-details').textContent =
         `${typeLabel}: ${state.selectedProduct} ${state.selectedPackSize} × ${qty} packs (${prodMonthCode}, exp ${expiryDate})`;
 

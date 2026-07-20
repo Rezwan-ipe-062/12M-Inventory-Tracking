@@ -289,10 +289,12 @@ function monthsUntilExpiry(expiryStr) {
 }
 
 function getExpiryLevel(months) {
+    if (months <= 0) return 'expired';
     if (months <= 3) return 'critical';
     if (months <= 6) return 'warning';
     if (months <= 12) return 'notice';
-    return 'distant';
+    if (months <= 18) return 'distant';
+    return 'future';
 }
 
 // ==============================
@@ -331,6 +333,7 @@ function isActiveScreen(id) {
 function refreshCurrentScreen() {
     if (isActiveScreen('screen-dashboard')) renderDashboard();
     if (isActiveScreen('screen-12m')) render12M(currentFilter);
+    if (isActiveScreen('screen-monthly')) renderMonthlyReport();
     if (isActiveScreen('screen-inventory')) renderInventory();
     if (isActiveScreen('screen-activity')) renderActivity(currentActivityFilter);
     if (isActiveScreen('screen-products')) renderProducts();
@@ -349,14 +352,18 @@ function showScreen(id, btn) {
     document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
     if (btn) btn.classList.add('active');
 
-    const titles = { 'screen-dashboard': 'Dashboard', 'screen-12m': '12M & 18M Report', 'screen-inventory': 'Inventory', 'screen-activity': 'Activity Log', 'screen-products': 'Products', 'screen-settings': 'Settings' };
+    const titles = { 'screen-dashboard': 'Dashboard', 'screen-12m': '12M & 18M Report', 'screen-monthly': 'Monthly Report', 'screen-inventory': 'Inventory', 'screen-activity': 'Activity Log', 'screen-products': 'Products', 'screen-settings': 'Settings' };
     document.getElementById('page-title').textContent = titles[id] || 'Dashboard';
 
     if (id === 'screen-dashboard') renderDashboard();
     if (id === 'screen-activity') { renderActivityWarehouseChips(); renderActivity(currentActivityFilter); }
     if (id === 'screen-inventory') renderInventory();
     if (id === 'screen-12m') render12M(currentFilter || 'all');
+    if (id === 'screen-monthly') renderMonthlyReport();
     if (id === 'screen-products') renderProducts();
+
+    var filterBar = document.getElementById('warehouse-filter-bar');
+    if (filterBar) filterBar.style.display = (id === 'screen-products') ? 'none' : '';
 }
 
 // ==============================
@@ -375,7 +382,7 @@ let dashboardCharts = {};
 function renderDashboard() {
     const opData = loadOperatorData();
 
-    const expiryItems = filterByWarehouse((opData.inventory || []).filter(item => item.expiryMonth).map(item => {
+    const expiryItems = filterByWarehouse((opData.inventory || []).filter(item => item.quantity > 0 && item.expiryMonth).map(item => {
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
         return {
             product: item.product,
@@ -562,21 +569,26 @@ function renderCharts(inventory) {
     });
 
     // Chart 3: Expiry Distribution (doughnut)
-    const expiryLevels = { critical: 0, warning: 0, notice: 0, distant: 0 };
+    const expiryLevels = { critical: 0, warning: 0, notice: 0, distant: 0, future: 0 };
     inventory.filter(i => i.expiryMonth).forEach(item => {
         const ml = monthsUntilExpiry(item.expiryMonth);
         const level = getExpiryLevel(ml);
         expiryLevels[level] = (expiryLevels[level] || 0) + item.quantity;
     });
 
+    var labels = ['Critical \u22643mo', 'Warning 4-6mo', 'Notice 7-12mo', 'Distant 13-18mo'];
+    var data = [expiryLevels.critical, expiryLevels.warning, expiryLevels.notice, expiryLevels.distant];
+    var colors = ['#DC2626', '#F97316', '#d97706', '#2563EB'];
+    if (expiryLevels.future > 0) { labels.push('Future >18mo'); data.push(expiryLevels.future); colors.push('#9CA3AF'); }
+
     document.getElementById('chart-expiry-distribution').innerHTML = '<canvas id="chart-expiry-distribution-canvas"></canvas>';
     dashboardCharts.expiryDist = new Chart(document.getElementById('chart-expiry-distribution-canvas'), {
         type: 'doughnut',
         data: {
-            labels: ['Critical \u22643mo', 'Warning 4-6mo', 'Notice 7-12mo', 'Distant 13-18mo'],
+            labels: labels,
             datasets: [{
-                data: [expiryLevels.critical, expiryLevels.warning, expiryLevels.notice, expiryLevels.distant],
-                backgroundColor: ['#DC2626', '#F97316', '#d97706', '#2563EB'],
+                data: data,
+                backgroundColor: colors,
                 borderWidth: 0
             }]
         },
@@ -600,7 +612,7 @@ function render12M(filter) {
     const tbody = document.getElementById('tbody-12m');
     const opData = loadOperatorData();
 
-    let expiryItems = filterByWarehouse((opData.inventory || []).filter(item => item.expiryMonth).map(item => {
+    let expiryItems = filterByWarehouse((opData.inventory || []).filter(item => item.quantity > 0 && item.expiryMonth).map(item => {
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
         const level = getExpiryLevel(monthsLeft);
         return {
@@ -672,11 +684,11 @@ function renderActivity(filter) {
     let txs = opData.transactions || [];
 
     if (activityWhFilter !== 'all') {
-        txs = txs.filter(d => d.warehouse === activityWhFilter);
+        txs = txs.filter(d => d.warehouse && String(d.warehouse).trim().toLowerCase() === String(activityWhFilter).trim().toLowerCase());
     }
 
     if (filter !== 'all') {
-        const typeMap = { 'add': 'receive', 'sub': 'dispatch' };
+        const typeMap = { 'add': 'receive', 'sub': 'dispatch', 'adjust': 'adjustment' };
         txs = txs.filter(d => d.type === typeMap[filter]);
     }
 
@@ -690,10 +702,15 @@ function renderActivity(filter) {
     txs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 
     tbody.innerHTML = txs.map(d => {
-        const isAdd = d.type === 'receive';
-        const typeLabel = isAdd ? '<span style="color:#16A34A;font-weight:600;">+</span>' : '<span style="color:#DC2626;font-weight:600;">\u2212</span>';
-        const typeText = isAdd ? 'Addition' : 'Subtraction';
-        return '<tr><td>' + (d.date || d.timestamp || '') + '</td><td>' + d.product + '</td><td>' + (d.packSize || '') + '</td><td>' + (getAgiCode(d.product, d.packSize || '') || '\u2014') + '</td><td>' + (d.productionMonth || '') + '</td><td>' + (d.warehouse || '\u2014') + '</td><td>' + typeLabel + ' ' + typeText + '</td><td>' + d.quantity + '</td><td>' + (d.operator_name || '\u2014') + '</td></tr>';
+        let typeHtml;
+        if (d.type === 'receive') {
+            typeHtml = '<span style="color:#16A34A;font-weight:600;">+</span> Addition';
+        } else if (d.type === 'dispatch') {
+            typeHtml = '<span style="color:#DC2626;font-weight:600;">\u2212</span> Subtraction';
+        } else {
+            typeHtml = '<span style="color:#333;font-weight:600;">\u25CF</span> Set';
+        }
+        return '<tr><td>' + (d.date || d.timestamp || '') + '</td><td>' + d.product + '</td><td>' + (d.packSize || '') + '</td><td>' + (getAgiCode(d.product, d.packSize || '') || '\u2014') + '</td><td>' + (d.productionMonth || '') + '</td><td>' + (d.warehouse || '\u2014') + '</td><td>' + typeHtml + '</td><td>' + d.quantity + '</td><td>' + (d.operator_name || '\u2014') + '</td></tr>';
     }).join('');
 }
 
@@ -711,15 +728,20 @@ function renderInventory() {
     const search = document.getElementById('inv-search').value.toLowerCase();
     const tbody = document.getElementById('tbody-inventory');
     const opData = loadOperatorData();
-    let data = filterByWarehouse((opData.inventory || []).map(item => ({
-        product: item.product,
-        pack: item.packSize,
-        prefix: '',
-        code: getAgiCode(item.product, item.packSize || ''),
-        prodMonth: item.productionMonth || '',
-        qty: item.quantity,
-        warehouse: item.warehouse || ''
-    })));
+    let data = filterByWarehouse((opData.inventory || []).map(item => {
+        var ml = item.expiryMonth ? monthsUntilExpiry(item.expiryMonth) : null;
+        return {
+            product: item.product,
+            pack: item.packSize,
+            prefix: (PRODUCTS.find(p => p.name === item.product && p.pack === item.packSize) || {}).prefix || '',
+            code: getAgiCode(item.product, item.packSize || ''),
+            prodMonth: item.productionMonth || '',
+            qty: item.quantity,
+            warehouse: item.warehouse || '',
+            monthsLeft: ml,
+            level: ml !== null ? getExpiryLevel(ml) : null
+        };
+    }));
 
     if (search) {
         data = data.filter(d => d.product.toLowerCase().includes(search) || d.code.toLowerCase().includes(search));
@@ -752,7 +774,7 @@ function renderInventory() {
     });
 
     if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">' +
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">' +
             (search ? 'No results found' : 'No inventory data yet. Start counting from the operator app.') +
             '</td></tr>';
         return;
@@ -762,10 +784,11 @@ function renderInventory() {
     for (const key in groups) {
         const items = groups[key];
         const first = items[0];
-        html += '<tr style="background:var(--table-header)"><td colspan="7" style="padding:10px 16px;font-weight:600;font-size:14px;">' + first.product + ' ' + first.pack + '</td></tr>';
+        html += '<tr style="background:var(--table-header)"><td colspan="8" style="padding:10px 16px;font-weight:600;font-size:14px;">' + first.product + ' ' + first.pack + '</td></tr>';
         items.forEach(d => {
             const fefoClass = highlighted.has(d.product + '|' + d.pack + '|' + d.prodMonth) ? ' style="background:#FEF3C7;"' : '';
-            html += '<tr' + fefoClass + '><td>' + d.product + '</td><td>' + d.pack + '</td><td>' + (d.prefix || '\u2014') + '</td><td>' + (d.code || '\u2014') + '</td><td>' + d.prodMonth + '</td><td>' + d.qty + '</td><td>' + (d.warehouse || '\u2014') + '</td></tr>';
+            var mlDisplay = d.monthsLeft !== null ? '<span class="badge badge-' + (d.level === 'distant' ? 'distant' : d.level === 'future' ? 'future' : d.level) + '">' + d.monthsLeft + 'M</span>' : '\u2014';
+            html += '<tr' + fefoClass + '><td>' + d.product + '</td><td>' + d.pack + '</td><td>' + (d.prefix || '\u2014') + '</td><td>' + (d.code || '\u2014') + '</td><td>' + d.prodMonth + '</td><td>' + mlDisplay + '</td><td>' + d.qty + '</td><td>' + (d.warehouse || '\u2014') + '</td></tr>';
         });
     }
 
@@ -874,10 +897,11 @@ function exportExcel() {
     let data = filterByWarehouse((opData.inventory || []).filter(item => item.expiryMonth)).map(item => {
         const monthsLeft = monthsUntilExpiry(item.expiryMonth);
         const level = getExpiryLevel(monthsLeft);
-        return { product: item.product, pack: item.packSize, code: item.productionMonth || '', expiry: item.expiryMonth, qty: item.quantity, monthsLeft, range: monthsLeft <= 12 ? '12m' : '18m', warehouse: item.warehouse || '' };
+        return { product: item.product, pack: item.packSize, code: item.productionMonth || '', expiry: item.expiryMonth, qty: item.quantity, monthsLeft, level: level, range: monthsLeft <= 12 ? '12m' : '18m', warehouse: item.warehouse || '' };
     });
-    let csv = 'Product,Pack,Code,Expiry,Qty,Months Left,Range,Warehouse\n';
-    data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.code + ',' + d.expiry + ',' + d.qty + ',' + d.monthsLeft + ',' + d.range + ',' + d.warehouse + '\n'; });
+    if (currentFilter && currentFilter !== 'all') data = data.filter(d => d.level === currentFilter);
+    let csv = 'Product,Pack,Code,Expiry,Qty,Months Left,Level,Range,Warehouse\n';
+    data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.code + ',' + d.expiry + ',' + d.qty + ',' + d.monthsLeft + ',' + d.level + ',' + d.range + ',' + d.warehouse + '\n'; });
     downloadCSV(csv, 'Expiry_Report_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
 
@@ -894,9 +918,11 @@ function exportDashboard() {
 
 function exportInventory() {
     const opData = loadOperatorData();
-    const data = filterByWarehouse(opData.inventory || []).map(item => ({
-        product: item.product, pack: item.packSize, prefix: '', code: item.productionMonth || '', prodMonth: item.productionMonth || '', qty: item.quantity, warehouse: item.warehouse || ''
+    const search = (document.getElementById('inv-search').value || '').toLowerCase();
+    let data = filterByWarehouse(opData.inventory || []).map(item => ({
+        product: item.product, pack: item.packSize, prefix: (PRODUCTS.find(p => p.name === item.product && p.pack === item.packSize) || {}).prefix || '', code: item.productionMonth || '', prodMonth: item.productionMonth || '', qty: item.quantity, warehouse: item.warehouse || ''
     }));
+    if (search) data = data.filter(d => d.product.toLowerCase().includes(search));
     let csv = 'Product,Pack,Prefix,Code,Prod Month,Qty,Warehouse\n';
     data.forEach(d => { csv += d.product + ',' + d.pack + ',' + d.prefix + ',' + d.code + ',' + d.prodMonth + ',' + d.qty + ',' + d.warehouse + '\n'; });
     downloadCSV(csv, 'Inventory_' + new Date().toISOString().slice(0, 10) + '.csv');
@@ -904,10 +930,18 @@ function exportInventory() {
 
 function exportActivity() {
     const opData = loadOperatorData();
-    const filtered = filterByWarehouse(opData.transactions || []);
+    let filtered = opData.transactions || [];
+    if (activityWhFilter !== 'all') {
+        filtered = filtered.filter(d => d.warehouse && String(d.warehouse).trim().toLowerCase() === String(activityWhFilter).trim().toLowerCase());
+    }
+    if (currentActivityFilter !== 'all') {
+        const typeMap = { 'add': 'receive', 'sub': 'dispatch', 'adjust': 'adjustment' };
+        filtered = filtered.filter(d => d.type === typeMap[currentActivityFilter]);
+    }
     let csv = 'Date & Time,Product,Pack,AGI Code,Code,Warehouse,Type,Qty,Operator\n';
     filtered.forEach(d => {
-        const typeText = d.type === 'receive' ? 'Addition' : 'Subtraction';
+        const typeLabels = { 'receive': 'Addition', 'dispatch': 'Subtraction', 'adjustment': 'Set' };
+        const typeText = typeLabels[d.type] || d.type;
         csv += (d.date || '') + ',' + d.product + ',' + (d.packSize || '') + ',' + (getAgiCode(d.product, d.packSize || '') || '') + ',' + (d.productionMonth || '') + ',' + (d.warehouse || '') + ',' + typeText + ',' + d.quantity + ',' + (d.operator_name || '') + '\n';
     });
     downloadCSV(csv, 'Activity_Log_' + new Date().toISOString().slice(0, 10) + '.csv');
@@ -919,6 +953,231 @@ function exportProducts() {
         csv += (d.prefix || '\u2014') + ',' + d.name + ',' + (d.pack || '\u2014') + ',' + (getAgiCode(d.name, d.pack) || '') + '\n';
     });
     downloadCSV(csv, 'Products_' + new Date().toISOString().slice(0, 10) + '.csv');
+}
+
+// ==============================
+// MONTHLY REPORT
+// ==============================
+
+function getInventoryByProductMonth(inventory) {
+    const agg = {};
+    inventory.filter(i => i.quantity > 0).forEach(item => {
+        const key = (item.packSize || '') + '|' + (item.productionMonth || '');
+        if (!agg[key]) agg[key] = { packSize: item.packSize, productionMonth: item.productionMonth, quantity: 0 };
+        agg[key].quantity += (item.quantity || 0);
+    });
+    return Object.values(agg);
+}
+
+function getSnapshotDateRange() {
+    const today = new Date();
+    const months = [];
+    for (let i = 11; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        months.push(d.toISOString().slice(0, 7));
+    }
+    return months;
+}
+
+function initMonthlyReportDropdowns() {
+    const months = getSnapshotDateRange();
+    const startSel = document.getElementById('monthly-start');
+    const endSel = document.getElementById('monthly-end');
+    if (!startSel || !endSel) return;
+    startSel.innerHTML = months.map(m => '<option value="' + m + '">' + formatMonth(m) + '</option>').join('');
+    endSel.innerHTML = months.map(m => '<option value="' + m + '">' + formatMonth(m) + '</option>').join('');
+    startSel.value = months[0];
+    endSel.value = months[months.length - 1];
+}
+
+function getSnapshotMonths() {
+    const startSel = document.getElementById('monthly-start');
+    const endSel = document.getElementById('monthly-end');
+    if (!startSel || !endSel) return [];
+    return [startSel.value, endSel.value];
+}
+
+function getSnapshotsByMonth(snapshots, startMonth, endMonth) {
+    const byMonth = {};
+    snapshots.forEach(s => {
+        if (s.snapshot_month >= startMonth && s.snapshot_month <= endMonth) {
+            if (!byMonth[s.snapshot_month]) byMonth[s.snapshot_month] = [];
+            byMonth[s.snapshot_month].push(s);
+        }
+    });
+    return byMonth;
+}
+
+function renderMonthlyReport() {
+    const months = getSnapshotDateRange();
+    const now = new Date();
+    const currentMonth = now.toISOString().slice(0, 7);
+    const currentMonthEl = document.getElementById('monthly-current-month');
+    if (currentMonthEl) currentMonthEl.textContent = 'Current Month: ' + formatMonth(currentMonth);
+
+    initMonthlyReportDropdowns();
+
+    if (typeof syncManager !== 'undefined' && syncManager.getMonthlySnapshots) {
+        syncManager.getMonthlySnapshots().then(function (snapshots) {
+            if (!snapshots || snapshots.length === 0) {
+                renderMonthlyReportWithSnapshots([], months[0], months[months.length - 1]);
+                return;
+            }
+            var range = getSnapshotMonths();
+            renderMonthlyReportWithSnapshots(snapshots, range[0], range[1]);
+        });
+    } else {
+        renderMonthlyReportWithSnapshots([], months[0], months[months.length - 1]);
+    }
+}
+
+function renderMonthlyReportWithSnapshots(snapshots, startMonth, endMonth) {
+    var summaryBody = document.getElementById('monthly-summary-body');
+    var flowBody = document.getElementById('monthly-flow-body');
+    if (!summaryBody || !flowBody) return;
+
+    if (!snapshots || snapshots.length === 0) {
+        summaryBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshots captured yet. Click "Capture Snapshot" to record current month.</td></tr>';
+        flowBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshots captured yet.</td></tr>';
+        updateMonthlyKPIs([], startMonth, endMonth);
+        return;
+    }
+
+    var byMonth = getSnapshotsByMonth(snapshots, startMonth, endMonth);
+    var sortedMonths = Object.keys(byMonth).sort();
+
+    summaryBody.innerHTML = sortedMonths.map(m => {
+        var rows = byMonth[m];
+        var totalQty = rows.reduce((sum, r) => sum + (r.quantity || 0), 0);
+        var count06 = rows.filter(r => (r.age_months || 0) <= 6).reduce((sum, r) => sum + (r.quantity || 0), 0);
+        var count69 = rows.filter(r => (r.age_months || 0) > 6 && (r.age_months || 0) <= 9).reduce((sum, r) => sum + (r.quantity || 0), 0);
+        var count912 = rows.filter(r => (r.age_months || 0) > 9 && (r.age_months || 0) <= 12).reduce((sum, r) => sum + (r.quantity || 0), 0);
+        var count12plus = rows.filter(r => (r.age_months || 0) > 12).reduce((sum, r) => sum + (r.quantity || 0), 0);
+        var cum12plus = count12plus;
+        var pctTotal = totalQty > 0 ? ((count12plus / totalQty) * 100).toFixed(1) : '0.0';
+        var disposal = count12plus > 0 ? count12plus + ' cartons' : '\u2014';
+        return '<tr><td>' + formatMonth(m) + '</td><td>' + totalQty + '</td><td>' + count06 + '</td><td>' + count69 + '</td><td>' + count912 + '</td><td>' + count12plus + '</td><td>' + cum12plus + '</td><td>' + pctTotal + '%</td><td>' + disposal + '</td></tr>';
+    }).join('');
+
+    flowBody.innerHTML = sortedMonths.map((m, idx) => {
+        var rows = byMonth[m];
+        var totalQty = rows.reduce((sum, r) => sum + (r.quantity || 0), 0);
+        var opening = idx > 0 ? byMonth[sortedMonths[idx - 1]].reduce((sum, r) => sum + (r.quantity || 0), 0) : totalQty;
+        var received = (rows.filter(r => r.snapshot_month === m).length > 0 && idx === 0) ? 0 : 0;
+        var dispatched = 0;
+        var expired = 0;
+        var closing = totalQty;
+        return '<tr><td>' + formatMonth(m) + '</td><td>' + opening + '</td><td>' + received + '</td><td>' + dispatched + '</td><td>' + expired + '</td><td>' + closing + '</td></tr>';
+    }).join('');
+
+    updateMonthlyKPIs(snapshots, startMonth, endMonth);
+}
+
+function updateMonthlyKPIs(snapshots, startMonth, endMonth) {
+    var currentTotal = document.getElementById('kpi-current-total');
+    var momChange = document.getElementById('kpi-mom-change');
+    var totalReceived = document.getElementById('kpi-total-received');
+    var totalDispatched = document.getElementById('kpi-total-dispatched');
+
+    if (!snapshots || snapshots.length === 0) {
+        if (currentTotal) currentTotal.textContent = '--';
+        if (momChange) momChange.textContent = '--';
+        if (totalReceived) totalReceived.textContent = '--';
+        if (totalDispatched) totalDispatched.textContent = '--';
+        return;
+    }
+
+    var byMonth = getSnapshotsByMonth(snapshots, startMonth, endMonth);
+    var sortedMonths = Object.keys(byMonth).sort();
+
+    var latestMonth = sortedMonths[sortedMonths.length - 1];
+    var latestTotal = (byMonth[latestMonth] || []).reduce((sum, r) => sum + (r.quantity || 0), 0);
+    if (currentTotal) currentTotal.textContent = latestTotal.toLocaleString() + ' ct';
+
+    if (sortedMonths.length >= 2) {
+        var prevMonth = sortedMonths[sortedMonths.length - 2];
+        var prevTotal = (byMonth[prevMonth] || []).reduce((sum, r) => sum + (r.quantity || 0), 0);
+        var diff = latestTotal - prevTotal;
+        var pct = prevTotal > 0 ? ((diff / prevTotal) * 100).toFixed(1) : '0.0';
+        var sign = diff >= 0 ? '+' : '';
+        if (momChange) {
+            momChange.textContent = sign + diff.toLocaleString() + ' (' + sign + pct + '%)';
+            momChange.style.color = diff >= 0 ? '#16A34A' : '#DC2626';
+        }
+    } else {
+        if (momChange) momChange.textContent = '--';
+    }
+
+    if (totalReceived) totalReceived.textContent = '\u2014';
+    if (totalDispatched) totalDispatched.textContent = '\u2014';
+}
+
+function captureMonthlySnapshot() {
+    if (typeof syncManager === 'undefined' || !syncManager.saveSnapshot) {
+        alert('Sync manager not available');
+        return;
+    }
+    var opData = loadOperatorData();
+    var inventory = opData.inventory || [];
+    if (inventory.length === 0) {
+        alert('No inventory data to snapshot');
+        return;
+    }
+    var now = new Date();
+    var snapshotMonth = now.toISOString().slice(0, 7);
+    var warehouse = document.getElementById('settings-warehouse-select') ? document.getElementById('settings-warehouse-select').value : (opData.meta ? opData.meta.warehouse : '');
+    var rows = [];
+    var agg = {};
+    inventory.filter(i => i.quantity > 0).forEach(item => {
+        var key = item.packSize + '|' + (item.productionMonth || '');
+        if (!agg[key]) agg[key] = { packSize: item.packSize, productionMonth: item.productionMonth || '', quantity: 0 };
+        agg[key].quantity += (item.quantity || 0);
+    });
+    Object.values(agg).forEach(item => {
+        var ageMonths = 0;
+        if (item.productionMonth) {
+            var prodDate = new Date(item.productionMonth + '-01');
+            ageMonths = (now.getFullYear() - prodDate.getFullYear()) * 12 + (now.getMonth() - prodDate.getMonth());
+        }
+        rows.push({
+            snapshot_month: snapshotMonth,
+            product: 'All Products',
+            pack_size: item.packSize,
+            production_month: item.productionMonth,
+            warehouse: warehouse,
+            quantity: item.quantity,
+            age_months: ageMonths
+        });
+    });
+    syncManager.saveSnapshot(rows).then(function () {
+        var msg = document.getElementById('monthly-snapshot-msg');
+        if (msg) {
+            msg.style.display = 'inline';
+            setTimeout(function () { msg.style.display = 'none'; }, 2000);
+        }
+        renderMonthlyReport();
+    });
+}
+
+function exportMonthlyReport() {
+    var summaryBody = document.getElementById('monthly-summary-body');
+    var flowBody = document.getElementById('monthly-flow-body');
+    if (!summaryBody || !flowBody) return;
+    var csv = 'Monthly Report\nMonth,Total Qty,0-6 Mo,6-9 Mo,9-12 Mo,12+ Mo,Cum 12M+,% of Total,Disposal Req\n';
+    summaryBody.querySelectorAll('tr').forEach(tr => {
+        var cells = tr.querySelectorAll('td');
+        if (cells.length >= 9) {
+            csv += Array.from(cells).map(c => c.textContent.trim()).join(',') + '\n';
+        }
+    });
+    csv += '\nInventory Flow\nMonth,Opening Stock,Received,Dispatched,Expired/Disposed,Closing Stock\n';
+    flowBody.querySelectorAll('tr').forEach(tr => {
+        var cells = tr.querySelectorAll('td');
+        if (cells.length >= 6) {
+            csv += Array.from(cells).map(c => c.textContent.trim()).join(',') + '\n';
+        }
+    });
+    downloadCSV(csv, 'Monthly_Report_' + new Date().toISOString().slice(0, 10) + '.csv');
 }
 
 // ==============================

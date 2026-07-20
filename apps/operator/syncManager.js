@@ -39,14 +39,35 @@
 
         saveLocal: function (key, data) {
             if (data && data.transactions) {
+                var existing = loadRaw(key);
+                var syncedTimestamps = {};
+                if (existing && existing.transactions) {
+                    existing.transactions.forEach(function (t) {
+                        if (t.sync_status === 'synced') syncedTimestamps[t.timestamp] = true;
+                    });
+                }
                 data.transactions = data.transactions.map(function (t) {
-                    if (!t.sync_status) t.sync_status = 'pending';
+                    if (!t.sync_status) {
+                        t.sync_status = syncedTimestamps[t.timestamp] ? 'synced' : 'pending';
+                    }
                     return t;
                 });
             }
             if (data && data.inventory) {
+                var existingInv = loadRaw(key);
+                var syncedInvKeys = {};
+                if (existingInv && existingInv.inventory) {
+                    existingInv.inventory.forEach(function (i) {
+                        if (i.sync_status === 'synced') {
+                            syncedInvKeys[(i.product || '') + '|' + (i.packSize || '') + '|' + (i.productionMonth || '') + '|' + (i.warehouse || '')] = true;
+                        }
+                    });
+                }
                 data.inventory = data.inventory.map(function (i) {
-                    if (!i.sync_status) i.sync_status = 'pending';
+                    if (!i.sync_status) {
+                        var k = (i.product || '') + '|' + (i.packSize || '') + '|' + (i.productionMonth || '') + '|' + (i.warehouse || '');
+                        i.sync_status = syncedInvKeys[k] ? 'synced' : 'pending';
+                    }
                     return i;
                 });
             }
@@ -173,21 +194,29 @@
             }
 
             var pulled = {
-                transactions: txRows.map(function (t) {
-                    return {
-                        product: t.product,
-                        packSize: t.pack_size || '',
-                        productionMonth: t.production_month || '',
-                        expiryMonth: t.expiry_month || '',
-                        quantity: t.quantity || 0,
-                        type: t.type || 'receive',
-                        operator_name: t.operator_name || '',
-                        warehouse: t.warehouse || '',
-                        timestamp: t.client_timestamp || '',
-                        date: t.client_date || '',
-                        sync_status: 'synced'
-                    };
-                }),
+                transactions: (function () {
+                    var mapped = txRows.map(function (t) {
+                        return {
+                            product: t.product,
+                            packSize: t.pack_size || '',
+                            productionMonth: t.production_month || '',
+                            expiryMonth: t.expiry_month || '',
+                            quantity: t.quantity || 0,
+                            type: t.type || 'receive',
+                            operator_name: t.operator_name || '',
+                            warehouse: t.warehouse || '',
+                            timestamp: t.client_timestamp || '',
+                            date: t.client_date || '',
+                            sync_status: 'synced'
+                        };
+                    });
+                    var seen = {};
+                    return mapped.filter(function (t) {
+                        if (seen[t.timestamp]) return false;
+                        seen[t.timestamp] = true;
+                        return true;
+                    });
+                })(),
                 inventory: (function () {
                     // Re-aggregate by (product, packSize, productionMonth, warehouse)
                     // so multiple operators at the same warehouse sum, not overwrite.
@@ -206,6 +235,10 @@
                             };
                         }
                         agg[key].quantity = (agg[key].quantity || 0) + (i.quantity || 0);
+                    });
+                    // Remove zero-quantity items from aggregated inventory
+                    Object.keys(agg).forEach(function(key) {
+                        if (agg[key].quantity <= 0) delete agg[key];
                     });
                     return Object.values(agg);
                 })()
@@ -267,6 +300,27 @@
             }
         }).catch(function (e) {
             console.warn('syncManager: pullProducts error', e.message || e);
+        });
+    };
+
+    syncManager.saveSnapshot = function (rows) {
+        if (!supabase || !rows || rows.length === 0) return Promise.resolve();
+        return supabase.from('monthly_snapshots').upsert(rows, {
+            onConflict: 'snapshot_month,product,pack_size,production_month,warehouse'
+        }).then(function (res) {
+            if (res.error) console.warn('syncManager: saveSnapshot failed', res.error);
+        }).catch(function (e) {
+            console.warn('syncManager: saveSnapshot error', e.message || e);
+        });
+    };
+
+    syncManager.getMonthlySnapshots = function () {
+        if (!supabase) return Promise.resolve([]);
+        return supabase.from('monthly_snapshots').select('*').order('snapshot_month', { ascending: true }).then(function (res) {
+            return res.data || [];
+        }).catch(function (e) {
+            console.warn('syncManager: getMonthlySnapshots error', e.message || e);
+            return [];
         });
     };
 })();

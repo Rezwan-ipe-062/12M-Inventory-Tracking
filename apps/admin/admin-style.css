@@ -459,6 +459,7 @@
         .row-warning-12m td { color: #e65100; font-weight: 500; }
         .row-notice { background: var(--yellow-bg); }
         .row-notice td { color: #92400e; }
+        .row-future { opacity: 0.75; }
 
         .badge {
             display: inline-block;
@@ -472,6 +473,8 @@
         .badge-warning { background: var(--orange); color: #fff; }
         .badge-notice { background: var(--yellow); color: #78350f; border: 1px solid #d97706; }
         .badge-distant { background: #DBEAFE; color: #1E40AF; border: 1px solid #93C5FD; }
+        .badge-future { background: #E5E7EB; color: #6B7280; border: 1px solid #D1D5DB; }
+        .badge-expired { background: #1F2937; color: #F3F4F6; border: 1px solid #374151; }
         .badge-green { background: var(--green); color: #fff; }
 
         .range-tag {
@@ -877,4 +880,39 @@
     .stat-value {
         font-size: 24px;
     }
+}
+
+/* MONTHLY REPORT */
+.monthly-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+}
+.monthly-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.monthly-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.monthly-current-month {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 14px;
+}
+.monthly-header .settings-input {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    background: var(--card);
+    color: var(--text);
 }
