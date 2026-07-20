@@ -1040,7 +1040,7 @@ function showNoData() {
     }
     ['bucket-expired-body','bucket-short-body','bucket-medium-body'].forEach(function (id) {
         var el = document.getElementById(id);
-        if (el) el.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshot data. Click "Capture Snapshot" to record inventory.</td></tr>';
+        if (el) el.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-muted);">No snapshot data. Click "Capture Snapshot" to record inventory.</td></tr>';
     });
 }
 
@@ -1140,7 +1140,7 @@ function renderBucket_Comparison(lmRows, cmRows, bodyId) {
     Object.keys(cmIdx).forEach(function (k) { allKeys[k] = true; });
     var keys = Object.keys(allKeys);
     if (keys.length === 0) {
-        body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
+        body.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
         return;
     }
     var items = keys.map(function (key) {
@@ -1149,7 +1149,7 @@ function renderBucket_Comparison(lmRows, cmRows, bodyId) {
         var cmQty = cmIdx[key] || 0;
         var delta = cmQty - lmQty;
         var deltaPct = lmQty > 0 ? ((delta / lmQty) * 100).toFixed(1) : (cmQty > 0 ? 'new' : '0.0');
-        return { product: parts[0] || '', packSize: parts[1] || '', prodMonth: parts[2] || '', lmQty: lmQty, cmQty: cmQty, delta: delta, deltaPct: deltaPct };
+        return { product: parts[0] || '', packSize: parts[1] || '', lmQty: lmQty, cmQty: cmQty, delta: delta, deltaPct: deltaPct };
     });
     items.sort(function (a, b) { return b.cmQty - a.cmQty; });
     var lmTotal = 0, cmTotal = 0;
@@ -1161,11 +1161,11 @@ function renderBucket_Comparison(lmRows, cmRows, bodyId) {
         else if (r.deltaPct === '0.0') dsp = '\u2014';
         else dsp = (r.delta > 0 ? '+' : '') + r.deltaPct + '%';
         var displayName = r.product ? r.product + ' ' + r.packSize : r.packSize;
-        return '<tr><td>' + displayName + '</td><td>' + formatMonth(r.prodMonth) + '</td><td>' + r.lmQty.toLocaleString() +
+        return '<tr><td>' + displayName + '</td><td>' + r.lmQty.toLocaleString() +
             '</td><td>' + r.cmQty.toLocaleString() + '</td><td class="' + cls + '">' + (r.delta > 0 ? '+' : '') +
             r.delta.toLocaleString() + '</td><td class="' + cls + '">' + dsp + '</td></tr>';
     }).join('') +
-    '<tr class="total-row"><td><strong>Total</strong></td><td></td><td><strong>' + lmTotal.toLocaleString() +
+    '<tr class="total-row"><td><strong>Total</strong></td><td><strong>' + lmTotal.toLocaleString() +
     '</strong></td><td><strong>' + cmTotal.toLocaleString() + '</strong></td><td><strong>' +
     (cmTotal - lmTotal > 0 ? '+' : '') + (cmTotal - lmTotal).toLocaleString() + '</strong></td><td><strong>' +
     (lmTotal > 0 ? ((cmTotal - lmTotal) / lmTotal * 100).toFixed(1) + '%' : '\u2014') + '</strong></td></tr>';
@@ -1177,22 +1177,22 @@ function renderBucket_SingleMonth(rows, bodyId) {
     var idx = indexByProduct(rows);
     var keys = Object.keys(idx);
     if (keys.length === 0) {
-        body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
+        body.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);">No stock in this bucket.</td></tr>';
         return;
     }
     var items = keys.map(function (k) {
         var parts = k.split('|');
-        return { product: parts[0] || '', packSize: parts[1] || '', prodMonth: parts[2] || '', qty: idx[k] };
+        return { product: parts[0] || '', packSize: parts[1] || '', qty: idx[k] };
     });
     items.sort(function (a, b) { return b.qty - a.qty; });
     var total = 0;
     body.innerHTML = items.map(function (r) {
         total += r.qty;
         var displayName = r.product ? r.product + ' ' + r.packSize : r.packSize;
-        return '<tr><td>' + displayName + '</td><td>' + formatMonth(r.prodMonth) + '</td><td>\u2014</td><td>' +
+        return '<tr><td>' + displayName + '</td><td>\u2014</td><td>' +
             r.qty.toLocaleString() + '</td><td>\u2014</td><td>\u2014</td></tr>';
     }).join('') +
-    '<tr class="total-row"><td><strong>Total</strong></td><td></td><td></td><td><strong>' +
+    '<tr class="total-row"><td><strong>Total</strong></td><td></td><td><strong>' +
     total.toLocaleString() + '</strong></td><td></td><td></td></tr>';
 }
 
@@ -1204,12 +1204,12 @@ function exportMonthlyReport() {
     ];
     var csv = 'Monthly Report: MoM Comparison\nGenerated: ' + new Date().toLocaleString() + '\n\n';
     sections.forEach(function (sec) {
-        csv += '### ' + sec.name + '\nProduct,Prod Month,LM Qty,CM Qty,Delta,Delta%\n';
+        csv += '### ' + sec.name + '\nProduct,LM Qty,CM Qty,Delta,Delta%\n';
         var body = document.getElementById(sec.bodyId);
         if (body) {
             body.querySelectorAll('tr').forEach(function (tr) {
                 var cells = tr.querySelectorAll('td');
-                if (cells.length >= 6) {
+                if (cells.length >= 5) {
                     csv += Array.from(cells).map(function (c) {
                         return '"' + c.textContent.trim().replace(/"/g, '""') + '"';
                     }).join(',') + '\n';
